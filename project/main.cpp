@@ -38,6 +38,7 @@ private:
         // creating instance
         instance.listExtensions();
         instance.init();
+        instance.setupDebugMessenger();
     }
 
     void mainLoop() {
@@ -48,7 +49,6 @@ private:
 
     void cleanup() {
         glfwDestroyWindow(window);
-
         glfwTerminate();
     }
 };
