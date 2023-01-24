@@ -59,6 +59,8 @@ void vkInstanceWrapper::listExtensions() {
 }
 
 void vkInstanceWrapper::init() {
+    instance = new VkInstance();
+
     if (enableValidationLayers && !checkValidationLayerSupport())
         throw std::runtime_error("validation layers requested, but not available!");
 
@@ -87,13 +89,14 @@ void vkInstanceWrapper::init() {
         createInfo.pNext = nullptr;
     }
 
-    instance = new VkInstance();
     if (vkCreateInstance(&createInfo, nullptr, instance) != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
 }
 
 void vkInstanceWrapper::setupDebugMessenger() {
+    debugMessenger = new VkDebugUtilsMessengerEXT();
+
     if (!enableValidationLayers) 
         return;
 
@@ -104,7 +107,6 @@ void vkInstanceWrapper::setupDebugMessenger() {
     createInfo.pfnUserCallback = debugCallback;
     createInfo.pUserData = nullptr; // Optional
 
-    debugMessenger = new VkDebugUtilsMessengerEXT();
     if (CreateDebugUtilsMessengerEXT(*instance, &createInfo, nullptr, debugMessenger) != VK_SUCCESS)
         throw std::runtime_error("failed to set up debug messenger!");
 }

@@ -6,24 +6,22 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkInstanceWrapper::debugCallback(
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void* pUserData) {
 
-    std::cerr << "validation layer ";
-
     switch (messageSeverity) {
         case VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT:
             // Event happened that is unrelated to specification or performance
-            std::cerr << "[GENER]: " << pCallbackData->pMessage << std::endl;
+            std::cerr << "validation layer [GENER]: " << pCallbackData->pMessage << std::endl;
             break;
         case VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT:
             // Violates specification or indicates mistake
-            std::cerr << "[VALID]: " << pCallbackData->pMessage << std::endl;
+            std::cerr << "validation layer [VALID]: " << pCallbackData->pMessage << std::endl;
             break;
         case VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT:
             // Potential non optimal use
-            std::cerr << "[PERFO]: " << pCallbackData->pMessage << std::endl;
+            std::cerr << "validation layer [PERFO]: " << pCallbackData->pMessage << std::endl;
             break;
         default:
             // Shouldnt happen but: none of the above
-            std::cerr << "[XXXXX]: " << pCallbackData->pMessage << std::endl;
+            std::cerr << "validation layer [XXXXX]: " << pCallbackData->pMessage << std::endl;
             break;
     }
 

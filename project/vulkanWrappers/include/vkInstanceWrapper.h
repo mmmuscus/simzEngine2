@@ -14,6 +14,10 @@ const bool enableValidationLayers = false;
 const bool enableValidationLayers = true;
 #endif
 
+/*
+A wrapper class for VkInstance, it also sets up default validation layers
+The wrapper ensures RAII, so we don't need to explicitly let go of VkInstance
+*/
 class vkInstanceWrapper {
 private:
 	VkInstance* instance;
