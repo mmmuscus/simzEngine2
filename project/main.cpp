@@ -43,7 +43,7 @@ private:
         instance.setupDebugMessenger();
 
         // getting devices
-        device.init(instance.get());
+        device.init(instance.getInstance());
     }
 
     void mainLoop() {

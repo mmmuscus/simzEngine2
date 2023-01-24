@@ -161,6 +161,7 @@
     <ClCompile Include="vulkanWrappers\src\vkInstanceWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vkDeviceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h" />
   </ItemGroup>

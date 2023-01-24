@@ -1,18 +1,12 @@
 #ifndef VK_INSTANCE_WRAPPER_H_
 #define VK_INSTANCE_WRAPPER_H_
 
+#include "generalIncludes.h"
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <stdexcept>
-#include <vector>
-
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
-const bool enableValidationLayers = true;
-#endif
 
 /*
 A wrapper class for VkInstance, it also sets up default validation layers
@@ -23,16 +17,12 @@ private:
 	VkInstance* instance;
 	VkDebugUtilsMessengerEXT* debugMessenger;
 
-	const std::vector<const char*> validationLayers = {
-		"VK_LAYER_KHRONOS_validation"
-	};
-
 public:
 	vkInstanceWrapper() : instance(nullptr), debugMessenger(nullptr) {}
 	~vkInstanceWrapper();
 
 	// TODO: change it to operator""?
-	VkInstance* get() { return instance; }
+	VkInstance* getInstance() { return instance; }
 
 	void listExtensions();
 	void init();

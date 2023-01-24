@@ -35,5 +35,8 @@
     <ClInclude Include="vulkanWrappers\include\vkDeviceWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\generalIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

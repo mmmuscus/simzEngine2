@@ -1,6 +1,15 @@
 #include "../include/vkDeviceWrapper.h"
 
+vkDeviceWrapper::~vkDeviceWrapper() {
+	vkDestroyDevice(*device, nullptr);
+}
+
 void vkDeviceWrapper::init(VkInstance* instance) {
+	initPhysicalDevice(instance);
+	initDevice();
+}
+
+void vkDeviceWrapper::initPhysicalDevice(VkInstance* instance) {
 	physicalDevice = VK_NULL_HANDLE;
 
 	uint32_t deviceCount = 0;
@@ -12,9 +21,9 @@ void vkDeviceWrapper::init(VkInstance* instance) {
 	std::vector<VkPhysicalDevice> devices(deviceCount);
 	vkEnumeratePhysicalDevices(*instance, &deviceCount, devices.data());
 
-	for (const auto& device : devices) {
-		if (isDeviceSuitable(device)) {
-			physicalDevice = new VkPhysicalDevice(device);
+	for (const auto& physDevice : devices) {
+		if (isDeviceSuitable(physDevice)) {
+			physicalDevice = new VkPhysicalDevice(physDevice);
 			break;
 		}
 	}
@@ -23,19 +32,59 @@ void vkDeviceWrapper::init(VkInstance* instance) {
 		throw std::runtime_error("failed to find a suitable GPU!");
 }
 
-bool vkDeviceWrapper::isDeviceSuitable(VkPhysicalDevice device) {
-	QueueFamilyIndices indices = findQueueFamilies(device);
+void vkDeviceWrapper::initDevice() {
+	device = new VkDevice();
+
+	QueueFamilyIndices indices = findQueueFamilies(*physicalDevice);
+
+	VkDeviceQueueCreateInfo queueCreateInfo{};
+	queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+	queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+	queueCreateInfo.queueCount = 1;
+
+	float queuePriority = 1.0f;
+	queueCreateInfo.pQueuePriorities = &queuePriority;
+
+	// We select the queried features we queried with vkGetPhysicalDeviceFeatures
+	VkPhysicalDeviceFeatures deviceFeatures{};
+
+	VkDeviceCreateInfo createInfo{};
+	createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	createInfo.pQueueCreateInfos = &queueCreateInfo;
+	createInfo.queueCreateInfoCount = 1;
+	createInfo.pEnabledFeatures = &deviceFeatures;
+	createInfo.enabledExtensionCount = 0;
+
+	/*
+	Previous implementations of Vulkan made distinctions between instance and device specific
+	validation layers, this is no longer the case its a good idea to set them up to be 
+	compatible with previous implementations
+	*/
+	if (enableValidationLayers) {
+		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+		createInfo.ppEnabledLayerNames = validationLayers.data();
+	}
+	else {
+		createInfo.enabledLayerCount = 0;
+	}
+
+	if (vkCreateDevice(*physicalDevice, &createInfo, nullptr, device) != VK_SUCCESS)
+		throw std::runtime_error("failed to create logical device!");
+}
+
+bool vkDeviceWrapper::isDeviceSuitable(VkPhysicalDevice physDevice) {
+	QueueFamilyIndices indices = findQueueFamilies(physDevice);
 	return indices.isComplete();
 }
 
-QueueFamilyIndices vkDeviceWrapper::findQueueFamilies(VkPhysicalDevice device) {
+QueueFamilyIndices vkDeviceWrapper::findQueueFamilies(VkPhysicalDevice physDevice) {
 	QueueFamilyIndices indices;
 
 	uint32_t queueFamilyCount = 0;
-	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+	vkGetPhysicalDeviceQueueFamilyProperties(physDevice, &queueFamilyCount, nullptr);
 
 	std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+	vkGetPhysicalDeviceQueueFamilyProperties(physDevice, &queueFamilyCount, queueFamilies.data());
 
 	int i = 0;
 	for (const auto& queueFamily : queueFamilies) {
