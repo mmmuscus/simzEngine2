@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "vulkanWrappers/include/vkInstanceWrapper.h"
+#include "vulkanWrappers/include/vkDeviceWrapper.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -24,6 +25,7 @@ private:
     GLFWwindow* window;
 
     vkInstanceWrapper instance;
+    vkDeviceWrapper device;
 
     void initWindow() {
         glfwInit();
@@ -39,6 +41,9 @@ private:
         instance.listExtensions();
         instance.init();
         instance.setupDebugMessenger();
+
+        // getting devices
+        device.init(instance.get());
     }
 
     void mainLoop() {

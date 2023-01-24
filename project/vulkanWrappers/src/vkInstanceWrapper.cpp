@@ -17,9 +17,8 @@ bool vkInstanceWrapper::checkValidationLayerSupport() {
             }
         }
 
-        if (!layerFound) {
+        if (!layerFound)
             return false;
-        }
     }
 
     return true;
@@ -32,9 +31,8 @@ std::vector<const char*> vkInstanceWrapper::getRequiredExtensions() {
 
     std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
-    if (enableValidationLayers) {
+    if (enableValidationLayers)
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-    }
 
     return extensions;
 }
@@ -61,9 +59,8 @@ void vkInstanceWrapper::listExtensions() {
 }
 
 void vkInstanceWrapper::init() {
-    if (enableValidationLayers && !checkValidationLayerSupport()) {
+    if (enableValidationLayers && !checkValidationLayerSupport())
         throw std::runtime_error("validation layers requested, but not available!");
-    }
 
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -108,7 +105,6 @@ void vkInstanceWrapper::setupDebugMessenger() {
     createInfo.pUserData = nullptr; // Optional
 
     debugMessenger = new VkDebugUtilsMessengerEXT();
-    if (CreateDebugUtilsMessengerEXT(*instance, &createInfo, nullptr, debugMessenger) != VK_SUCCESS) {
+    if (CreateDebugUtilsMessengerEXT(*instance, &createInfo, nullptr, debugMessenger) != VK_SUCCESS)
         throw std::runtime_error("failed to set up debug messenger!");
-    }
 }

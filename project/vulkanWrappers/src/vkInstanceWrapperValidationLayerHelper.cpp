@@ -6,20 +6,24 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkInstanceWrapper::debugCallback(
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void* pUserData) {
 
-    std::cerr << "validation layer " << pCallbackData->pMessage << std::endl;
+    std::cerr << "validation layer ";
 
     switch (messageSeverity) {
         case VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT:
-            std::cerr << "[GNR]: " << pCallbackData->pMessage << std::endl;
+            // Event happened that is unrelated to specification or performance
+            std::cerr << "[GENER]: " << pCallbackData->pMessage << std::endl;
             break;
         case VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT:
-            std::cerr << "[VLD]: " << pCallbackData->pMessage << std::endl;
+            // Violates specification or indicates mistake
+            std::cerr << "[VALID]: " << pCallbackData->pMessage << std::endl;
             break;
         case VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT:
-            std::cerr << "[PRF]: " << pCallbackData->pMessage << std::endl;
+            // Potential non optimal use
+            std::cerr << "[PERFO]: " << pCallbackData->pMessage << std::endl;
             break;
         default:
-            std::cerr << "[XXX]: " << pCallbackData->pMessage << std::endl;
+            // Shouldnt happen but: none of the above
+            std::cerr << "[XXXXX]: " << pCallbackData->pMessage << std::endl;
             break;
     }
 
@@ -45,6 +49,7 @@ void vkInstanceWrapper::DestroyDebugUtilsMessengerEXT(
     VkInstance instance,
     VkDebugUtilsMessengerEXT debugMessenger,
     const VkAllocationCallbacks* pAllocator) {
+
     auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
     if (func != nullptr) {
         func(instance, debugMessenger, pAllocator);
