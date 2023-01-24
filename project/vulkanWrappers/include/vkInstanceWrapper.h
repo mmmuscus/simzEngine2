@@ -8,24 +8,37 @@
 #include <stdexcept>
 #include <vector>
 
+#ifdef NDEBUG
+const bool enableValidationLayers = false;
+#else
+const bool enableValidationLayers = true;
+#endif
+
 class vkInstanceWrapper {
 private:
 	VkInstance* instance;
 	VkDebugUtilsMessengerEXT* debugMessenger;
 
-	// Validation layer variables
-#ifdef NDEBUG
-	const bool enableValidationLayers = false;
-#else
-	const bool enableValidationLayers = true;
-#endif
-
 	const std::vector<const char*> validationLayers = {
-			"VK_LAYER_KHRONOS_validation"
+		"VK_LAYER_KHRONOS_validation"
 	};
 
-	// FUNCTIONS
+public:
+	vkInstanceWrapper() : instance(nullptr), debugMessenger(nullptr) {}
+	~vkInstanceWrapper();
+
+	// TODO: change it to operator""?
+	VkInstance* get() { return instance; }
+
+	void listExtensions();
+	void init();
+	void setupDebugMessenger();
+
+private:
 	bool checkValidationLayerSupport();
+
+	std::vector<const char*> getRequiredExtensions();
+
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 		VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -40,20 +53,7 @@ private:
 		VkInstance instance,
 		VkDebugUtilsMessengerEXT debugMessenger,
 		const VkAllocationCallbacks* pAllocator);
-
-	std::vector<const char*> getRequiredExtensions();
-
-public:
-	vkInstanceWrapper() : instance(nullptr), debugMessenger(nullptr) {}
-	~vkInstanceWrapper();
-
-	// TODO: change it to operator""?
-	VkInstance* get() { return instance; }
-
-	void listExtensions();
-	void init();
-	void setupDebugMessenger();
 };
 
-#endif /* VK_INSTANCE_WRAPPER_H_ */
+#endif // VK_INSTANCE_WRAPPER_H_ 
 

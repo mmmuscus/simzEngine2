@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vkInstanceWrapperValidationLayerHelper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkInstanceWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
