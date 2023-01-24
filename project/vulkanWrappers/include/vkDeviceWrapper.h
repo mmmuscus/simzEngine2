@@ -22,8 +22,8 @@ public:
 	vkDeviceWrapper() : physicalDevice(nullptr), device(nullptr) {}
 	~vkDeviceWrapper();
 
-	void init(VkInstance* instance);
-	void initPhysicalDevice(VkInstance* instance);
+	void init(const VkInstance* instance);
+	void initPhysicalDevice(const VkInstance* instance);
 	void initDevice();
 
 private:

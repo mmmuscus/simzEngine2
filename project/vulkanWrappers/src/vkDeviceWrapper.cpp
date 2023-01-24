@@ -4,12 +4,12 @@ vkDeviceWrapper::~vkDeviceWrapper() {
 	vkDestroyDevice(*device, nullptr);
 }
 
-void vkDeviceWrapper::init(VkInstance* instance) {
+void vkDeviceWrapper::init(const VkInstance* instance) {
 	initPhysicalDevice(instance);
 	initDevice();
 }
 
-void vkDeviceWrapper::initPhysicalDevice(VkInstance* instance) {
+void vkDeviceWrapper::initPhysicalDevice(const VkInstance* instance) {
 	physicalDevice = VK_NULL_HANDLE;
 
 	uint32_t deviceCount = 0;
