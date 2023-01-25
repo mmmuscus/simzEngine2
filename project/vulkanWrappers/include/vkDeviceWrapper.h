@@ -12,7 +12,10 @@ struct QueueFamilyIndices {
 
 	bool isComplete() { return graphicsFamily.has_value(); }
 };
-
+ /*
+ A wrapper class for VkPhysicalDevice and VkDevice, handled at the same place for convinience
+ The wrapper ensures RAII, so we don't need to explicitly let go of VkDevice
+ */
 class vkDeviceWrapper {
 private:
 	VkPhysicalDevice* physicalDevice;
