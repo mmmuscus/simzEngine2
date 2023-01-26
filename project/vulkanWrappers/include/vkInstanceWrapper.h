@@ -22,7 +22,7 @@ public:
 	~vkInstanceWrapper();
 
 	// TODO: change it to operator""?
-	const VkInstance* getInstance() { return instance; }
+	VkInstance* getInstance() { return instance; }
 
 	void listExtensions();
 	void init();

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "vulkanWrappers/include/vkInstanceWrapper.h"
+#include "vulkanWrappers/include/vkWindowSurfaceWrapper.h"
 #include "vulkanWrappers/include/vkDeviceWrapper.h"
 
 const uint32_t WIDTH = 800;
@@ -25,6 +26,7 @@ private:
     GLFWwindow* window;
 
     vkInstanceWrapper instance;
+    vkWindowSurfaceWrapper surface;
     vkDeviceWrapper device;
 
     void initWindow() {
@@ -41,6 +43,9 @@ private:
         instance.listExtensions();
         instance.init();
         instance.setupDebugMessenger();
+
+        // creating window surfaces
+        surface.init(instance.getInstance(), window);
 
         // getting devices
         device.init(instance.getInstance());

@@ -27,6 +27,9 @@
     <ClCompile Include="vulkanWrappers\src\vkDeviceWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vkWindowSurfaceWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\vkWindowSurfaceWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
