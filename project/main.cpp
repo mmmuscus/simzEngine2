@@ -44,7 +44,7 @@ private:
         instance.init();
         instance.setupDebugMessenger();
 
-        // creating window surfaces
+        // creating window surface
         surface.init(instance.getInstance(), window);
 
         // getting devices
