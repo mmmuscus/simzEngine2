@@ -48,7 +48,7 @@ private:
         surface.init(instance.getInstance(), window);
 
         // getting devices
-        device.init(instance.getInstance());
+        device.init(instance.getInstance(), surface.getSurface());
     }
 
     void mainLoop() {

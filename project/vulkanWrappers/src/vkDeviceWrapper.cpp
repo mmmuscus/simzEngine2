@@ -4,7 +4,9 @@ vkDeviceWrapper::~vkDeviceWrapper() {
 	vkDestroyDevice(*device, nullptr);
 }
 
-void vkDeviceWrapper::init(const VkInstance* instance) {
+void vkDeviceWrapper::init(const VkInstance* instance, VkSurfaceKHR* _surface) {
+	surface = _surface;
+
 	initPhysicalDevice(instance);
 	initDevice();
 }
@@ -90,6 +92,13 @@ QueueFamilyIndices vkDeviceWrapper::findQueueFamilies(VkPhysicalDevice physDevic
 	for (const auto& queueFamily : queueFamilies) {
 		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) 
 			indices.graphicsFamily = i;
+
+		VkBool32 presentSupport = false;
+		vkGetPhysicalDeviceSurfaceSupportKHR(physDevice, i, *surface, &presentSupport);
+
+		if (presentSupport) {
+			indices.presentFamily = i;
+		}
 
 		if (indices.isComplete())
 			break;

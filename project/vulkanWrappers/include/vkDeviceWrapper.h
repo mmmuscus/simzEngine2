@@ -9,8 +9,9 @@
 
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
+	std::optional<uint32_t> presentFamily;
 
-	bool isComplete() { return graphicsFamily.has_value(); }
+	bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
 };
  /*
  A wrapper class for VkPhysicalDevice and VkDevice, handled at the same place for convinience
@@ -21,11 +22,13 @@ private:
 	VkPhysicalDevice* physicalDevice;
 	VkDevice* device;
 
+	VkSurfaceKHR* surface;
+
 public:
 	vkDeviceWrapper() : physicalDevice(nullptr), device(nullptr) {}
 	~vkDeviceWrapper();
 
-	void init(const VkInstance* instance);
+	void init(const VkInstance* instance, VkSurfaceKHR* _surface);
 	void initPhysicalDevice(const VkInstance* instance);
 	void initDevice();
 

@@ -9,11 +9,14 @@
 class vkWindowSurfaceWrapper {
 private:
 	VkSurfaceKHR* surface;
+
 	VkInstance* instance;
 
 public:
 	vkWindowSurfaceWrapper() : surface(nullptr), instance(nullptr) {}
 	~vkWindowSurfaceWrapper();
+
+	VkSurfaceKHR* getSurface() { return surface; }
 
 	void init(VkInstance* _instance, GLFWwindow* window);
 };
