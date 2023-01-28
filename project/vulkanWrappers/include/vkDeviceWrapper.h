@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.h>
 
 #include <optional>
+#include <set>
 
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
@@ -21,11 +22,19 @@ class vkDeviceWrapper {
 private:
 	VkPhysicalDevice* physicalDevice;
 	VkDevice* device;
+	
+	VkQueue* graphicsQueue;
+	VkQueue* presentQueue;
 
 	VkSurfaceKHR* surface;
 
 public:
-	vkDeviceWrapper() : physicalDevice(nullptr), device(nullptr) {}
+	vkDeviceWrapper() : 
+		physicalDevice(nullptr), 
+		device(nullptr), 
+		graphicsQueue(nullptr), 
+		presentQueue(nullptr), 
+		surface(nullptr) {}
 	~vkDeviceWrapper();
 
 	void init(const VkInstance* instance, VkSurfaceKHR* _surface);
