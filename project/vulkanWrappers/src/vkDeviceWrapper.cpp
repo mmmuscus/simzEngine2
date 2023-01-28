@@ -62,7 +62,8 @@ void vkDeviceWrapper::initDevice() {
 	createInfo.pQueueCreateInfos = queueCreateInfos.data();
 	createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
 	createInfo.pEnabledFeatures = &deviceFeatures;
-	createInfo.enabledExtensionCount = 0;
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+	createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
 	/*
 	Previous implementations of Vulkan made distinctions between instance and device specific
@@ -86,7 +87,16 @@ void vkDeviceWrapper::initDevice() {
 
 bool vkDeviceWrapper::isDeviceSuitable(VkPhysicalDevice physDevice) {
 	QueueFamilyIndices indices = findQueueFamilies(physDevice);
-	return indices.isComplete();
+
+	bool extensionsSupported = checkDeviceExtensionSupport(physDevice);
+
+	bool swapChainAdequate = false;
+	if (extensionsSupported) {
+		SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physDevice);
+		swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+	}
+
+	return indices.isComplete() && extensionsSupported && swapChainAdequate;
 }
 
 QueueFamilyIndices vkDeviceWrapper::findQueueFamilies(VkPhysicalDevice physDevice) {
@@ -117,4 +127,43 @@ QueueFamilyIndices vkDeviceWrapper::findQueueFamilies(VkPhysicalDevice physDevic
 	}
 
 	return indices;
+}
+
+bool vkDeviceWrapper::checkDeviceExtensionSupport(VkPhysicalDevice physDevice) {
+	uint32_t extensionCount;
+	vkEnumerateDeviceExtensionProperties(physDevice, nullptr, &extensionCount, nullptr);
+
+	std::vector<VkExtensionProperties> avalaibleExtensions(extensionCount);
+	vkEnumerateDeviceExtensionProperties(physDevice, nullptr, &extensionCount, avalaibleExtensions.data());
+
+	std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+	for (const auto& extension : avalaibleExtensions)
+		requiredExtensions.erase(extension.extensionName);
+
+	return requiredExtensions.empty();
+}
+
+SwapChainSupportDetails vkDeviceWrapper::querySwapChainSupport(VkPhysicalDevice physDevice) {
+	SwapChainSupportDetails details;
+
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physDevice, *surface, &details.capabilities);
+
+	uint32_t formatCount;
+	vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, *surface, &formatCount, nullptr);
+
+	if (formatCount != 0) {
+		details.formats.resize(formatCount);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, *surface, &formatCount, details.formats.data());
+	}
+
+	uint32_t presentModeCount;
+	vkGetPhysicalDeviceSurfacePresentModesKHR(physDevice, *surface, &presentModeCount, nullptr);
+
+	if (presentModeCount != 0) {
+		details.presentModes.resize(presentModeCount);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(physDevice, *surface, &presentModeCount, details.presentModes.data());
+	}
+
+	return details;
 }

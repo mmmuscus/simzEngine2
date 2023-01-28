@@ -3,22 +3,19 @@
 
 #include "generalIncludes.h"
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
-class vkWindowSurfaceWrapper {
+class vkSwapChainWrapper {
 private:
 	VkSurfaceKHR* surface;
 
 	VkInstance* instance;
 
 public:
-	vkWindowSurfaceWrapper() : surface(nullptr), instance(nullptr) {}
-	~vkWindowSurfaceWrapper();
+	vkSwapChainWrapper() : surface(nullptr), instance(nullptr) {}
+	~vkSwapChainWrapper();
 
 	VkSurfaceKHR* getSurface() { return surface; }
 
-	void init(VkInstance* _instance, GLFWwindow* window);
+	void initSurface(VkInstance* _instance, GLFWwindow* window);
 };
 
 #endif // VK_WINDOW_SURFACE_WRAPPER_H_

@@ -1,10 +1,10 @@
-#include "../include/vkWindowSurfaceWrapper.h"
+#include "../include/vkSwapChainWrapper.h"
 
-vkWindowSurfaceWrapper::~vkWindowSurfaceWrapper() {
+vkSwapChainWrapper::~vkSwapChainWrapper() {
     vkDestroySurfaceKHR(*instance, *surface, nullptr);
 }
 
-void vkWindowSurfaceWrapper::init(VkInstance* _instance, GLFWwindow* window) {
+void vkSwapChainWrapper::initSurface(VkInstance* _instance, GLFWwindow* window) {
     surface = new VkSurfaceKHR();
     
     if (glfwCreateWindowSurface(*_instance, window, nullptr, surface) != VK_SUCCESS)

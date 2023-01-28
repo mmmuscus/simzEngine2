@@ -9,7 +9,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkInstanceWrapper::debugCallback(
     switch (messageSeverity) {
         case VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT:
             // Event happened that is unrelated to specification or performance
-            std::cerr << "validation layer [GENER]: " << pCallbackData->pMessage << std::endl;
+            // std::cerr << "validation layer [GENER]: " << pCallbackData->pMessage << std::endl;
             break;
         case VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT:
             // Violates specification or indicates mistake

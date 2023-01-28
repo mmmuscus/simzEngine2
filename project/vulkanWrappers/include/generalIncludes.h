@@ -1,6 +1,9 @@
 #ifndef GENERAL_INCLUDES_H_
 #define GENERAL_INCLUDES_H_
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 #include <stdexcept>
 #include <vector>
 

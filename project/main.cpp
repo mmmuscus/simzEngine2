@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "vulkanWrappers/include/vkInstanceWrapper.h"
-#include "vulkanWrappers/include/vkWindowSurfaceWrapper.h"
+#include "vulkanWrappers/include/vkSwapChainWrapper.h"
 #include "vulkanWrappers/include/vkDeviceWrapper.h"
 
 const uint32_t WIDTH = 800;
@@ -26,8 +26,8 @@ private:
     GLFWwindow* window;
 
     vkInstanceWrapper instance;
-    vkWindowSurfaceWrapper surface;
-    vkDeviceWrapper device;
+    vkSwapChainWrapper swapChainWrapper;
+    vkDeviceWrapper devicesWrapper;
 
     void initWindow() {
         glfwInit();
@@ -45,10 +45,10 @@ private:
         instance.setupDebugMessenger();
 
         // creating window surface
-        surface.init(instance.getInstance(), window);
+        swapChainWrapper.initSurface(instance.getInstance(), window);
 
         // getting devices
-        device.init(instance.getInstance(), surface.getSurface());
+        devicesWrapper.init(instance.getInstance(), swapChainWrapper.getSurface());
     }
 
     void mainLoop() {
