@@ -1,21 +1,29 @@
-#ifndef VK_WINDOW_SURFACE_WRAPPER_H_
-#define VK_WINDOW_SURFACE_WRAPPER_H_
+#ifndef VK_SWAP_CHAIN_WRAPPER_H_
+#define VK_SWAP_CHAIN_WRAPPER_H_
 
 #include "generalIncludes.h"
 
+#include <limits>
+#include <algorithm>
+
+#include "vkDeviceWrapper.h"
+
 class vkSwapChainWrapper {
 private:
-	VkSurfaceKHR* surface;
+	VkSwapchainKHR* swapChain;
 
-	VkInstance* instance;
+	VkDevice* device;
 
 public:
-	vkSwapChainWrapper() : surface(nullptr), instance(nullptr) {}
+	vkSwapChainWrapper() : swapChain(nullptr), device(nullptr) {}
 	~vkSwapChainWrapper();
 
-	VkSurfaceKHR* getSurface() { return surface; }
+	void init(vkDeviceWrapper* deviceWrapper,  GLFWwindow* window, VkSurfaceKHR* surface);
 
-	void initSurface(VkInstance* _instance, GLFWwindow* window);
+private:
+	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& abailablePresentModes);
+	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* window);
 };
 
-#endif // VK_WINDOW_SURFACE_WRAPPER_H_
+#endif // VK_SWAP_CHAIN_WRAPPER_H_

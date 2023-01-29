@@ -6,6 +6,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <cstdint>
 
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
@@ -15,6 +16,12 @@ const bool enableValidationLayers = true;
 
 const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation"
+};
+
+struct SwapChainSupportDetails {
+	VkSurfaceCapabilitiesKHR capabilities;
+	std::vector<VkSurfaceFormatKHR> formats;
+	std::vector<VkPresentModeKHR> presentModes;
 };
 
 #endif // GENERAL_INCLUDES_H_

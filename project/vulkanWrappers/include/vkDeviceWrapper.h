@@ -13,12 +13,6 @@ struct QueueFamilyIndices {
 	bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
 };
 
-struct SwapChainSupportDetails {
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
-};
-
  /*
  A wrapper class for VkPhysicalDevice and VkDevice, handled at the same place for convinience
  The wrapper ensures RAII, so we don't need to explicitly let go of VkDevice
@@ -46,17 +40,21 @@ public:
 		surface(nullptr) {}
 	~vkDeviceWrapper();
 
+	VkPhysicalDevice* getPhysicalDevice() { return physicalDevice; }
+	VkDevice* getDevice() { return device; }
+
 	void init(const VkInstance* instance, VkSurfaceKHR* _surface);
 	void initPhysicalDevice(const VkInstance* instance);
 	void initDevice();
+
+	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice physDevice);
+	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice physDevice);
 
 private:
 	
 	// TODO: ranking devices based on reqs and selecting the best one
 	bool isDeviceSuitable(VkPhysicalDevice physDevice);
-	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice physDevice);
 	bool checkDeviceExtensionSupport(VkPhysicalDevice physDevice);
-	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice physDevice);
 };
 
 #endif // VK_DEVICE_WRAPPER_H_
