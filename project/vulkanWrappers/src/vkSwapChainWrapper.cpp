@@ -1,14 +1,23 @@
 #include "../include/vkSwapChainWrapper.h"
 
 vkSwapChainWrapper::~vkSwapChainWrapper() {
+    for (auto imageView : swapChainImageViews)
+        vkDestroyImageView(*device, imageView, nullptr);
+
     vkDestroySwapchainKHR(*device, *swapChain, nullptr);
 }
 
 void vkSwapChainWrapper::init(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface) {
-    swapChain = new VkSwapchainKHR();
     device = deviceWrapper->getDevice();
     
-    SwapChainSupportDetails swapChainSupport = 
+    initSwapChain(deviceWrapper, window, surface);
+    initImageViews();
+}
+
+void vkSwapChainWrapper::initSwapChain(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface) {
+    swapChain = new VkSwapchainKHR();
+
+    SwapChainSupportDetails swapChainSupport =
         deviceWrapper->querySwapChainSupport(*deviceWrapper->getPhysicalDevice());
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
@@ -30,7 +39,7 @@ void vkSwapChainWrapper::init(vkDeviceWrapper* deviceWrapper, GLFWwindow* window
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    QueueFamilyIndices indices = 
+    QueueFamilyIndices indices =
         deviceWrapper->findQueueFamilies(*deviceWrapper->getPhysicalDevice());
     uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
@@ -60,6 +69,30 @@ void vkSwapChainWrapper::init(vkDeviceWrapper* deviceWrapper, GLFWwindow* window
 
     swapChainImageFormat = surfaceFormat.format;
     swapChainExtent = extent;
+}
+
+void vkSwapChainWrapper::initImageViews() {
+    swapChainImageViews.resize(swapChainImages.size());
+
+    for (size_t i = 0; i < swapChainImages.size(); i++) {
+        VkImageViewCreateInfo createInfo{};
+        createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        createInfo.image = swapChainImages[i];
+        createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        createInfo.format = swapChainImageFormat;
+        createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        createInfo.subresourceRange.baseMipLevel = 0;
+        createInfo.subresourceRange.levelCount = 1;
+        createInfo.subresourceRange.baseArrayLayer = 0;
+        createInfo.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(*device, &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS)
+            throw std::runtime_error("failed to create image views!");
+    }
 }
 
 VkSurfaceFormatKHR vkSwapChainWrapper::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {

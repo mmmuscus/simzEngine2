@@ -44,13 +44,13 @@ public:
 	VkDevice* getDevice() { return device; }
 
 	void init(const VkInstance* instance, VkSurfaceKHR* _surface);
-	void initPhysicalDevice(const VkInstance* instance);
-	void initDevice();
 
 	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice physDevice);
 	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice physDevice);
 
 private:
+	void initPhysicalDevice(const VkInstance* instance);
+	void initDevice();
 	
 	// TODO: ranking devices based on reqs and selecting the best one
 	bool isDeviceSuitable(VkPhysicalDevice physDevice);
