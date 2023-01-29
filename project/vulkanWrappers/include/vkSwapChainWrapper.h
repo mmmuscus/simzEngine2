@@ -11,6 +11,9 @@
 class vkSwapChainWrapper {
 private:
 	VkSwapchainKHR* swapChain;
+	std::vector<VkImage> swapChainImages;
+	VkFormat swapChainImageFormat;
+	VkExtent2D swapChainExtent;
 
 	VkDevice* device;
 
