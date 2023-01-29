@@ -7,6 +7,7 @@ class vkSurfaceWrapper {
 private:
 	VkSurfaceKHR* surface;
 
+	// The following resources are not being maintained by the class
 	VkInstance* instance;
 
 public:

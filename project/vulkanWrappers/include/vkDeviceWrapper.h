@@ -25,6 +25,7 @@ private:
 	VkQueue* graphicsQueue;
 	VkQueue* presentQueue;
 
+	// The following resources are not being maintained by the class
 	VkSurfaceKHR* surface;
 
 	const std::vector<const char*> deviceExtensions = {

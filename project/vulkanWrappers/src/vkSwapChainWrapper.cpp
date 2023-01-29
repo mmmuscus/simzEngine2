@@ -67,8 +67,8 @@ void vkSwapChainWrapper::initSwapChain(vkDeviceWrapper* deviceWrapper, GLFWwindo
     swapChainImages.resize(imageCount);
     vkGetSwapchainImagesKHR(*device, *swapChain, &imageCount, swapChainImages.data());
 
-    swapChainImageFormat = surfaceFormat.format;
-    swapChainExtent = extent;
+    swapChainImageFormat = new VkFormat(surfaceFormat.format);
+    swapChainExtent = new VkExtent2D(extent);
 }
 
 void vkSwapChainWrapper::initImageViews() {
@@ -79,7 +79,7 @@ void vkSwapChainWrapper::initImageViews() {
         createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         createInfo.image = swapChainImages[i];
         createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        createInfo.format = swapChainImageFormat;
+        createInfo.format = *swapChainImageFormat;
         createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
         createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
         createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
