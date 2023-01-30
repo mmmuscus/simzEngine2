@@ -1,10 +1,14 @@
 #include "../include/vkSwapChainWrapper.h"
 
 vkSwapChainWrapper::~vkSwapChainWrapper() {
+    if (device == nullptr)
+        return;
+    
     for (auto imageView : imageViews)
         vkDestroyImageView(*device, imageView, nullptr);
 
-    vkDestroySwapchainKHR(*device, *swapChain, nullptr);
+    if (swapChain != nullptr)
+        vkDestroySwapchainKHR(*device, *swapChain, nullptr);
 }
 
 void vkSwapChainWrapper::init(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface) {

@@ -1,7 +1,8 @@
 #include "../include/vkDeviceWrapper.h"
 
 vkDeviceWrapper::~vkDeviceWrapper() {
-	vkDestroyDevice(*device, nullptr);
+	if (device != nullptr)
+		vkDestroyDevice(*device, nullptr);
 }
 
 void vkDeviceWrapper::init(const VkInstance* instance, VkSurfaceKHR* _surface) {

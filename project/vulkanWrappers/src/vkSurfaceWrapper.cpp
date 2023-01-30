@@ -1,7 +1,11 @@
 #include "../include/vkSurfaceWrapper.h"
 
 vkSurfaceWrapper::~vkSurfaceWrapper() {
-	vkDestroySurfaceKHR(*instance, *surface, nullptr);
+    if (instance == nullptr)
+        return;
+
+    if (surface != nullptr)
+	    vkDestroySurfaceKHR(*instance, *surface, nullptr);
 }
 
 void vkSurfaceWrapper::init(VkInstance* _instance, GLFWwindow* window) {

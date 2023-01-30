@@ -1,42 +1,5 @@
 #include "../include/vkInstanceWrapper.h"
 
-bool vkInstanceWrapper::checkValidationLayerSupport() {
-    uint32_t layerCount;
-    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
-    std::vector<VkLayerProperties> availableLayers(layerCount);
-    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
-
-    for (const char* layerName : validationLayers) {
-        bool layerFound = false;
-
-        for (const auto& layerProperties : availableLayers) {
-            if (strcmp(layerName, layerProperties.layerName) == 0) {
-                layerFound = true;
-                break;
-            }
-        }
-
-        if (!layerFound)
-            return false;
-    }
-
-    return true;
-}
-
-std::vector<const char*> vkInstanceWrapper::getRequiredExtensions() {
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
-    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-    std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-
-    if (enableValidationLayers)
-        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-
-    return extensions;
-}
-
 vkInstanceWrapper::~vkInstanceWrapper() {
     if (enableValidationLayers && debugMessenger != nullptr)
         DestroyDebugUtilsMessengerEXT(*instance, *debugMessenger, nullptr);
@@ -97,7 +60,7 @@ void vkInstanceWrapper::init() {
 void vkInstanceWrapper::setupDebugMessenger() {
     debugMessenger = new VkDebugUtilsMessengerEXT();
 
-    if (!enableValidationLayers) 
+    if (!enableValidationLayers)
         return;
 
     VkDebugUtilsMessengerCreateInfoEXT createInfo{};
@@ -109,4 +72,41 @@ void vkInstanceWrapper::setupDebugMessenger() {
 
     if (CreateDebugUtilsMessengerEXT(*instance, &createInfo, nullptr, debugMessenger) != VK_SUCCESS)
         throw std::runtime_error("failed to set up debug messenger!");
+}
+
+bool vkInstanceWrapper::checkValidationLayerSupport() {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (const char* layerName : validationLayers) {
+        bool layerFound = false;
+
+        for (const auto& layerProperties : availableLayers) {
+            if (strcmp(layerName, layerProperties.layerName) == 0) {
+                layerFound = true;
+                break;
+            }
+        }
+
+        if (!layerFound)
+            return false;
+    }
+
+    return true;
+}
+
+std::vector<const char*> vkInstanceWrapper::getRequiredExtensions() {
+    uint32_t glfwExtensionCount = 0;
+    const char** glfwExtensions;
+    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+    if (enableValidationLayers)
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+    return extensions;
 }

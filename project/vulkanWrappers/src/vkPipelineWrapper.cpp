@@ -1,11 +1,17 @@
 #include "../include/vkPipelineWrapper.h"
 
 vkPipelineWrapper::~vkPipelineWrapper() {
-	vkDestroyPipeline(*device, *graphicsPipeline, nullptr);
+	if (device == nullptr)
+		return;
 
-	vkDestroyPipelineLayout(*device, *pipelineLayout, nullptr);
+	if (graphicsPipeline != nullptr)
+		vkDestroyPipeline(*device, *graphicsPipeline, nullptr);
 
-	vkDestroyRenderPass(*device, *renderPass, nullptr);
+	if (pipelineLayout != nullptr)
+		vkDestroyPipelineLayout(*device, *pipelineLayout, nullptr);
+
+	if (renderPass != nullptr)
+		vkDestroyRenderPass(*device, *renderPass, nullptr);
 }
 
 void vkPipelineWrapper::init(VkDevice* _device, VkFormat* swapChainImageFormat) {
