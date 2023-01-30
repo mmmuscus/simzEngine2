@@ -30,15 +30,16 @@ static std::vector<char> readFile(const std::string& filename) {
 
 class vkPipelineWrapper {
 private:
-
+    VkPipelineLayout* pipelineLayout;
 
     // The following resources are not being maintained by the class
     VkDevice* device;
 
 public:
-    vkPipelineWrapper() : device(nullptr) {}
+    vkPipelineWrapper() : pipelineLayout(nullptr), device(nullptr) {}
+    ~vkPipelineWrapper();
 
-    void initGraphicsPipeline();
+    void initGraphicsPipeline(VkDevice* _device);
 
 private:
     VkShaderModule createShaderModule(const std::vector<char>& code);
