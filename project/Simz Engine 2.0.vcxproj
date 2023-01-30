@@ -159,6 +159,7 @@
     <ClCompile Include="vulkanWrappers\src\vkDeviceWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkInstanceWrapperValidationLayerHelper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkInstanceWrapper.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vkPipelineWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkSurfaceWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkSwapChainWrapper.cpp" />
   </ItemGroup>
@@ -166,8 +167,14 @@
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vkDeviceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h" />
+    <ClInclude Include="vulkanWrappers\include\vkPipelineWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkSurfaceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkSwapChainWrapper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\compile.bat" />
+    <None Include="shaders\fragmentShaders\baseShader.frag" />
+    <None Include="shaders\vertexShaders\baseShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

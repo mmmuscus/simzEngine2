@@ -10,6 +10,7 @@
 #include "vulkanWrappers/include/vkSurfaceWrapper.h"
 #include "vulkanWrappers/include/vkDeviceWrapper.h"
 #include "vulkanWrappers/include/vkSwapChainWrapper.h"
+#include "vulkanWrappers/include/vkPipelineWrapper.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -30,6 +31,7 @@ private:
     vkSurfaceWrapper surface;
     vkDeviceWrapper deviceWrapper;
     vkSwapChainWrapper swapChain;
+    vkPipelineWrapper pipeline;
 
     void initWindow() {
         glfwInit();
@@ -54,6 +56,8 @@ private:
 
         // creating swap chain
         swapChain.init(&deviceWrapper, window, surface.getSurface());
+
+        pipeline.initGraphicsPipeline();
     }
 
     void mainLoop() {
