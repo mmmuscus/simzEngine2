@@ -11,11 +11,11 @@
 class vkSwapChainWrapper {
 private:
 	VkSwapchainKHR* swapChain;
-	std::vector<VkImage> swapChainImages;
-	VkFormat* swapChainImageFormat;
-	VkExtent2D* swapChainExtent;
+	std::vector<VkImage> images;
+	VkFormat* imageFormat;
+	VkExtent2D* extent;
 	// An ImageView is a View to an image (think databases)
-	std::vector<VkImageView> swapChainImageViews;
+	std::vector<VkImageView> imageViews;
 
 	// The following resources are not being maintained by the class
 	VkDevice* device;
@@ -24,7 +24,7 @@ public:
 	vkSwapChainWrapper() : swapChain(nullptr), device(nullptr) {}
 	~vkSwapChainWrapper();
 
-	VkFormat* getImageFormat() { return swapChainImageFormat; }
+	VkFormat* getImageFormat() { return imageFormat; }
 
 	void init(vkDeviceWrapper* deviceWrapper,  GLFWwindow* window, VkSurfaceKHR* surface);
 
