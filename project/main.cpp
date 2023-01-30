@@ -56,8 +56,6 @@ private:
 
         // creating swap chain
         swapChain.init(&deviceWrapper, window, surface.getSurface());
-
-        pipeline.initGraphicsPipeline();
     }
 
     void mainLoop() {
