@@ -58,7 +58,7 @@ private:
         swapChain.init(&device, window, surface.getSurface());
 
         // creating graphics pipeline
-        // graphicsPipeline.init(device.getDevice(), swapChain.getImageFormat());
+        graphicsPipeline.init(device.getDevice(), swapChain.getImageFormat());
     }
 
     void mainLoop() {

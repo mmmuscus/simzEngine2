@@ -17,7 +17,7 @@ vkPipelineWrapper::~vkPipelineWrapper() {
 void vkPipelineWrapper::init(VkDevice* _device, VkFormat* swapChainImageFormat) {
 	device = _device;
 
-	initRenderPass(swapChainImageFormat);
+	// initRenderPass(swapChainImageFormat);
 	initGraphicsPipeline();
 }
 
@@ -79,6 +79,7 @@ void vkPipelineWrapper::initGraphicsPipeline() {
 
 	VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
+	/*
 	// This structure describes the format of the vertex data that will be passed to the vertex shader
 	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -171,6 +172,7 @@ void vkPipelineWrapper::initGraphicsPipeline() {
 
 	if (vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, graphicsPipeline) != VK_SUCCESS)
 		throw std::runtime_error("failed to create graphics pipeline!");
+	*/
 
 	// Cleanup for shader modules
 	vkDestroyShaderModule(*device, fragShaderModule, nullptr);
