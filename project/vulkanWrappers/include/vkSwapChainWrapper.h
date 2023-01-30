@@ -24,6 +24,8 @@ public:
 	vkSwapChainWrapper() : swapChain(nullptr), device(nullptr) {}
 	~vkSwapChainWrapper();
 
+	VkFormat* getImageFormat() { return swapChainImageFormat; }
+
 	void init(vkDeviceWrapper* deviceWrapper,  GLFWwindow* window, VkSurfaceKHR* surface);
 
 private:

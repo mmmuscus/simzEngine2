@@ -29,9 +29,9 @@ private:
 
     vkInstanceWrapper instance;
     vkSurfaceWrapper surface;
-    vkDeviceWrapper deviceWrapper;
+    vkDeviceWrapper device;
     vkSwapChainWrapper swapChain;
-    vkPipelineWrapper pipeline;
+    vkPipelineWrapper graphicsPipeline;
 
     void initWindow() {
         glfwInit();
@@ -52,10 +52,13 @@ private:
         surface.init(instance.getInstance(), window);
 
         // getting devices
-        deviceWrapper.init(instance.getInstance(), surface.getSurface());
+        device.init(instance.getInstance(), surface.getSurface());
 
         // creating swap chain
-        swapChain.init(&deviceWrapper, window, surface.getSurface());
+        swapChain.init(&device, window, surface.getSurface());
+
+        // creating graphics pipeline
+        graphicsPipeline.init(device.getDevice(), swapChain.getImageFormat());
     }
 
     void mainLoop() {

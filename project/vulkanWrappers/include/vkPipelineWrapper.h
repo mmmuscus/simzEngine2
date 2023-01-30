@@ -23,8 +23,6 @@ static std::vector<char> readFile(const std::string& filename) {
 
     file.close();
 
-    printf("%d\n", buffer.size());
-
     return buffer;
 }
 
@@ -32,18 +30,23 @@ class vkPipelineWrapper {
 private:
     VkRenderPass* renderPass;
     VkPipelineLayout* pipelineLayout;
+    VkPipeline* graphicsPipeline;
 
     // The following resources are not being maintained by the class
     VkDevice* device;
 
 public:
-    vkPipelineWrapper() : pipelineLayout(nullptr), device(nullptr) {}
+    vkPipelineWrapper() : 
+        renderPass(nullptr), 
+        pipelineLayout(nullptr), 
+        graphicsPipeline(nullptr), 
+        device(nullptr) {}
     ~vkPipelineWrapper();
 
-    void init(VkDevice* _device);
+    void init(VkDevice* _device, VkFormat* swapChainImageFormat);
 
 private:
-    void initRenderPass(VkFormat swapChainImageFormat);
+    void initRenderPass(VkFormat* swapChainImageFormat);
     void initGraphicsPipeline();
 
     VkShaderModule createShaderModule(const std::vector<char>& code);

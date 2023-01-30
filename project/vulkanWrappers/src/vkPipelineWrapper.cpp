@@ -1,23 +1,26 @@
 #include "../include/vkPipelineWrapper.h"
 
 vkPipelineWrapper::~vkPipelineWrapper() {
+	vkDestroyPipeline(*device, *graphicsPipeline, nullptr);
+
 	vkDestroyPipelineLayout(*device, *pipelineLayout, nullptr);
 
 	vkDestroyRenderPass(*device, *renderPass, nullptr);
 }
 
-void vkPipelineWrapper::init(VkDevice* _device) {
+void vkPipelineWrapper::init(VkDevice* _device, VkFormat* swapChainImageFormat) {
 	device = _device;
 
+	initRenderPass(swapChainImageFormat);
 	initGraphicsPipeline();
 }
 
-void vkPipelineWrapper::initRenderPass(VkFormat swapChainImageFormat) {
+void vkPipelineWrapper::initRenderPass(VkFormat* swapChainImageFormat) {
 	renderPass = new VkRenderPass();
 
 	// This struct a color attachment represented by one of the images of the swapchain
 	VkAttachmentDescription colorAttachment{};
-	colorAttachment.format = swapChainImageFormat;
+	colorAttachment.format = *swapChainImageFormat;
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -46,6 +49,7 @@ void vkPipelineWrapper::initRenderPass(VkFormat swapChainImageFormat) {
 
 void vkPipelineWrapper::initGraphicsPipeline() {
 	pipelineLayout = new VkPipelineLayout();
+	graphicsPipeline = new VkPipeline();
 
 	// possibly move the actual paths to another part of the code
 	auto vertShaderCode = readFile("shaders/vertexShaders/baseShader.vert");
@@ -142,6 +146,25 @@ void vkPipelineWrapper::initGraphicsPipeline() {
 
 	if (vkCreatePipelineLayout(*device, &pipelineLayoutInfo, nullptr, pipelineLayout) != VK_SUCCESS)
 		throw std::runtime_error("failed to create pipeline layout!");
+
+	VkGraphicsPipelineCreateInfo pipelineInfo{};
+	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipelineInfo.stageCount = 2;
+	pipelineInfo.pStages = shaderStages;
+	pipelineInfo.pVertexInputState = &vertexInputInfo;
+	pipelineInfo.pInputAssemblyState = &inputAssembly;
+	pipelineInfo.pViewportState = &viewportState;
+	pipelineInfo.pRasterizationState = &rasterizer;
+	pipelineInfo.pMultisampleState = &multisampling;
+	pipelineInfo.pColorBlendState = &colorBlending;
+	pipelineInfo.pDynamicState = &dynamicState;
+	pipelineInfo.layout = *pipelineLayout;
+	pipelineInfo.renderPass = *renderPass;
+	pipelineInfo.subpass = 0;
+	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+	if (vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, graphicsPipeline) != VK_SUCCESS)
+		throw std::runtime_error("failed to create graphics pipeline!");
 
 	// Cleanup for shader modules
 	vkDestroyShaderModule(*device, fragShaderModule, nullptr);
