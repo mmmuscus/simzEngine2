@@ -17,7 +17,7 @@ vkPipelineWrapper::~vkPipelineWrapper() {
 void vkPipelineWrapper::init(VkDevice* _device, VkFormat* swapChainImageFormat) {
 	device = _device;
 
-	// initRenderPass(swapChainImageFormat);
+	initRenderPass(swapChainImageFormat);
 	initGraphicsPipeline();
 }
 
@@ -58,9 +58,10 @@ void vkPipelineWrapper::initGraphicsPipeline() {
 	graphicsPipeline = new VkPipeline();
 
 	// possibly move the actual paths to another part of the code
-	auto vertShaderCode = readFile("shaders/vertexShaders/baseShader.vert");
-	auto fragShaderCode = readFile("shaders/fragmentShaders/baseShader.frag");
+	auto vertShaderCode = readFile("shaders/vertexShaders/vert.spv");
+	auto fragShaderCode = readFile("shaders/fragmentShaders/frag.spv");
 
+	
 	// Shader modules hold the shader program
 	VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
 	VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -79,7 +80,6 @@ void vkPipelineWrapper::initGraphicsPipeline() {
 
 	VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-	/*
 	// This structure describes the format of the vertex data that will be passed to the vertex shader
 	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -172,7 +172,6 @@ void vkPipelineWrapper::initGraphicsPipeline() {
 
 	if (vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, graphicsPipeline) != VK_SUCCESS)
 		throw std::runtime_error("failed to create graphics pipeline!");
-	*/
 
 	// Cleanup for shader modules
 	vkDestroyShaderModule(*device, fragShaderModule, nullptr);
@@ -186,7 +185,8 @@ VkShaderModule vkPipelineWrapper::createShaderModule(const std::vector<char>& co
 	createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 	VkShaderModule shaderModule;
-	if (vkCreateShaderModule(*device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+	if (vkCreateShaderModule(*device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
 		throw std::runtime_error("failed to create shader module!");
-	}
+
+	return shaderModule;
 }
