@@ -16,6 +16,9 @@ private:
 	VkExtent2D* extent;
 	// An ImageView is a View to an image (think databases)
 	std::vector<VkImageView> imageViews;
+	// These are dependent on the renderPass, so its kind of awkward that it is here, when we 
+	// destroy this variable, the renderPass already dosent exist.
+	std::vector<VkFramebuffer> framebuffers;
 
 	// The following resources are not being maintained by the class
 	VkDevice* device;
@@ -27,6 +30,7 @@ public:
 	VkFormat* getImageFormat() { return imageFormat; }
 
 	void init(vkDeviceWrapper* deviceWrapper,  GLFWwindow* window, VkSurfaceKHR* surface);
+	void initFrameBuffers(VkRenderPass* renderPass);
 
 private:
 	void initSwapChain(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface);

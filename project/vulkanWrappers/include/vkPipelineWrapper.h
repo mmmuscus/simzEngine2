@@ -43,6 +43,8 @@ public:
         device(nullptr) {}
     ~vkPipelineWrapper();
 
+    VkRenderPass* getRenderPass() { return renderPass; }
+
     void init(VkDevice* _device, VkFormat* swapChainImageFormat);
 
 private:

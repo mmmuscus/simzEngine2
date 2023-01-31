@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vkCommandWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkDeviceWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkInstanceWrapperValidationLayerHelper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkInstanceWrapper.cpp" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
+    <ClInclude Include="vulkanWrappers\include\vkCommandWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkDeviceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkPipelineWrapper.h" />
