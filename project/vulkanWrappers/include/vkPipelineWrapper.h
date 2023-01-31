@@ -44,6 +44,7 @@ public:
     ~vkPipelineWrapper();
 
     VkRenderPass* getRenderPass() { return renderPass; }
+    VkPipeline* getGraphicsPipeline() { return graphicsPipeline; }
 
     void init(VkDevice* _device, VkFormat* swapChainImageFormat);
 

@@ -4,6 +4,8 @@
 #include "generalIncludes.h"
 
 #include "vkDeviceWrapper.h"
+#include "vkSwapChainWrapper.h"
+#include "vkPipelineWrapper.h"
 
 class vkCommandWrapper {
 private:
@@ -18,6 +20,8 @@ public:
 	~vkCommandWrapper();
 
 	void init(vkDeviceWrapper* deviceWrapper);
+
+	void recordCommandBuffer(vkPipelineWrapper* pipelineWrapper, vkSwapChainWrapper* swapChainWrapper, uint32_t imageIndex);
 
 private:
 	void initCommandPool(vkDeviceWrapper* deviceWrapper);

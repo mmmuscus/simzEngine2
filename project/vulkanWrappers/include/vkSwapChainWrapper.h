@@ -28,6 +28,8 @@ public:
 	~vkSwapChainWrapper();
 
 	VkFormat* getImageFormat() { return imageFormat; }
+	VkExtent2D* getExtent() { return extent; }
+	std::vector<VkFramebuffer> getFramebuffers() { return framebuffers; }
 
 	void init(vkDeviceWrapper* deviceWrapper,  GLFWwindow* window, VkSurfaceKHR* surface);
 	void initFrameBuffers(VkRenderPass* renderPass);
