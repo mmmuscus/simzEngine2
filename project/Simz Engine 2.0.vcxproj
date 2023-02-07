@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -163,6 +163,7 @@
     <ClCompile Include="vulkanWrappers\src\vkPipelineWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkSurfaceWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkSwapChainWrapper.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vkSyncWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="vulkanWrappers\include\vkPipelineWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkSurfaceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkSwapChainWrapper.h" />
+    <ClInclude Include="vulkanWrappers\include\vkSyncWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\compile.bat" />
