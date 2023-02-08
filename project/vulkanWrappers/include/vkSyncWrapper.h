@@ -5,7 +5,9 @@
 
 class vkSyncWrapper {
 private:
-
+	VkSemaphore* imageAvailableSemaphore;
+	VkSemaphore* renderFinishedSemaphore;
+	VkFence* inFlightFence;
 
 public:
 
