@@ -10,7 +10,13 @@ private:
 	VkFence* inFlightFence;
 
 public:
+	vkSyncWrapper() :
+		imageAvailableSemaphore(nullptr),
+		renderFinishedSemaphore(nullptr),
+		inFlightFence(nullptr) {}
+	~vkSyncWrapper();
 
+	void init();
 
 private:
 
