@@ -19,6 +19,8 @@ public:
 	vkCommandWrapper() : commandPool(nullptr) {}
 	~vkCommandWrapper();
 
+	VkCommandBuffer* getCommandBuffer() { return commandBuffer; }
+
 	void init(vkDeviceWrapper* deviceWrapper);
 
 	void recordCommandBuffer(vkPipelineWrapper* pipelineWrapper, vkSwapChainWrapper* swapChainWrapper, uint32_t imageIndex);

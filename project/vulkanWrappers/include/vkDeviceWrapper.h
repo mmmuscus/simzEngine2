@@ -43,6 +43,8 @@ public:
 
 	VkPhysicalDevice* getPhysicalDevice() { return physicalDevice; }
 	VkDevice* getDevice() { return device; }
+	VkQueue* getGraphicsQueue() { return graphicsQueue; }
+	VkQueue* getPresentQueue() { return presentQueue; }
 
 	void init(const VkInstance* instance, VkSurfaceKHR* _surface);
 
