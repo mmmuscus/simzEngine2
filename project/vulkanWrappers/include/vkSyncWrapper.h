@@ -19,6 +19,10 @@ public:
 		device(nullptr) {}
 	~vkSyncWrapper();
 
+	VkSemaphore* getImageAvailableSemaphore() { return imageAvailableSemaphore; }
+	VkSemaphore* getRenderFinishedSemaphore() { return renderFinishedSemaphore; }
+	VkFence* getInFlightFence() { return inFlightFence; }
+
 	void init(VkDevice* _device);
 
 private:

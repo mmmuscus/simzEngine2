@@ -12,6 +12,7 @@
 #include "vulkanWrappers/include/vkSwapChainWrapper.h"
 #include "vulkanWrappers/include/vkPipelineWrapper.h"
 #include "vulkanWrappers/include/vkCommandWrapper.h"
+#include "vulkanWrappers/include/vkSyncWrapper.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -34,6 +35,7 @@ private:
     vkSwapChainWrapper swapChain;
     vkPipelineWrapper graphicsPipeline;
     vkCommandWrapper command;
+    vkSyncWrapper syncObject;
 
     void initWindow() {
         glfwInit();
@@ -67,6 +69,9 @@ private:
 
         // creating command pool and command buffer
         command.init(&device);
+
+        // creating sync objects
+        syncObject.init(device.getDevice());
     }
 
     void mainLoop() {
