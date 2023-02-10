@@ -9,14 +9,17 @@ private:
 	VkSemaphore* renderFinishedSemaphore;
 	VkFence* inFlightFence;
 
+	VkDevice* device;
+
 public:
 	vkSyncWrapper() :
 		imageAvailableSemaphore(nullptr),
 		renderFinishedSemaphore(nullptr),
-		inFlightFence(nullptr) {}
+		inFlightFence(nullptr),
+		device(nullptr) {}
 	~vkSyncWrapper();
 
-	void init();
+	void init(VkDevice* _device);
 
 private:
 
