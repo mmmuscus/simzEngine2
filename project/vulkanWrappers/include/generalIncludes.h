@@ -24,4 +24,6 @@ struct SwapChainSupportDetails {
 	std::vector<VkPresentModeKHR> presentModes;
 };
 
+const int MAX_FRAMES_IN_FLIGHT = 2;
+
 #endif // GENERAL_INCLUDES_H_
