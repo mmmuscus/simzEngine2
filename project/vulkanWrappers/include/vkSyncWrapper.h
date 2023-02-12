@@ -5,23 +5,19 @@
 
 class vkSyncWrapper {
 private:
-	VkSemaphore* imageAvailableSemaphore;
-	VkSemaphore* renderFinishedSemaphore;
-	VkFence* inFlightFence;
+	std::vector<VkSemaphore> imageAvailableSemaphores;
+	std::vector<VkSemaphore> renderFinishedSemaphores;
+	std::vector<VkFence> inFlightFences;
 
 	VkDevice* device;
 
 public:
-	vkSyncWrapper() :
-		imageAvailableSemaphore(nullptr),
-		renderFinishedSemaphore(nullptr),
-		inFlightFence(nullptr),
-		device(nullptr) {}
+	vkSyncWrapper() : device(nullptr) {}
 	~vkSyncWrapper();
 
-	VkSemaphore* getImageAvailableSemaphore() { return imageAvailableSemaphore; }
-	VkSemaphore* getRenderFinishedSemaphore() { return renderFinishedSemaphore; }
-	VkFence* getInFlightFence() { return inFlightFence; }
+	std::vector<VkSemaphore> getImageAvailableSemaphore() { return imageAvailableSemaphores; }
+	std::vector<VkSemaphore> getRenderFinishedSemaphore() { return renderFinishedSemaphores; }
+	std::vector<VkFence> getInFlightFence() { return inFlightFences; }
 
 	void init(VkDevice* _device);
 
