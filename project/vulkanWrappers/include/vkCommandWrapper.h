@@ -10,7 +10,7 @@
 class vkCommandWrapper {
 private:
 	VkCommandPool* commandPool;
-	VkCommandBuffer* commandBuffer;
+	std::vector<VkCommandBuffer> commandBuffers;
 
 	// The following resources are not being maintained by the class
 	VkDevice* device;
@@ -19,7 +19,7 @@ public:
 	vkCommandWrapper() : commandPool(nullptr) {}
 	~vkCommandWrapper();
 
-	VkCommandBuffer* getCommandBuffer() { return commandBuffer; }
+	std::vector<VkCommandBuffer> getCommandBuffer() { return commandBuffers; }
 
 	void init(vkDeviceWrapper* deviceWrapper);
 
