@@ -19,7 +19,7 @@ public:
 	vkCommandWrapper() : commandPool(nullptr) {}
 	~vkCommandWrapper();
 
-	std::vector<VkCommandBuffer> getCommandBuffer() { return commandBuffers; }
+	std::vector<VkCommandBuffer> getCommandBuffers() { return commandBuffers; }
 
 	void init(vkDeviceWrapper* deviceWrapper);
 

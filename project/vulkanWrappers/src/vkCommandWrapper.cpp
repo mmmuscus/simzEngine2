@@ -51,7 +51,7 @@ void vkCommandWrapper::recordCommandBuffer(vkPipelineWrapper* pipelineWrapper, v
 	beginInfo.flags = 0; // Optional
 	beginInfo.pInheritanceInfo = nullptr; // Optional
 
-	if (vkBeginCommandBuffer(*commandBuffer, &beginInfo) != VK_SUCCESS)
+	if (vkBeginCommandBuffer(commandBuffers, &beginInfo) != VK_SUCCESS)
 		throw std::runtime_error("failed to begin recording command buffer!");
 
 	VkRenderPassBeginInfo renderPassInfo{};
@@ -65,7 +65,7 @@ void vkCommandWrapper::recordCommandBuffer(vkPipelineWrapper* pipelineWrapper, v
 	renderPassInfo.clearValueCount = 1;
 	renderPassInfo.pClearValues = &clearColor;
 
-	vkCmdBeginRenderPass(*commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdBeginRenderPass(commandBuffers, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 	vkCmdBindPipeline(*commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineWrapper->getGraphicsPipeline());
 

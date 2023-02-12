@@ -37,6 +37,8 @@ private:
     vkCommandWrapper command;
     vkSyncWrapper syncObject;
 
+    uint32_t currentFrame = 0;
+
     void initWindow() {
         glfwInit();
 
