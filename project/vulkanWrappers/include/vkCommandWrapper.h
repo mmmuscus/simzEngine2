@@ -20,6 +20,7 @@ public:
 	~vkCommandWrapper();
 
 	std::vector<VkCommandBuffer> getCommandBuffers() { return commandBuffers; }
+	VkCommandBuffer getCommandBuffer(uint32_t i) { return commandBuffers[i]; }
 
 	void init(vkDeviceWrapper* deviceWrapper);
 
