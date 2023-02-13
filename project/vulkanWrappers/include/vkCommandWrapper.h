@@ -23,7 +23,11 @@ public:
 
 	void init(vkDeviceWrapper* deviceWrapper);
 
-	void recordCommandBuffer(vkPipelineWrapper* pipelineWrapper, vkSwapChainWrapper* swapChainWrapper, uint32_t imageIndex);
+	void recordCommandBuffer(
+		VkCommandBuffer commandBuffer, 
+		vkPipelineWrapper* pipelineWrapper, 
+		vkSwapChainWrapper* swapChainWrapper, 
+		uint32_t imageIndex);
 
 private:
 	void initCommandPool(vkDeviceWrapper* deviceWrapper);
