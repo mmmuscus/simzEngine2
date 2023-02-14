@@ -79,7 +79,7 @@ private:
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
-            //drawFrame();
+            drawFrame();
         }
 
         vkDeviceWaitIdle(*device.getDevice());
