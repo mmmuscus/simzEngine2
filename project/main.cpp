@@ -90,16 +90,30 @@ private:
         VkCommandBuffer buffer = command.getCommandBuffer(currentFrame);
 
         vkWaitForFences(*device.getDevice(), 1, &fence, VK_TRUE, UINT64_MAX);
-        vkResetFences(*device.getDevice(), 1, &fence);
 
         uint32_t imageIndex;
-        vkAcquireNextImageKHR(
+        VkResult result = vkAcquireNextImageKHR(
             *device.getDevice(),
             *swapChain.getSwapChain(),
             UINT64_MAX,
             syncObject.getImageAvailableSemaphore(currentFrame),
             VK_NULL_HANDLE,
             &imageIndex);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+            swapChain.recreateSwapChain(
+                &device,
+                window, 
+                surface.getSurface(), 
+                graphicsPipeline.getRenderPass());
+            return;
+        }
+        else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+            throw std::runtime_error("failed to acquire swap chain image!");
+        }
+
+        // Only reset the fence if we are submitting work
+        vkResetFences(*device.getDevice(), 1, &fence);
 
         vkResetCommandBuffer(command.getCommandBuffer(currentFrame), 0);
         command.recordCommandBuffer(command.getCommandBuffer(currentFrame), &graphicsPipeline, &swapChain, imageIndex);
@@ -132,7 +146,19 @@ private:
         presentInfo.pSwapchains = swapChains;
         presentInfo.pImageIndices = &imageIndex;
 
-        vkQueuePresentKHR(*device.getPresentQueue(), &presentInfo);
+        result = vkQueuePresentKHR(*device.getPresentQueue(), &presentInfo);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+            swapChain.recreateSwapChain(
+                &device,
+                window,
+                surface.getSurface(),
+                graphicsPipeline.getRenderPass());
+            return;
+        }
+        else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+            throw std::runtime_error("failed to acquire swap chain image!");
+        }
 
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
