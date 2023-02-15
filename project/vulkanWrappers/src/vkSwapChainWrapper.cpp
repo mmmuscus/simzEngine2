@@ -19,6 +19,8 @@ void vkSwapChainWrapper::recreateSwapChain(
 ) {
     vkDeviceWaitIdle(*device);
 
+    cleanupSwapChain();
+
     initSwapChain(deviceWrapper, window, surface);
     initImageViews();
     initFrameBuffers(renderPass);
