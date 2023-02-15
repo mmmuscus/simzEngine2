@@ -35,6 +35,13 @@ public:
 	void init(vkDeviceWrapper* deviceWrapper,  GLFWwindow* window, VkSurfaceKHR* surface);
 	void initFrameBuffers(VkRenderPass* renderPass);
 
+	void recreateSwapChain(
+		vkDeviceWrapper* deviceWrapper, 
+		GLFWwindow* window, 
+		VkSurfaceKHR* surface,
+		VkRenderPass* renderPass);
+	void cleanupSwapChain();
+
 private:
 	void initSwapChain(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface);
 	void initImageViews();

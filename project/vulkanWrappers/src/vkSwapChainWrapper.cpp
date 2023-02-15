@@ -1,18 +1,7 @@
 #include "../include/vkSwapChainWrapper.h"
 
 vkSwapChainWrapper::~vkSwapChainWrapper() {
-    if (device == nullptr)
-        return;
-
-    // When we destoy this, the render pass its based on already dosent exist
-    for (auto framebuffer : framebuffers)
-        vkDestroyFramebuffer(*device, framebuffer, nullptr);
-    
-    for (auto imageView : imageViews)
-        vkDestroyImageView(*device, imageView, nullptr);
-
-    if (swapChain != nullptr)
-        vkDestroySwapchainKHR(*device, *swapChain, nullptr);
+    cleanupSwapChain();
 }
 
 void vkSwapChainWrapper::init(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface) {
@@ -20,6 +9,32 @@ void vkSwapChainWrapper::init(vkDeviceWrapper* deviceWrapper, GLFWwindow* window
     
     initSwapChain(deviceWrapper, window, surface);
     initImageViews();
+}
+
+void vkSwapChainWrapper::recreateSwapChain(
+    vkDeviceWrapper* deviceWrapper, 
+    GLFWwindow* window, 
+    VkSurfaceKHR* surface,
+    VkRenderPass* renderPass
+) {
+    vkDeviceWaitIdle(*device);
+
+    initSwapChain(deviceWrapper, window, surface);
+    initImageViews();
+    initFrameBuffers(renderPass);
+}
+
+void vkSwapChainWrapper::cleanupSwapChain() {
+    if (device == nullptr)
+        return;
+
+    for (size_t i = 0; i < framebuffers.size(); i++)
+        vkDestroyFramebuffer(*device, framebuffers[i], nullptr);
+
+    for (size_t i = 0; i < imageViews.size(); i++)
+        vkDestroyImageView(*device, imageViews[i], nullptr);
+
+    vkDestroySwapchainKHR(*device, *swapChain, nullptr);
 }
 
 void vkSwapChainWrapper::initSwapChain(vkDeviceWrapper* deviceWrapper, GLFWwindow* window, VkSurfaceKHR* surface) {
