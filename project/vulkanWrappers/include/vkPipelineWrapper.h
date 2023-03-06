@@ -32,6 +32,9 @@ private:
     VkPipelineLayout* pipelineLayout;
     VkPipeline* graphicsPipeline;
 
+    // Attempting the moving of framebuffers
+    std::vector<VkFramebuffer> framebuffers;
+
     // The following resources are not being maintained by the class
     VkDevice* device;
 
