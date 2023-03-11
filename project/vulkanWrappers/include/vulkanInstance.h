@@ -44,6 +44,8 @@ public:
 	vk::Instance getInstance() { return instance.get(); }
 	vk::PhysicalDevice getPhysicalDevice() { return physicalDevice; }
 	vk::Device getDevice() { return device.get(); }
+	vk::Queue getGraphicsQueue() { return graphicsQueue; }
+	vk::Queue getPresentQueue() { return presentQueue; }
 
 	void listExtensions();
 

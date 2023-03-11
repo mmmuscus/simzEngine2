@@ -29,6 +29,7 @@ public:
 	void setDevice(vk::Device _device) { device = _device; }
 
 	vk::SurfaceKHR getSurface() { return surface; }
+	vk::SwapchainKHR getSwapChain() { return swapChain; }
 	vk::Format getFormat() { return imageFormat; }
 	vk::Extent2D getExtent() { return extent; }
 	std::vector<vk::ImageView> getImageViews() { return imageViews; }
