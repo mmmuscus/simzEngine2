@@ -42,7 +42,8 @@ void vulkanInstance::initDevice() {
         queueCreateInfos.data()
     );
     createInfo.pEnabledFeatures = &deviceFeatures;
-    createInfo.enabledExtensionCount = 0;
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+    createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     if (enableValidationLayers) {
         createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
@@ -60,23 +61,41 @@ void vulkanInstance::initDevice() {
     presentQueue = device->getQueue(indices.presentFamily.value(), 0);
 }
 
-bool vulkanInstance::isDeviceSuitable(const vk::PhysicalDevice& device) {
-    QueueFamilyIndices indices = findQueueFamilies(device);
+bool vulkanInstance::isDeviceSuitable(const vk::PhysicalDevice& physDevice) {
+    QueueFamilyIndices indices = findQueueFamilies(physDevice);
 
-    return indices.isComplete();
+    bool extensionsSupported = checkDeviceExtensionSupport(physDevice);
+
+    bool swapChainAdequate = false;
+    if (extensionsSupported) {
+        SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physDevice);
+        swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+    }
+
+    return indices.isComplete() && extensionsSupported && swapChainAdequate;
 }
 
-QueueFamilyIndices vulkanInstance::findQueueFamilies(vk::PhysicalDevice device) {
+bool vulkanInstance::checkDeviceExtensionSupport(const vk::PhysicalDevice& physDevice) {
+    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+    for (const auto& extension : physDevice.enumerateDeviceExtensionProperties()) {
+        requiredExtensions.erase(extension.extensionName);
+    }
+
+    return requiredExtensions.empty();
+}
+
+QueueFamilyIndices vulkanInstance::findQueueFamilies(vk::PhysicalDevice physDevice) {
     QueueFamilyIndices indices;
 
-    auto queueFamilies = device.getQueueFamilyProperties();
+    auto queueFamilies = physDevice.getQueueFamilyProperties();
 
     int i = 0;
     for (const auto& queueFamily : queueFamilies) {
         if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
             indices.graphicsFamily = i;
 
-        if (queueFamily.queueCount > 0 && device.getSurfaceSupportKHR(i, surface))
+        if (queueFamily.queueCount > 0 && physDevice.getSurfaceSupportKHR(i, surface))
             indices.presentFamily = i;
 
         if (indices.isComplete())
@@ -86,4 +105,13 @@ QueueFamilyIndices vulkanInstance::findQueueFamilies(vk::PhysicalDevice device) 
     }
 
     return indices;
+}
+
+SwapChainSupportDetails vulkanInstance::querySwapChainSupport(const vk::PhysicalDevice& physDevice) {
+    SwapChainSupportDetails details;
+    details.capabilities = physDevice.getSurfaceCapabilitiesKHR(surface);
+    details.formats = physDevice.getSurfaceFormatsKHR(surface);
+    details.presentModes = physDevice.getSurfacePresentModesKHR(surface);
+
+    return details;
 }

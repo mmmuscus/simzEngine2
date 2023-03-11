@@ -29,6 +29,10 @@ private:
 	vk::Queue graphicsQueue;
 	vk::Queue presentQueue;
 
+	const std::vector<const char*> deviceExtensions = {
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
+	};
+
 	// Not maintained by the class:
 	vk::SurfaceKHR surface;
 
@@ -38,6 +42,8 @@ public:
 	void setSurface(vk::SurfaceKHR _surface) { surface = _surface; }
 
 	vk::Instance getInstance() { return instance.get(); }
+	vk::PhysicalDevice getPhysicalDevice() { return physicalDevice; }
+	vk::Device getDevice() { return device.get(); }
 
 	void listExtensions();
 
@@ -47,8 +53,8 @@ public:
 	void initDevice();
 
 	// Devices:
-	QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device);
-	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice physDevice);
+	QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice physDevice);
+	SwapChainSupportDetails querySwapChainSupport(const vk::PhysicalDevice& physDevice);
 
 private:
 	// Instance:
@@ -73,8 +79,8 @@ private:
 
 	// Devices:
 	// TODO: ranking devices based on reqs and selecting the best one
-	bool isDeviceSuitable(const vk::PhysicalDevice& device);
-	bool checkDeviceExtensionSupport(VkPhysicalDevice physDevice);
+	bool isDeviceSuitable(const vk::PhysicalDevice& physDevice);
+	bool checkDeviceExtensionSupport(const vk::PhysicalDevice& physDevice);
 };
 
 #endif // VULKAN_INSTANCE_H_

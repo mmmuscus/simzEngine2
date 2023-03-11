@@ -214,8 +214,14 @@ private:
         surface.initSurface(window);
 
         // Devices:
-        /*instance.initPhysicalDevice();
-        instance.initDevice();*/
+        instance.setSurface(surface.getSurface());
+        instance.initPhysicalDevice();
+        instance.initDevice();
+
+        // SwapChain:
+        surface.setDevice(instance.getDevice());
+        surface.initSwapChain(&instance, window);
+        surface.initImageViews();
     }
 
     void mainLoop() {
