@@ -6,18 +6,20 @@
 #include <cstdlib>
 #include <vector>
 
-#include "vulkanWrappers/include/vkInstanceWrapper.h"
+/*#include "vulkanWrappers/include/vkInstanceWrapper.h"
 #include "vulkanWrappers/include/vkSurfaceWrapper.h"
 #include "vulkanWrappers/include/vkDeviceWrapper.h"
 #include "vulkanWrappers/include/vkSwapChainWrapper.h"
 #include "vulkanWrappers/include/vkPipelineWrapper.h"
 #include "vulkanWrappers/include/vkCommandWrapper.h"
-#include "vulkanWrappers/include/vkSyncWrapper.h"
+#include "vulkanWrappers/include/vkSyncWrapper.h"*/
+
+#include "vulkanWrappers/include/vulkanInstance.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
-class Application {
+/*class Application {
 public:
     void run() {
         initWindow();
@@ -168,6 +170,45 @@ private:
         }
 
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    }
+
+    void cleanup() {
+        glfwDestroyWindow(window);
+        glfwTerminate();
+    }
+};*/
+
+class Application {
+public:
+    void run() {
+        initWindow();
+        initVulkan();
+        mainLoop();
+        cleanup();
+    }
+
+private:
+    GLFWwindow* window;
+
+    vulkanInstance instance;
+
+    void initWindow() {
+        glfwInit();
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+    }
+
+    void initVulkan() {
+        instance.listExtensions();
+        instance.init();
+    }
+
+    void mainLoop() {
+        while (!glfwWindowShouldClose(window)) {
+            glfwPollEvents();
+        }
     }
 
     void cleanup() {

@@ -39,6 +39,18 @@
     <ClCompile Include="vulkanWrappers\src\vkCommandWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vkSyncWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h">
@@ -60,6 +72,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\vkCommandWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\vkSyncWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\vulkanIncludes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

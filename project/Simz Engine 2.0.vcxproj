@@ -164,6 +164,9 @@
     <ClCompile Include="vulkanWrappers\src\vkSurfaceWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkSwapChainWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vkSyncWrapper.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="vulkanWrappers\include\vkSurfaceWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkSwapChainWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vkSyncWrapper.h" />
+    <ClInclude Include="vulkanWrappers\include\vulkanIncludes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\compile.bat" />
