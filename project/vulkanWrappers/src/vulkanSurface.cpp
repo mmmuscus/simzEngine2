@@ -1,11 +1,14 @@
 #include "../include/vulkanSurface.h"
 
-void vulkanSurface::init(vk::Instance _instance) {
-	instance = _instance;
-
-	initSurface();
+vulkanSurface::~vulkanSurface() {
+	instance.destroySurfaceKHR(surface);
 }
 
-void vulkanSurface::initSurface() {
+void vulkanSurface::initSurface(GLFWwindow* window) {
+	VkSurfaceKHR surf;
 
+	if (glfwCreateWindowSurface(instance, window, nullptr, &surf) != VK_SUCCESS)
+		throw std::runtime_error("failed to create window surface!");
+
+	surface = surf;
 }

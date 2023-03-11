@@ -20,18 +20,26 @@ void vulkanInstance::initPhysicalDevice() {
 
 void vulkanInstance::initDevice() {
     QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
+    std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+
     float queuePriority = 1.0f;
-    auto queueCreateInfo = vk::DeviceQueueCreateInfo(
-        vk::DeviceQueueCreateFlags(),
-        indices.graphicsFamily.value(),
-        1, // queueCount
-        &queuePriority
-    );
+
+    for (uint32_t queueFamily : uniqueQueueFamilies) {
+        queueCreateInfos.push_back({
+            vk::DeviceQueueCreateFlags(),
+            queueFamily,
+            1, // queueCount
+            &queuePriority
+            });
+    }
 
     auto deviceFeatures = vk::PhysicalDeviceFeatures();
     auto createInfo = vk::DeviceCreateInfo(
         vk::DeviceCreateFlags(),
-        1, &queueCreateInfo
+        static_cast<uint32_t>(queueCreateInfos.size()),
+        queueCreateInfos.data()
     );
     createInfo.pEnabledFeatures = &deviceFeatures;
     createInfo.enabledExtensionCount = 0;
@@ -49,6 +57,7 @@ void vulkanInstance::initDevice() {
     }
 
     graphicsQueue = device->getQueue(indices.graphicsFamily.value(), 0);
+    presentQueue = device->getQueue(indices.presentFamily.value(), 0);
 }
 
 bool vulkanInstance::isDeviceSuitable(const vk::PhysicalDevice& device) {
@@ -64,13 +73,14 @@ QueueFamilyIndices vulkanInstance::findQueueFamilies(vk::PhysicalDevice device) 
 
     int i = 0;
     for (const auto& queueFamily : queueFamilies) {
-        if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics) {
+        if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
             indices.graphicsFamily = i;
-        }
 
-        if (indices.isComplete()) {
+        if (queueFamily.queueCount > 0 && device.getSurfaceSupportKHR(i, surface))
+            indices.presentFamily = i;
+
+        if (indices.isComplete())
             break;
-        }
 
         i++;
     }

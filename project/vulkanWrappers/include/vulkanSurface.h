@@ -7,17 +7,22 @@
 
 class vulkanSurface {
 private:
-	vk::UniqueSurfaceKHR surface;
+	vk::SurfaceKHR surface;
 
 
-
+	// Not maintained by the class:
 	vk::Instance instance;
 
 public:
-	void init(vk::Instance _instance);
+	~vulkanSurface();
+
+	void setInstance(vk::Instance _instance) { instance = _instance; }
+
+	vk::SurfaceKHR getSurface() { return surface; }
+
+	void initSurface(GLFWwindow* window);
 
 private:
-	void initSurface();
 };
 
 #endif // VULKAN_SURFACE_H_

@@ -14,7 +14,7 @@ public:
 	vkSurfaceWrapper() : surface(nullptr), instance(nullptr) {}
 	~vkSurfaceWrapper();
 
-	VkSurfaceKHR* getSurface() { return surface; }
+	VkSurfaceKHR* getSurfacePtr() { return surface; }
 
 	void init(VkInstance* _instance, GLFWwindow* window);
 };

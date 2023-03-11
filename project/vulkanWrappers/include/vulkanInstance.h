@@ -9,9 +9,10 @@
 
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
+	std::optional<uint32_t> presentFamily;
 
 	bool isComplete() {
-		return graphicsFamily.has_value();
+		return graphicsFamily.has_value() && presentFamily.has_value();
 	}
 };
 
@@ -26,25 +27,30 @@ private:
 	vk::UniqueDevice device;
 	// Queues:
 	vk::Queue graphicsQueue;
+	vk::Queue presentQueue;
+
+	// Not maintained by the class:
+	vk::SurfaceKHR surface;
 
 public:
 	~vulkanInstance();
 
+	void setSurface(vk::SurfaceKHR _surface) { surface = _surface; }
+
 	vk::Instance getInstance() { return instance.get(); }
 
 	void listExtensions();
-	void init();
+
+	void initInstance();
+	void initCallback();
+	void initPhysicalDevice();
+	void initDevice();
 
 	// Devices:
 	QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device);
 	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice physDevice);
 
 private:
-	void initInstance();
-	void initCallback();
-	void initPhysicalDevice();
-	void initDevice();
-
 	// Instance:
 	bool checkValidationLayerSupport();
 	std::vector<const char*> getRequiredExtensions();

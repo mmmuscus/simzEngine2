@@ -18,11 +18,6 @@ void vulkanInstance::listExtensions() {
     }
 }
 
-void vulkanInstance::init() {
-	initInstance();
-    initCallback();
-}
-
 void vulkanInstance::initInstance() {
     if (enableValidationLayers && !checkValidationLayerSupport()) {
         throw std::runtime_error("validation layers requested, but not available!");

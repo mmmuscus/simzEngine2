@@ -15,6 +15,7 @@
 #include "vulkanWrappers/include/vkSyncWrapper.h"*/
 
 #include "vulkanWrappers/include/vulkanInstance.h"
+#include "vulkanWrappers/include/vulkanSurface.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -191,6 +192,7 @@ private:
     GLFWwindow* window;
 
     vulkanInstance instance;
+    vulkanSurface surface;
 
     void initWindow() {
         glfwInit();
@@ -202,7 +204,18 @@ private:
 
     void initVulkan() {
         instance.listExtensions();
-        instance.init();
+
+        // Instance:
+        instance.initInstance();
+        instance.initCallback();
+
+        // Surface:
+        surface.setInstance(instance.getInstance());
+        surface.initSurface(window);
+
+        // Devices:
+        /*instance.initPhysicalDevice();
+        instance.initDevice();*/
     }
 
     void mainLoop() {
