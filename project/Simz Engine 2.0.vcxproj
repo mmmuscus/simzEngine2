@@ -168,6 +168,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanObject.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanRenderPass.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanSurface.cpp" />
   </ItemGroup>
@@ -182,6 +183,7 @@
     <ClInclude Include="vulkanWrappers\include\vkSyncWrapper.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
+    <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderPass.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanSurface.h" />
   </ItemGroup>

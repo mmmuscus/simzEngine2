@@ -39,6 +39,8 @@ public:
     
     void setDevice(vk::Device _device) { device = _device; }
 
+    vk::Pipeline getPipeline() { return graphicsPipeline; }
+
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
 
 private:

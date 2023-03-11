@@ -18,6 +18,7 @@
 #include "vulkanWrappers/include/vulkanSurface.h"
 #include "vulkanWrappers/include/vulkanObject.h"
 #include "vulkanWrappers/include/vulkanRenderPass.h"
+#include "vulkanWrappers/include/vulkanRenderer.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -197,6 +198,7 @@ private:
     vulkanSurface surface;
     vulkanObject object;
     vulkanRenderPass renderPass;
+    vulkanRenderer renderer;
 
     void initWindow() {
         glfwInit();
@@ -237,6 +239,11 @@ private:
 
         // Framebuffers:
         renderPass.initFrameBuffers(surface.getImageViews(), surface.getExtent());
+
+        // CommandPool + CommandBuffers:
+        renderer.setDevice(instance.getDevice());
+        renderer.initCommandPool(&instance);
+        renderer.initCommandBuffers();
     }
 
     void mainLoop() {

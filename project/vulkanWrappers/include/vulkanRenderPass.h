@@ -17,6 +17,7 @@ public:
 	void setDevice(vk::Device _device) { device = _device; }
 
 	vk::RenderPass getRenderPass() { return renderPass; }
+	std::vector<vk::Framebuffer> getFramebuffers() { return framebuffers; }
 
 	void initRenderPass(vk::Format imageFormat);
 	void initFrameBuffers(std::vector<vk::ImageView> imageViews, vk::Extent2D extent);
