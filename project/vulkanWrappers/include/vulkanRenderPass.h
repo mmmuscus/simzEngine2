@@ -6,6 +6,7 @@
 class vulkanRenderPass {
 private:
 	vk::RenderPass renderPass;
+	std::vector<vk::Framebuffer> framebuffers;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -18,6 +19,7 @@ public:
 	vk::RenderPass getRenderPass() { return renderPass; }
 
 	void initRenderPass(vk::Format imageFormat);
+	void initFrameBuffers(std::vector<vk::ImageView> imageViews, vk::Extent2D extent);
 
 private:
 

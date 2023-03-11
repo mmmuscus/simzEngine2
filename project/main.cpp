@@ -234,6 +234,9 @@ private:
         // Pipeline:
         object.setDevice(instance.getDevice());
         object.initPipeline(surface.getExtent(), renderPass.getRenderPass());
+
+        // Framebuffers:
+        renderPass.initFrameBuffers(surface.getImageViews(), surface.getExtent());
     }
 
     void mainLoop() {

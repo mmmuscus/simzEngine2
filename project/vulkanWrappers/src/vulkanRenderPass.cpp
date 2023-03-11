@@ -1,6 +1,10 @@
 #include "../include/vulkanRenderPass.h"
 
 vulkanRenderPass::~vulkanRenderPass() {
+    for (auto framebuffer : framebuffers) {
+        device.destroyFramebuffer(framebuffer);
+    }
+
     device.destroyRenderPass(renderPass);
 }
 
@@ -35,5 +39,30 @@ void vulkanRenderPass::initRenderPass(vk::Format imageFormat) {
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create render pass!");
+    }
+}
+
+void vulkanRenderPass::initFrameBuffers(std::vector<vk::ImageView> imageViews, vk::Extent2D extent) {
+    framebuffers.resize(imageViews.size());
+
+    for (size_t i = 0; i < imageViews.size(); i++) {
+        vk::ImageView attachments[] = {
+            imageViews[i]
+        };
+
+        vk::FramebufferCreateInfo framebufferInfo = {};
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = extent.width;
+        framebufferInfo.height = extent.height;
+        framebufferInfo.layers = 1;
+
+        try {
+            framebuffers[i] = device.createFramebuffer(framebufferInfo);
+        }
+        catch (vk::SystemError err) {
+            throw std::runtime_error("failed to create framebuffer!");
+        }
     }
 }

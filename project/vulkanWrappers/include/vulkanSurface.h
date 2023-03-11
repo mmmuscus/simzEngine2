@@ -31,6 +31,7 @@ public:
 	vk::SurfaceKHR getSurface() { return surface; }
 	vk::Format getFormat() { return imageFormat; }
 	vk::Extent2D getExtent() { return extent; }
+	std::vector<vk::ImageView> getImageViews() { return imageViews; }
 
 	void initSurface(GLFWwindow* window);
 	void initSwapChain(vulkanInstance* inst, GLFWwindow* window);
