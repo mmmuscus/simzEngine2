@@ -1,10 +1,11 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
+    device.destroyPipeline(graphicsPipeline);
     device.destroyPipelineLayout(pipelineLayout);
 }
 
-void vulkanObject::initPipeline(vk::Extent2D extent) {
+void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) {
     auto vertShaderCode = readFile("shaders/vertexShaders/vert.spv");
     auto fragShaderCode = readFile("shaders/fragmentShaders/frag.spv");
 
@@ -88,6 +89,28 @@ void vulkanObject::initPipeline(vk::Extent2D extent) {
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create pipeline layout!");
+    }
+
+    vk::GraphicsPipelineCreateInfo pipelineInfo = {};
+    pipelineInfo.stageCount = 2;
+    pipelineInfo.pStages = shaderStages;
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &inputAssembly;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizer;
+    pipelineInfo.pMultisampleState = &multisampling;
+    pipelineInfo.pColorBlendState = &colorBlending;
+    pipelineInfo.layout = pipelineLayout;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = 0;
+    pipelineInfo.basePipelineHandle = nullptr;
+
+    try {
+        vk::Result result;
+        std::tie( result, graphicsPipeline ) = device.createGraphicsPipeline(nullptr, pipelineInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create graphics pipeline!");
     }
 }
 

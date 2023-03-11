@@ -39,7 +39,7 @@ public:
     
     void setDevice(vk::Device _device) { device = _device; }
 
-    void initPipeline(vk::Extent2D extent);
+    void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);

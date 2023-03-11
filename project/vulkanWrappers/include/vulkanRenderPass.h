@@ -15,6 +15,8 @@ public:
 
 	void setDevice(vk::Device _device) { device = _device; }
 
+	vk::RenderPass getRenderPass() { return renderPass; }
+
 	void initRenderPass(vk::Format imageFormat);
 
 private:

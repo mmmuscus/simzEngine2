@@ -233,7 +233,7 @@ private:
 
         // Pipeline:
         object.setDevice(instance.getDevice());
-        object.initPipeline(surface.getExtent());
+        object.initPipeline(surface.getExtent(), renderPass.getRenderPass());
     }
 
     void mainLoop() {
