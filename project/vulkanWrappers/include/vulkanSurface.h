@@ -29,6 +29,7 @@ public:
 	void setDevice(vk::Device _device) { device = _device; }
 
 	vk::SurfaceKHR getSurface() { return surface; }
+	vk::Format getFormat() { return imageFormat; }
 	vk::Extent2D getExtent() { return extent; }
 
 	void initSurface(GLFWwindow* window);

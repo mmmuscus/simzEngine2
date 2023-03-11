@@ -5,8 +5,8 @@ vulkanObject::~vulkanObject() {
 }
 
 void vulkanObject::initPipeline(vk::Extent2D extent) {
-    auto vertShaderCode = readFile("shaders/vert.spv");
-    auto fragShaderCode = readFile("shaders/frag.spv");
+    auto vertShaderCode = readFile("shaders/vertexShaders/vert.spv");
+    auto fragShaderCode = readFile("shaders/fragmentShaders/frag.spv");
 
     auto vertShaderModule = createShaderModule(vertShaderCode);
     auto fragShaderModule = createShaderModule(fragShaderCode);
