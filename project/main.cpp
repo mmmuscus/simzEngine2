@@ -16,6 +16,7 @@
 
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
+#include "vulkanWrappers/include/vulkanObject.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -193,6 +194,7 @@ private:
 
     vulkanInstance instance;
     vulkanSurface surface;
+    vulkanObject object;
 
     void initWindow() {
         glfwInit();
@@ -222,6 +224,12 @@ private:
         surface.setDevice(instance.getDevice());
         surface.initSwapChain(&instance, window);
         surface.initImageViews();
+
+        // Render Pass:
+
+        // Pipeline:
+        object.setDevice(instance.getDevice());
+        object.initPipeline(surface.getExtent());
     }
 
     void mainLoop() {
