@@ -30,7 +30,7 @@ private:
 public:
 	~vulkanInstance();
 
-	vk::UniqueInstance* getInstancePtr() { return &instance; }
+	vk::Instance getInstance() { return instance.get(); }
 
 	void listExtensions();
 	void init();

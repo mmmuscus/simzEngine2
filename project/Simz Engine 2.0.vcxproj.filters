@@ -51,6 +51,9 @@
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vulkanSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\vulkanIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\vulkanSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
