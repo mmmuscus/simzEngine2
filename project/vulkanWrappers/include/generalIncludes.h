@@ -1,12 +1,8 @@
 #ifndef GENERAL_INCLUDES_H_
 #define GENERAL_INCLUDES_H_
 
-#define GLFW_INCLUDE_VULKAN
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
-
-#include <stdexcept>
-#include <vector>
-#include <cstdint>
 
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
@@ -15,13 +11,13 @@ const bool enableValidationLayers = true;
 #endif
 
 const std::vector<const char*> validationLayers = {
-		"VK_LAYER_KHRONOS_validation"
+        "VK_LAYER_KHRONOS_validation"
 };
 
 struct SwapChainSupportDetails {
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
+    vk::SurfaceCapabilitiesKHR capabilities;
+    std::vector<vk::SurfaceFormatKHR> formats;
+    std::vector<vk::PresentModeKHR> presentModes;
 };
 
 const int MAX_FRAMES_IN_FLIGHT = 2;

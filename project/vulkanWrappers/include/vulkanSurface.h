@@ -1,7 +1,7 @@
 #ifndef VULKAN_SURFACE_H_
 #define VULKAN_SURFACE_H_
 
-#include "vulkanIncludes.h"
+#include "generalIncludes.h"
 
 #include "vulkanInstance.h"
 #include "vulkanRenderPass.h"

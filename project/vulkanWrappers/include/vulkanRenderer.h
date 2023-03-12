@@ -1,7 +1,7 @@
 #ifndef VULKAN_RENDERER_H_
 #define VULKAN_RENDERER_H_
 
-#include "vulkanIncludes.h"
+#include "generalIncludes.h"
 
 #include "vulkanInstance.h"
 #include "vulkanObject.h"

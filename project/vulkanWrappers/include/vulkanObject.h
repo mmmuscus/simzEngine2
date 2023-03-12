@@ -1,7 +1,7 @@
 #ifndef VULKAN_OBJECT_H_
 #define VULKAN_OBJECT_H_
 
-#include "vulkanIncludes.h"
+#include "generalIncludes.h"
 
 #include <fstream>
 

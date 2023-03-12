@@ -1,7 +1,7 @@
 #ifndef VULKAN_RENDER_PASS_H_
 #define VULKAN_RENDER_PASS_H_
 
-#include "vulkanIncludes.h"
+#include "generalIncludes.h"
 
 class vulkanRenderPass {
 private:

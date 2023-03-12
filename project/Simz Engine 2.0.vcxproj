@@ -156,14 +156,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkCommandWrapper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkDeviceWrapper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkInstanceWrapperValidationLayerHelper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkInstanceWrapper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkPipelineWrapper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkSurfaceWrapper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkSwapChainWrapper.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vkSyncWrapper.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
@@ -174,14 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
-    <ClInclude Include="vulkanWrappers\include\vkCommandWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vkDeviceWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vkInstanceWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vkPipelineWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vkSurfaceWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vkSwapChainWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vkSyncWrapper.h" />
-    <ClInclude Include="vulkanWrappers\include\vulkanIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderPass.h" />
