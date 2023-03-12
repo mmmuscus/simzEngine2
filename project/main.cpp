@@ -266,7 +266,7 @@ private:
                 surface.getExtent());
         }
 
-        vkDeviceWaitIdle(instance.getDevice());
+        instance.getDevice().waitIdle();
     }
 
     void cleanup() {

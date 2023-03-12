@@ -4,6 +4,7 @@
 #include "vulkanIncludes.h"
 
 #include "vulkanInstance.h"
+#include "vulkanRenderPass.h"
 
 class vulkanSurface {
 private:
@@ -37,6 +38,13 @@ public:
 	void initSurface(GLFWwindow* window);
 	void initSwapChain(vulkanInstance* inst, GLFWwindow* window);
 	void initImageViews();
+
+	void cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers);
+	void recreateSwapChain(
+		vulkanRenderPass* renderPass, 
+		GLFWwindow* window, 
+		vulkanInstance* inst
+	);
 
 private:
 

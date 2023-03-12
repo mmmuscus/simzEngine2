@@ -103,6 +103,32 @@ void vulkanSurface::initImageViews() {
     }
 }
 
+void vulkanSurface::cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers) {
+    for (auto framebuffer : framebuffers) {
+        device.destroyFramebuffer(framebuffer);
+    }
+
+    for (auto imageView : imageViews) {
+        device.destroyImageView(imageView);
+    }
+
+    device.destroySwapchainKHR(swapChain);
+}
+
+void vulkanSurface::recreateSwapChain(
+    vulkanRenderPass* renderPass,
+    GLFWwindow* window,
+    vulkanInstance* inst
+) {
+    device.waitIdle();
+
+    cleanupSwapChain(renderPass->getFramebuffers());
+
+    initSwapChain(inst, window);
+    initImageViews();
+    renderPass->initFrameBuffers(imageViews, extent);
+}
+
 vk::SurfaceFormatKHR vulkanSurface::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) {
     if (availableFormats.size() == 1 && availableFormats[0].format == vk::Format::eUndefined) {
         return { vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eSrgbNonlinear };
