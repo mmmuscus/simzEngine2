@@ -19,9 +19,8 @@ void vulkanInstance::listExtensions() {
 }
 
 void vulkanInstance::initInstance() {
-    if (enableValidationLayers && !checkValidationLayerSupport()) {
+    if (enableValidationLayers && !checkValidationLayerSupport())
         throw std::runtime_error("validation layers requested, but not available!");
-    }
 
     auto appInfo = vk::ApplicationInfo(
         "Momendigm Shift",

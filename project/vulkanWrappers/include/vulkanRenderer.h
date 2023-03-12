@@ -17,6 +17,8 @@ private:
 	std::vector<vk::Semaphore> imageAvailableSemaphores;
 	std::vector<vk::Semaphore> renderFinishedSemaphores;
 	std::vector<vk::Fence> inFlightFences;
+	// currentFrame:
+	size_t currentFrame = 0;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -31,14 +33,21 @@ public:
 	void initSyncObjects();
 
 	void recordCommandBuffer(
-		vk::CommandBuffer  commandBuffer,
+		vk::CommandBuffer commandBuffer,
 		vk::Pipeline graphicsPipeline,
-		vulkanRenderPass renderPass,
+		vulkanRenderPass* renderPass,
 		vk::Extent2D extent,
 		uint32_t imageIndex
 	);
 
-	void drawFrame();
+	void drawFrame(
+		vk::SwapchainKHR swapChain,
+		vk::Queue graphicsQueue,
+		vk::Queue presentQueue,
+		vk::Pipeline graphicsPipeline,
+		vulkanRenderPass* renderPass,
+		vk::Extent2D extent
+	);
 
 private:
 

@@ -129,7 +129,11 @@ private:
         vkResetFences(*device.getDevice(), 1, &fence);
 
         vkResetCommandBuffer(command.getCommandBuffer(currentFrame), 0);
-        command.recordCommandBuffer(command.getCommandBuffer(currentFrame), &graphicsPipeline, &swapChain, imageIndex);
+        command.recordCommandBuffer(
+            command.getCommandBuffer(currentFrame), 
+            &graphicsPipeline, 
+            &swapChain, 
+            imageIndex);
 
         VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -204,6 +208,7 @@ private:
         glfwInit();
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
     }
@@ -244,12 +249,24 @@ private:
         renderer.setDevice(instance.getDevice());
         renderer.initCommandPool(&instance);
         renderer.initCommandBuffers();
+
+        // SyncObjects:
+        renderer.initSyncObjects();
     }
 
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
+            renderer.drawFrame(
+                surface.getSwapChain(),
+                instance.getGraphicsQueue(),
+                instance.getPresentQueue(),
+                object.getPipeline(),
+                &renderPass,
+                surface.getExtent());
         }
+
+        vkDeviceWaitIdle(instance.getDevice());
     }
 
     void cleanup() {
