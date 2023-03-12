@@ -208,9 +208,15 @@ private:
         glfwInit();
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+        glfwSetWindowUserPointer(window, this);
+        glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+    }
+
+    static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+        auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
+        app->renderer.setFrameBufferResized(true);
     }
 
     void initVulkan() {
@@ -258,12 +264,11 @@ private:
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
             renderer.drawFrame(
-                surface.getSwapChain(),
-                instance.getGraphicsQueue(),
-                instance.getPresentQueue(),
+                &surface,
+                &instance,
                 object.getPipeline(),
                 &renderPass,
-                surface.getExtent());
+                window);
         }
 
         instance.getDevice().waitIdle();

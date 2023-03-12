@@ -114,28 +114,46 @@ void vulkanRenderer::recordCommandBuffer(
 }
 
 void vulkanRenderer::drawFrame(
-    vk::SwapchainKHR swapChain,
-    vk::Queue graphicsQueue,
-    vk::Queue presentQueue,
+    vulkanSurface* surface,
+    vulkanInstance* instance,
     vk::Pipeline graphicsPipeline,
     vulkanRenderPass* renderPass,
-    vk::Extent2D extent
+    GLFWwindow* window
 ) {
     device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+
+    uint32_t imageIndex;
+    try {
+        vk::ResultValue result = device.acquireNextImageKHR(
+            surface->getSwapChain(),
+            std::numeric_limits<uint64_t>::max(),
+            imageAvailableSemaphores[currentFrame],
+            nullptr);
+        imageIndex = result.value;
+    } catch (vk::OutOfDateKHRError err) {
+        surface->recreateSwapChain(
+            renderPass,
+            window,
+            instance);
+        return;
+    } catch (vk::SystemError err) {
+        throw std::runtime_error("failed to acquire swap chain image!");
+    }
+
     device.resetFences(1, &inFlightFences[currentFrame]);
 
-    uint32_t imageIndex = device.acquireNextImageKHR(
-        swapChain, 
+    /*uint32_t imageIndex = device.acquireNextImageKHR(
+        surface->getSwapChain(), 
         std::numeric_limits<uint64_t>::max(),
         imageAvailableSemaphores[currentFrame], 
-        nullptr).value;
+        nullptr).value;*/
 
     vkResetCommandBuffer(commandBuffers[currentFrame], 0);
     recordCommandBuffer(
         commandBuffers[currentFrame],
         graphicsPipeline,
         renderPass,
-        extent,
+        surface->getExtent(),
         imageIndex);
 
     vk::SubmitInfo submitInfo = {};
@@ -154,7 +172,7 @@ void vulkanRenderer::drawFrame(
     submitInfo.pSignalSemaphores = signalSemaphores;
 
     try {
-        graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
+        instance->getGraphicsQueue().submit(submitInfo, inFlightFences[currentFrame]);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to submit draw command buffer!");
@@ -164,12 +182,31 @@ void vulkanRenderer::drawFrame(
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
 
-    vk::SwapchainKHR swapChains[] = { swapChain };
+    vk::SwapchainKHR swapChains[] = { surface->getSwapChain() };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
 
-    presentQueue.presentKHR(presentInfo);
+    vk::Result resultPresent;
+    try {
+        resultPresent = instance->getPresentQueue().presentKHR(presentInfo);
+    }
+    catch (vk::OutOfDateKHRError err) {
+        resultPresent = vk::Result::eErrorOutOfDateKHR;
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to present swap chain image!");
+    }
+
+    if (resultPresent == vk::Result::eSuboptimalKHR || resultPresent == vk::Result::eSuboptimalKHR || framebufferResized) {
+        std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
+        framebufferResized = false;
+        surface->recreateSwapChain(
+            renderPass,
+            window,
+            instance);
+        return;
+    }
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

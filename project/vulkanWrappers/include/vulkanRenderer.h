@@ -17,8 +17,9 @@ private:
 	std::vector<vk::Semaphore> imageAvailableSemaphores;
 	std::vector<vk::Semaphore> renderFinishedSemaphores;
 	std::vector<vk::Fence> inFlightFences;
-	// currentFrame:
+	// Helper variables:
 	size_t currentFrame = 0;
+	bool framebufferResized = false;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -26,6 +27,7 @@ private:
 public:
 	~vulkanRenderer();
 
+	void setFrameBufferResized(bool val) { framebufferResized = val; }
 	void setDevice(vk::Device _device) { device = _device; }
 
 	void initCommandPool(vulkanInstance* instance);
@@ -41,12 +43,11 @@ public:
 	);
 
 	void drawFrame(
-		vk::SwapchainKHR swapChain,
-		vk::Queue graphicsQueue,
-		vk::Queue presentQueue,
+		vulkanSurface* surface,
+		vulkanInstance* instance,
 		vk::Pipeline graphicsPipeline,
 		vulkanRenderPass* renderPass,
-		vk::Extent2D extent
+		GLFWwindow* window
 	);
 
 private:
