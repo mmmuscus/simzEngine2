@@ -117,8 +117,7 @@ void vulkanRenderer::drawFrame(
     vulkanSurface* surface,
     vulkanInstance* instance,
     vk::Pipeline graphicsPipeline,
-    vulkanRenderPass* renderPass,
-    GLFWwindow* window
+    vulkanRenderPass* renderPass
 ) {
     device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
@@ -133,7 +132,6 @@ void vulkanRenderer::drawFrame(
     } catch (vk::OutOfDateKHRError err) {
         surface->recreateSwapChain(
             renderPass,
-            window,
             instance);
         return;
     } catch (vk::SystemError err) {
@@ -141,12 +139,6 @@ void vulkanRenderer::drawFrame(
     }
 
     device.resetFences(1, &inFlightFences[currentFrame]);
-
-    /*uint32_t imageIndex = device.acquireNextImageKHR(
-        surface->getSwapChain(), 
-        std::numeric_limits<uint64_t>::max(),
-        imageAvailableSemaphores[currentFrame], 
-        nullptr).value;*/
 
     vkResetCommandBuffer(commandBuffers[currentFrame], 0);
     recordCommandBuffer(
@@ -203,7 +195,6 @@ void vulkanRenderer::drawFrame(
         framebufferResized = false;
         surface->recreateSwapChain(
             renderPass,
-            window,
             instance);
         return;
     }

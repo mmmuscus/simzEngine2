@@ -56,8 +56,9 @@ private:
         instance.initCallback();
 
         // Surface:
+        surface.setWindow(window);
         surface.setInstance(instance.getInstance());
-        surface.initSurface(window);
+        surface.initSurface();
 
         // Devices:
         instance.setSurface(surface.getSurface());
@@ -66,7 +67,7 @@ private:
 
         // SwapChain:
         surface.setDevice(instance.getDevice());
-        surface.initSwapChain(&instance, window);
+        surface.initSwapChain(&instance);
         surface.initImageViews();
 
         // Render Pass:
@@ -96,8 +97,7 @@ private:
                 &surface,
                 &instance,
                 object.getPipeline(),
-                &renderPass,
-                window);
+                &renderPass);
         }
 
         instance.getDevice().waitIdle();

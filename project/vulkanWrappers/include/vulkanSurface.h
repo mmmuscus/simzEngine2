@@ -20,12 +20,14 @@ private:
 	std::vector<vk::ImageView> imageViews;
 
 	// Not maintained by the class:
+	GLFWwindow* window;
 	vk::Instance instance;
 	vk::Device device;
 
 public:
 	~vulkanSurface();
 
+	void setWindow(GLFWwindow* _window) { window = _window; }
 	void setInstance(vk::Instance _instance) { instance = _instance; }
 	void setDevice(vk::Device _device) { device = _device; }
 
@@ -35,14 +37,13 @@ public:
 	vk::Extent2D getExtent() { return extent; }
 	std::vector<vk::ImageView> getImageViews() { return imageViews; }
 
-	void initSurface(GLFWwindow* window);
-	void initSwapChain(vulkanInstance* inst, GLFWwindow* window);
+	void initSurface();
+	void initSwapChain(vulkanInstance* inst);
 	void initImageViews();
 
 	void cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers);
 	void recreateSwapChain(
 		vulkanRenderPass* renderPass, 
-		GLFWwindow* window, 
 		vulkanInstance* inst
 	);
 

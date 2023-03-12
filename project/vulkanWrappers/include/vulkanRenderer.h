@@ -3,7 +3,6 @@
 
 #include "generalIncludes.h"
 
-#include "vulkanInstance.h"
 #include "vulkanObject.h"
 #include "vulkanRenderPass.h"
 #include "vulkanSurface.h"
@@ -46,8 +45,7 @@ public:
 		vulkanSurface* surface,
 		vulkanInstance* instance,
 		vk::Pipeline graphicsPipeline,
-		vulkanRenderPass* renderPass,
-		GLFWwindow* window
+		vulkanRenderPass* renderPass
 	);
 
 private:

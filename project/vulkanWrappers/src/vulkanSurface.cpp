@@ -10,7 +10,7 @@ vulkanSurface::~vulkanSurface() {
 	instance.destroySurfaceKHR(surface);
 }
 
-void vulkanSurface::initSurface(GLFWwindow* window) {
+void vulkanSurface::initSurface() {
 	VkSurfaceKHR surf;
 
 	if (glfwCreateWindowSurface(instance, window, nullptr, &surf) != VK_SUCCESS)
@@ -19,7 +19,7 @@ void vulkanSurface::initSurface(GLFWwindow* window) {
 	surface = surf;
 }
 
-void vulkanSurface::initSwapChain(vulkanInstance* inst, GLFWwindow* window) {
+void vulkanSurface::initSwapChain(vulkanInstance* inst) {
     SwapChainSupportDetails swapChainSupport = 
         inst->querySwapChainSupport(inst->getPhysicalDevice());
 
@@ -117,7 +117,6 @@ void vulkanSurface::cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers) 
 
 void vulkanSurface::recreateSwapChain(
     vulkanRenderPass* renderPass,
-    GLFWwindow* window,
     vulkanInstance* inst
 ) {
     int width = 0, height = 0;
@@ -131,7 +130,7 @@ void vulkanSurface::recreateSwapChain(
 
     cleanupSwapChain(renderPass->getFramebuffers());
 
-    initSwapChain(inst, window);
+    initSwapChain(inst);
     initImageViews();
     renderPass->initFrameBuffers(imageViews, extent);
 }
