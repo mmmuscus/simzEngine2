@@ -32,7 +32,7 @@ void vulkanInstance::initDevice() {
             queueFamily,
             1, // queueCount
             &queuePriority
-            });
+        });
     }
 
     auto deviceFeatures = vk::PhysicalDeviceFeatures();
