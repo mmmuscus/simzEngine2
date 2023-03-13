@@ -9,40 +9,42 @@ vulkanRenderPass::~vulkanRenderPass() {
 }
 
 void vulkanRenderPass::initRenderPass(vk::Format imageFormat) {
-    vk::AttachmentDescription colorAttachment = {};
-    colorAttachment.format = imageFormat;
-    colorAttachment.samples = vk::SampleCountFlagBits::e1;
-    colorAttachment.loadOp = vk::AttachmentLoadOp::eClear;
-    colorAttachment.storeOp = vk::AttachmentStoreOp::eStore;
-    colorAttachment.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
-    colorAttachment.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
-    colorAttachment.initialLayout = vk::ImageLayout::eUndefined;
-    colorAttachment.finalLayout = vk::ImageLayout::ePresentSrcKHR;
+    auto colorAttachment = vk::AttachmentDescription(
+        vk::AttachmentDescriptionFlags(),
+        imageFormat,
+        vk::SampleCountFlagBits::e1,
+        vk::AttachmentLoadOp::eClear,
+        vk::AttachmentStoreOp::eStore,
+        vk::AttachmentLoadOp::eDontCare,
+        vk::AttachmentStoreOp::eDontCare,
+        vk::ImageLayout::eUndefined,
+        vk::ImageLayout::ePresentSrcKHR
+    );
 
-    vk::AttachmentReference colorAttachmentRef = {};
-    colorAttachmentRef.attachment = 0;
-    colorAttachmentRef.layout = vk::ImageLayout::eColorAttachmentOptimal;
+    auto colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
 
-    vk::SubpassDescription subpass = {};
-    subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
-    subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &colorAttachmentRef;
+    auto subpass = vk::SubpassDescription(
+        vk::SubpassDescriptionFlags(),
+        vk::PipelineBindPoint::eGraphics,
+        0, nullptr,                             // input attachment
+        1, &colorAttachmentRef                  // color attachment
+    );
 
-    vk::SubpassDependency dependency = {};
-    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    dependency.dstSubpass = 0;
-    dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    // dependency.srcAccessMask = 0;
-    dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+    auto dependency = vk::SubpassDependency(
+        (uint32_t)VK_SUBPASS_EXTERNAL,
+        (uint32_t)0,
+        vk::PipelineStageFlagBits::eColorAttachmentOutput,
+        vk::PipelineStageFlagBits::eColorAttachmentOutput,
+        (vk::AccessFlagBits)0,
+        vk::AccessFlagBits::eColorAttachmentWrite
+    );
 
-    vk::RenderPassCreateInfo renderPassInfo = {};
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = &colorAttachment;
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpass;
-    renderPassInfo.dependencyCount = 1;
-    renderPassInfo.pDependencies = &dependency;
+    auto renderPassInfo = vk::RenderPassCreateInfo(
+        vk::RenderPassCreateFlags(),
+        1, &colorAttachment,
+        1, &subpass,
+        1, &dependency
+    );
 
     try {
         renderPass = device.createRenderPass(renderPassInfo);
@@ -60,13 +62,13 @@ void vulkanRenderPass::initFrameBuffers(std::vector<vk::ImageView> imageViews, v
             imageViews[i]
         };
 
-        vk::FramebufferCreateInfo framebufferInfo = {};
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = 1;
-        framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = extent.width;
-        framebufferInfo.height = extent.height;
-        framebufferInfo.layers = 1;
+        auto framebufferInfo = vk::FramebufferCreateInfo(
+            vk::FramebufferCreateFlags(),
+            renderPass,
+            1, attachments,
+            extent.width, extent.height,
+            1
+        );
 
         try {
             framebuffers[i] = device.createFramebuffer(framebufferInfo);
