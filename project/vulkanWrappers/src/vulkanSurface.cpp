@@ -80,30 +80,25 @@ void vulkanSurface::initImageViews() {
     imageViews.resize(images.size());
 
     for (size_t i = 0; i < images.size(); i++) {
-
-        auto componentMapping = vk::ComponentMapping(
-            vk::ComponentSwizzle::eIdentity,
-            vk::ComponentSwizzle::eIdentity,
-            vk::ComponentSwizzle::eIdentity,
-            vk::ComponentSwizzle::eIdentity
-        );
-
-        auto imageSubresourceRange = vk::ImageSubresourceRange(
-            vk::ImageAspectFlagBits::eColor,
-            0, 1, 0, 1
+        auto createInfo = vk::ImageViewCreateInfo(
+            vk::ImageViewCreateFlags(),
+            images[i],
+            vk::ImageViewType::e2D,
+            imageFormat,
+            vk::ComponentMapping(
+                vk::ComponentSwizzle::eIdentity,
+                vk::ComponentSwizzle::eIdentity,
+                vk::ComponentSwizzle::eIdentity,
+                vk::ComponentSwizzle::eIdentity
+            ),
+            vk::ImageSubresourceRange(
+                vk::ImageAspectFlagBits::eColor,
+                0, 1, 0, 1
+            )
         );
 
         try {
-            imageViews[i] = device.createImageView(
-                vk::ImageViewCreateInfo(
-                    vk::ImageViewCreateFlags(),
-                    images[i],
-                    vk::ImageViewType::e2D,
-                    imageFormat,
-                    componentMapping,
-                    imageSubresourceRange
-                )
-            );
+            imageViews[i] = device.createImageView(createInfo);
         }
         catch (vk::SystemError err) {
             throw std::runtime_error("failed to create image views!");
