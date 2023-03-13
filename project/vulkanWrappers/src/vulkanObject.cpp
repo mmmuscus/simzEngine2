@@ -27,56 +27,71 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
         }
     };
 
-    vk::PipelineVertexInputStateCreateInfo vertexInputInfo = {};
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
+    auto vertexInputInfo = vk::PipelineVertexInputStateCreateInfo(
+        vk::PipelineVertexInputStateCreateFlags(),
+        0, nullptr,                     // vertex binding descriptions
+        0, nullptr                      // vertex attribute descriptions
+    );
 
-    vk::PipelineInputAssemblyStateCreateInfo inputAssembly = {};
-    inputAssembly.topology = vk::PrimitiveTopology::eTriangleList;
-    inputAssembly.primitiveRestartEnable = VK_FALSE;
+    auto inputAssembly = vk::PipelineInputAssemblyStateCreateInfo(
+        vk::PipelineInputAssemblyStateCreateFlags(),
+        vk::PrimitiveTopology::eTriangleList,
+        VK_FALSE
+    );
 
-    vk::PipelineViewportStateCreateInfo viewportState = {};
-    viewportState.viewportCount = 1;
-    viewportState.scissorCount = 1;
+    auto viewportState = vk::PipelineViewportStateCreateInfo(
+        vk::PipelineViewportStateCreateFlags(),
+        1, nullptr,                     // viewports
+        1, nullptr                      // scissors
+    );
 
-    vk::PipelineRasterizationStateCreateInfo rasterizer = {};
-    rasterizer.depthClampEnable = VK_FALSE;
-    rasterizer.rasterizerDiscardEnable = VK_FALSE;
-    rasterizer.polygonMode = vk::PolygonMode::eFill;
-    rasterizer.lineWidth = 1.0f;
-    rasterizer.cullMode = vk::CullModeFlagBits::eBack;
-    rasterizer.frontFace = vk::FrontFace::eClockwise;
-    rasterizer.depthBiasEnable = VK_FALSE;
+    auto rasterizer = vk::PipelineRasterizationStateCreateInfo(
+        vk::PipelineRasterizationStateCreateFlags(),
+        VK_FALSE,
+        VK_FALSE,
+        vk::PolygonMode::eFill,
+        vk::CullModeFlagBits::eBack,
+        vk::FrontFace::eClockwise,
+        VK_FALSE, 0.0f, 0.0f, 0.0f,     // depth bias
+        1.0f
+    );
 
-    vk::PipelineMultisampleStateCreateInfo multisampling = {};
-    multisampling.sampleShadingEnable = VK_FALSE;
-    multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
+    auto multisampling = vk::PipelineMultisampleStateCreateInfo(
+        vk::PipelineMultisampleStateCreateFlags(),
+        vk::SampleCountFlagBits::e1,
+        VK_FALSE
+    );
 
-    vk::PipelineColorBlendAttachmentState colorBlendAttachment = {};
-    colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
-    colorBlendAttachment.blendEnable = VK_FALSE;
+    auto colorBlendAttachment = vk::PipelineColorBlendAttachmentState(
+        VK_FALSE,
+        vk::BlendFactor::eZero, vk::BlendFactor::eZero, vk::BlendOp::eAdd,      // color blend
+        vk::BlendFactor::eZero, vk::BlendFactor::eZero, vk::BlendOp::eAdd,      // alpha blend
+        vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA
+    );
 
-    vk::PipelineColorBlendStateCreateInfo colorBlending = {};
-    colorBlending.logicOpEnable = VK_FALSE;
-    colorBlending.logicOp = vk::LogicOp::eCopy;
-    colorBlending.attachmentCount = 1;
-    colorBlending.pAttachments = &colorBlendAttachment;
-    colorBlending.blendConstants[0] = 0.0f;
-    colorBlending.blendConstants[1] = 0.0f;
-    colorBlending.blendConstants[2] = 0.0f;
-    colorBlending.blendConstants[3] = 0.0f;
+    auto colorBlending = vk::PipelineColorBlendStateCreateInfo(
+        vk::PipelineColorBlendStateCreateFlags(),
+        VK_FALSE, vk::LogicOp::eCopy,   // logic operation
+        1, &colorBlendAttachment,
+        { 0.0f, 0.0f, 0.0f, 0.0f }      // blend constants
+    );
 
     std::vector<vk::DynamicState> dynamicStates = {
             vk::DynamicState::eViewport,
             vk::DynamicState::eScissor
     };
-    vk::PipelineDynamicStateCreateInfo dynamicState{};
-    dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
-    dynamicState.pDynamicStates = dynamicStates.data();
 
-    vk::PipelineLayoutCreateInfo pipelineLayoutInfo = {};
-    pipelineLayoutInfo.setLayoutCount = 0;
-    pipelineLayoutInfo.pushConstantRangeCount = 0;
+    auto dynamicState = vk::PipelineDynamicStateCreateInfo(
+        vk::PipelineDynamicStateCreateFlags(),
+        static_cast<uint32_t>(dynamicStates.size()),
+        dynamicStates.data()
+    );
+
+    auto pipelineLayoutInfo = vk::PipelineLayoutCreateInfo(
+        vk::PipelineLayoutCreateFlags(),
+        0, nullptr,                     // set layouts
+        0, nullptr                      // push constant range
+    );
 
     try {
         pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
@@ -85,20 +100,23 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
         throw std::runtime_error("failed to create pipeline layout!");
     }
 
-    vk::GraphicsPipelineCreateInfo pipelineInfo = {};
-    pipelineInfo.stageCount = 2;
-    pipelineInfo.pStages = shaderStages;
-    pipelineInfo.pVertexInputState = &vertexInputInfo;
-    pipelineInfo.pInputAssemblyState = &inputAssembly;
-    pipelineInfo.pViewportState = &viewportState;
-    pipelineInfo.pRasterizationState = &rasterizer;
-    pipelineInfo.pMultisampleState = &multisampling;
-    pipelineInfo.pColorBlendState = &colorBlending;
-    pipelineInfo.pDynamicState = &dynamicState;
-    pipelineInfo.layout = pipelineLayout;
-    pipelineInfo.renderPass = renderPass;
-    pipelineInfo.subpass = 0;
-    pipelineInfo.basePipelineHandle = nullptr;
+    auto pipelineInfo = vk::GraphicsPipelineCreateInfo(
+        vk::PipelineCreateFlags(),
+        2, shaderStages,                // (shader) stages
+        &vertexInputInfo,
+        &inputAssembly,
+        nullptr,                        // tesselation state
+        &viewportState,
+        &rasterizer,
+        &multisampling,
+        nullptr,                        // depth stencil state
+        &colorBlending,
+        &dynamicState,
+        pipelineLayout,
+        renderPass,
+        0,                              // subpass
+        nullptr                         // base pipeline handle
+    );
 
     try {
         vk::Result result;
