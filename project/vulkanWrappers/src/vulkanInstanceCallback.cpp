@@ -11,12 +11,6 @@ void vulkanInstance::initCallback() {
         debugCallback,
         nullptr
     );
-
-    /*try {
-        callback = instance.get().createDebugUtilsMessengerEXT(createInfo);
-    } catch (vk::SystemError err) {
-        throw std::runtime_error("failed to set up debug callback!");
-    }*/
     
     if (CreateDebugUtilsMessengerEXT(*instance, reinterpret_cast<const VkDebugUtilsMessengerCreateInfoEXT*>(&createInfo), nullptr, &callback) != VK_SUCCESS) {
         throw std::runtime_error("failed to set up debug callback!");
