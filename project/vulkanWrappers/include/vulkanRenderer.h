@@ -29,6 +29,8 @@ public:
 	void setFrameBufferResized(bool val) { framebufferResized = val; }
 	void setDevice(vk::Device _device) { device = _device; }
 
+	vk::CommandPool getCommandPool() { return commandPool; }
+
 	void initCommandPool(vulkanInstance* instance);
 	void initCommandBuffers();
 	void initSyncObjects();

@@ -78,9 +78,6 @@ private:
         object.setDevice(instance.getDevice());
         object.initPipeline(surface.getExtent(), renderPass.getRenderPass());
 
-        // Vertex Buffer:
-        object.initVertexBuffer(instance.getPhysicalDevice());
-
         // Framebuffers:
         renderPass.initFrameBuffers(surface.getImageViews(), surface.getExtent());
 
@@ -88,6 +85,9 @@ private:
         renderer.setDevice(instance.getDevice());
         renderer.initCommandPool(&instance);
         renderer.initCommandBuffers();
+
+        // Vertex Buffer:
+        object.initVertexBuffer(&instance, renderer.getCommandPool());
 
         // SyncObjects:
         renderer.initSyncObjects();

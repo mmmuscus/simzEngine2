@@ -3,6 +3,8 @@
 
 #include "generalIncludes.h"
 
+#include "vulkanInstance.h"
+
 #include <fstream>
 
 struct Vertex {
@@ -86,9 +88,22 @@ public:
     std::vector<Vertex> getVertices() { return vertices; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
-    void initVertexBuffer(vk::PhysicalDevice physicalDevice);
+    void initVertexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
 
 private:
+    void initBuffer(
+        vk::DeviceSize size, 
+        vk::BufferUsageFlags usage, 
+        vk::MemoryPropertyFlags properties, 
+        vk::PhysicalDevice physicalDevice,
+        vk::Buffer& buffer, 
+        vk::DeviceMemory& bufferMemory
+    );
+    void copyBuffer(
+        vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
+        vk::CommandPool commandPool, vk::Queue graphicsQueue
+    );
+
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);
 
     uint32_t findMemoryType(
