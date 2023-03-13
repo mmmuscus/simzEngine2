@@ -14,12 +14,11 @@ void vulkanRenderer::initCommandPool(vulkanInstance* instance) {
     QueueFamilyIndices queueFamilyIndices = 
         instance->findQueueFamilies(instance->getPhysicalDevice());
 
-    vk::CommandPoolCreateInfo poolInfo = {};
-    poolInfo.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
-    poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
-
     try {
-        commandPool = device.createCommandPool(poolInfo);
+        commandPool = device.createCommandPool(vk::CommandPoolCreateInfo(
+                vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
+                queueFamilyIndices.graphicsFamily.value()
+        ));
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create command pool!");
@@ -29,10 +28,11 @@ void vulkanRenderer::initCommandPool(vulkanInstance* instance) {
 void vulkanRenderer::initCommandBuffers() {
     commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
-    vk::CommandBufferAllocateInfo allocInfo = {};
-    allocInfo.commandPool = commandPool;
-    allocInfo.level = vk::CommandBufferLevel::ePrimary;
-    allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
+    auto allocInfo = vk::CommandBufferAllocateInfo(
+        commandPool,
+        vk::CommandBufferLevel::ePrimary,
+        (uint32_t)commandBuffers.size()
+    );
 
     try {
         commandBuffers = device.allocateCommandBuffers(allocInfo);
@@ -66,7 +66,7 @@ void vulkanRenderer::recordCommandBuffer(
     vk::Extent2D extent,
     uint32_t imageIndex
 ) {
-    vk::CommandBufferBeginInfo beginInfo = {};
+    auto beginInfo = vk::CommandBufferBeginInfo();
 
     try {
         commandBuffer.begin(beginInfo);
@@ -75,31 +75,27 @@ void vulkanRenderer::recordCommandBuffer(
         throw std::runtime_error("failed to begin recording command buffer!");
     }
 
-    vk::RenderPassBeginInfo renderPassInfo = {};
-    renderPassInfo.renderPass = renderPass->getRenderPass();
-    renderPassInfo.framebuffer = renderPass->getFramebuffers()[imageIndex];
-    renderPassInfo.renderArea.offset = vk::Offset2D(0, 0);
-    renderPassInfo.renderArea.extent = extent;
-
     vk::ClearValue clearColor = { std::array<float, 4>{ 0.0f, 0.0f, 0.0f, 1.0f } };
-    renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = &clearColor;
+    auto renderArea = vk::Rect2D(vk::Offset2D(0, 0), extent);
+
+    auto renderPassInfo = vk::RenderPassBeginInfo(
+        renderPass->getRenderPass(),
+        renderPass->getFramebuffers()[imageIndex],
+        renderArea,
+        1, &clearColor
+    );
 
     commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, graphicsPipeline);
 
-    vk::Viewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = (float)extent.width;
-    viewport.height = (float)extent.height;
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-    commandBuffer.setViewport(0, 1, &viewport);
+    auto viewport = vk::Viewport(
+        0.0f, 0.0f,                 // x, y
+        (float)extent.width, (float)extent.height,
+        0.0f, 1.0f                  // min, max depth
+    );
+    auto scissor = vk::Rect2D(vk::Offset2D(0, 0), extent);
 
-    vk::Rect2D scissor{};
-    scissor.offset = vk::Offset2D(0, 0);
-    scissor.extent = extent;
+    commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
     commandBuffer.draw(3, 1, 0, 0);
@@ -148,20 +144,15 @@ void vulkanRenderer::drawFrame(
         surface->getExtent(),
         imageIndex);
 
-    vk::SubmitInfo submitInfo = {};
-
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
-    submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = waitSemaphores;
-    submitInfo.pWaitDstStageMask = waitStages;
-
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
-
     vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = signalSemaphores;
+
+    auto submitInfo = vk::SubmitInfo(
+        1, waitSemaphores, waitStages,
+        1, &commandBuffers[currentFrame],
+        1, signalSemaphores
+    );
 
     try {
         instance->getGraphicsQueue().submit(submitInfo, inFlightFences[currentFrame]);
@@ -170,14 +161,13 @@ void vulkanRenderer::drawFrame(
         throw std::runtime_error("failed to submit draw command buffer!");
     }
 
-    vk::PresentInfoKHR presentInfo = {};
-    presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = signalSemaphores;
-
     vk::SwapchainKHR swapChains[] = { surface->getSwapChain() };
-    presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains = swapChains;
-    presentInfo.pImageIndices = &imageIndex;
+
+    auto presentInfo = vk::PresentInfoKHR(
+        1, signalSemaphores,
+        1, swapChains,
+        &imageIndex
+    );
 
     vk::Result resultPresent;
     try {
