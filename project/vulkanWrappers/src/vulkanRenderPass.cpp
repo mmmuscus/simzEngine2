@@ -31,11 +31,11 @@ void vulkanRenderPass::initRenderPass(vk::Format imageFormat) {
     );
 
     auto dependency = vk::SubpassDependency(
-        (uint32_t)VK_SUBPASS_EXTERNAL,
-        (uint32_t)0,
+        static_cast<uint32_t>(VK_SUBPASS_EXTERNAL),
+        static_cast<uint32_t>(0),
         vk::PipelineStageFlagBits::eColorAttachmentOutput,
         vk::PipelineStageFlagBits::eColorAttachmentOutput,
-        (vk::AccessFlagBits)0,
+        static_cast<vk::AccessFlagBits>(0),
         vk::AccessFlagBits::eColorAttachmentWrite
     );
 

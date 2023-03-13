@@ -1,6 +1,9 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
+    device.destroyBuffer(vertexBuffer);
+    device.freeMemory(vertexBufferMemory);
+
     device.destroyPipeline(graphicsPipeline);
     device.destroyPipelineLayout(pipelineLayout);
 }
@@ -130,6 +133,44 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
     }
 }
 
+void vulkanObject::initVertexBuffer(vk::PhysicalDevice physicalDevice) {
+    auto bufferInfo = vk::BufferCreateInfo(
+        vk::BufferCreateFlags(),
+        sizeof(vertices[0]) * vertices.size(),
+        vk::BufferUsageFlagBits::eVertexBuffer,
+        vk::SharingMode::eExclusive
+    );
+
+    try {
+        vertexBuffer = device.createBuffer(bufferInfo);
+    } catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create vertex buffer!");
+    }
+
+    vk::MemoryRequirements memRequirements = device.getBufferMemoryRequirements(vertexBuffer);
+
+    auto allocInfo = vk::MemoryAllocateInfo(
+        memRequirements.size,
+        findMemoryType(
+            memRequirements.memoryTypeBits,
+            vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+            physicalDevice
+        )
+    );
+
+    try {
+        vertexBufferMemory = device.allocateMemory(allocInfo);
+    } catch (vk::SystemError err) {
+        throw std::runtime_error("failed to allocate vertex buffer memory!");
+    }
+
+    device.bindBufferMemory(vertexBuffer, vertexBufferMemory, 0);
+
+    void* data = device.mapMemory(vertexBufferMemory, 0, bufferInfo.size);
+    memcpy(data, vertices.data(), (size_t)bufferInfo.size);
+    device.unmapMemory(vertexBufferMemory);
+}
+
 vk::UniqueShaderModule vulkanObject::createShaderModule(const std::vector<char>& code) {
     try {
         return device.createShaderModuleUnique({
@@ -141,4 +182,20 @@ vk::UniqueShaderModule vulkanObject::createShaderModule(const std::vector<char>&
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create shader module!");
     }
+}
+
+uint32_t vulkanObject::findMemoryType(
+    uint32_t typeFilter, 
+    vk::MemoryPropertyFlags properties, 
+    vk::PhysicalDevice physicalDevice
+) {
+    vk::PhysicalDeviceMemoryProperties memProperties = physicalDevice.getMemoryProperties();
+
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+
+    throw std::runtime_error("failed to find suitable memory type!");
 }

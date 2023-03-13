@@ -35,7 +35,7 @@ public:
 
 	void recordCommandBuffer(
 		vk::CommandBuffer commandBuffer,
-		vk::Pipeline graphicsPipeline,
+		vulkanObject* object,
 		vulkanRenderPass* renderPass,
 		vk::Extent2D extent,
 		uint32_t imageIndex
@@ -44,7 +44,7 @@ public:
 	void drawFrame(
 		vulkanSurface* surface,
 		vulkanInstance* instance,
-		vk::Pipeline graphicsPipeline,
+		vulkanObject* object,
 		vulkanRenderPass* renderPass
 	);
 

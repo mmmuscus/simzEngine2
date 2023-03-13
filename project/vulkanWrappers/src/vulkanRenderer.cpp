@@ -31,7 +31,7 @@ void vulkanRenderer::initCommandBuffers() {
     auto allocInfo = vk::CommandBufferAllocateInfo(
         commandPool,
         vk::CommandBufferLevel::ePrimary,
-        (uint32_t)commandBuffers.size()
+        static_cast<uint32_t>(commandBuffers.size())
     );
 
     try {
@@ -61,7 +61,7 @@ void vulkanRenderer::initSyncObjects() {
 
 void vulkanRenderer::recordCommandBuffer(
     vk::CommandBuffer commandBuffer,
-    vk::Pipeline graphicsPipeline,
+    vulkanObject* object,
     vulkanRenderPass* renderPass,
     vk::Extent2D extent,
     uint32_t imageIndex
@@ -86,7 +86,7 @@ void vulkanRenderer::recordCommandBuffer(
     );
 
     commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-    commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, graphicsPipeline);
+    commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, object->getPipeline());
 
     auto viewport = vk::Viewport(
         0.0f, 0.0f,                 // x, y
@@ -98,7 +98,11 @@ void vulkanRenderer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    commandBuffer.draw(3, 1, 0, 0);
+    vk::Buffer vertexBuffers[] = { object->getVertexBuffer() };
+    vk::DeviceSize offsets[] = { 0 };
+    commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
+
+    commandBuffer.draw(static_cast<uint32_t>(object->getVertices().size()), 1, 0, 0);
     commandBuffer.endRenderPass();
 
     try {
@@ -112,7 +116,7 @@ void vulkanRenderer::recordCommandBuffer(
 void vulkanRenderer::drawFrame(
     vulkanSurface* surface,
     vulkanInstance* instance,
-    vk::Pipeline graphicsPipeline,
+    vulkanObject* object,
     vulkanRenderPass* renderPass
 ) {
     device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
@@ -139,7 +143,7 @@ void vulkanRenderer::drawFrame(
     vkResetCommandBuffer(commandBuffers[currentFrame], 0);
     recordCommandBuffer(
         commandBuffers[currentFrame],
-        graphicsPipeline,
+        object,
         renderPass,
         surface->getExtent(),
         imageIndex);
@@ -180,7 +184,7 @@ void vulkanRenderer::drawFrame(
         throw std::runtime_error("failed to present swap chain image!");
     }
 
-    if (resultPresent == vk::Result::eSuboptimalKHR || resultPresent == vk::Result::eSuboptimalKHR || framebufferResized) {
+    if (resultPresent == vk::Result::eSuboptimalKHR || framebufferResized) {
         std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
         framebufferResized = false;
         surface->recreateSwapChain(

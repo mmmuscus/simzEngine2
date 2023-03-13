@@ -62,6 +62,16 @@ class vulkanObject {
 private:
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
+    // Buffers:
+    vk::Buffer vertexBuffer;
+    vk::DeviceMemory vertexBufferMemory;
+
+    // Vertices:
+    const std::vector<Vertex> vertices = {
+        {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+        {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+        {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+    };
 
     // Not maintained by the class:
     vk::Device device;
@@ -72,11 +82,20 @@ public:
     void setDevice(vk::Device _device) { device = _device; }
 
     vk::Pipeline getPipeline() { return graphicsPipeline; }
+    vk::Buffer getVertexBuffer() { return vertexBuffer; }
+    std::vector<Vertex> getVertices() { return vertices; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
+    void initVertexBuffer(vk::PhysicalDevice physicalDevice);
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);
+
+    uint32_t findMemoryType(
+        uint32_t typeFilter,
+        vk::MemoryPropertyFlags properties,
+        vk::PhysicalDevice physicalDevice
+    );
 };
 
 #endif // VULKAN_OBJECT_H_
