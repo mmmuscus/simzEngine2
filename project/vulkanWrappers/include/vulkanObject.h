@@ -26,7 +26,7 @@ struct Vertex {
 
         auto colorInputAttributeDesciption = vk::VertexInputAttributeDescription(
             1, 0,                       // location, binding
-            vk::Format::eR32G32Sfloat,
+            vk::Format::eR32G32B32Sfloat,
             offsetof(Vertex, color)
         );
 
