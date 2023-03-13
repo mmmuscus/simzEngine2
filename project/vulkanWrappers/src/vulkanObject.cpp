@@ -27,10 +27,13 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
         }
     };
 
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
+
     auto vertexInputInfo = vk::PipelineVertexInputStateCreateInfo(
         vk::PipelineVertexInputStateCreateFlags(),
-        0, nullptr,                     // vertex binding descriptions
-        0, nullptr                      // vertex attribute descriptions
+        1, &bindingDescription,
+        static_cast<uint32_t>(attributeDescriptions.size()), attributeDescriptions.data()
     );
 
     auto inputAssembly = vk::PipelineInputAssemblyStateCreateInfo(
