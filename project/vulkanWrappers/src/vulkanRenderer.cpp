@@ -101,8 +101,10 @@ void vulkanRenderer::recordCommandBuffer(
     vk::Buffer vertexBuffers[] = { object->getVertexBuffer() };
     vk::DeviceSize offsets[] = { 0 };
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
+    commandBuffer.bindIndexBuffer(object->getIndexBuffer(), 0, vk::IndexType::eUint16);
 
-    commandBuffer.draw(static_cast<uint32_t>(object->getVertices().size()), 1, 0, 0);
+    commandBuffer.drawIndexed(static_cast<uint32_t>(object->getIndices().size()), 1, 0, 0, 0);
+    // commandBuffer.draw(static_cast<uint32_t>(object->getVertices().size()), 1, 0, 0);
     commandBuffer.endRenderPass();
 
     try {

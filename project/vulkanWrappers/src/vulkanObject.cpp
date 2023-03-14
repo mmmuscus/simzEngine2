@@ -1,6 +1,8 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
+    device.destroyBuffer(indexBuffer);
+    device.freeMemory(indexBufferMemory);
     device.destroyBuffer(vertexBuffer);
     device.freeMemory(vertexBufferMemory);
 
@@ -165,6 +167,45 @@ void vulkanObject::initVertexBuffer(vulkanInstance* instance, vk::CommandPool co
 
     copyBuffer(
         stagingBuffer, vertexBuffer, bufferSize,
+        commandPool, graphicsQueue
+    );
+
+    device.destroyBuffer(stagingBuffer);
+    device.freeMemory(stagingBufferMemory);
+}
+
+void vulkanObject::initIndexBuffer(vulkanInstance* instance, vk::CommandPool commandPool) {
+    vk::PhysicalDevice physicalDevice = instance->getPhysicalDevice();
+    vk::Queue graphicsQueue = instance->getGraphicsQueue();
+
+    vk::DeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+
+    vk::Buffer stagingBuffer;
+    vk::DeviceMemory stagingBufferMemory;
+    initBuffer(
+        bufferSize,
+        vk::BufferUsageFlagBits::eTransferSrc,
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        physicalDevice,
+        stagingBuffer,
+        stagingBufferMemory
+    );
+
+    void* data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    memcpy(data, indices.data(), (size_t)bufferSize);
+    device.unmapMemory(stagingBufferMemory);
+
+    initBuffer(
+        bufferSize,
+        vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        physicalDevice,
+        indexBuffer,
+        indexBufferMemory
+    );
+
+    copyBuffer(
+        stagingBuffer, indexBuffer, bufferSize,
         commandPool, graphicsQueue
     );
 

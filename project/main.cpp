@@ -86,8 +86,9 @@ private:
         renderer.initCommandPool(&instance);
         renderer.initCommandBuffers();
 
-        // Vertex Buffer:
+        // Vertex + Index Buffer:
         object.initVertexBuffer(&instance, renderer.getCommandPool());
+        object.initIndexBuffer(&instance, renderer.getCommandPool());
 
         // SyncObjects:
         renderer.initSyncObjects();
