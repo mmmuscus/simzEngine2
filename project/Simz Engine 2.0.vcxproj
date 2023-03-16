@@ -159,6 +159,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanObject.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanRenderPass.cpp" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
+    <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderPass.h" />

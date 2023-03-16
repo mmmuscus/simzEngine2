@@ -66,6 +66,8 @@ void vulkanRenderer::recordCommandBuffer(
     vk::Extent2D extent,
     uint32_t imageIndex
 ) {
+    vulkanModelData* modelData = object->getModelData();
+
     auto beginInfo = vk::CommandBufferBeginInfo();
 
     try {
@@ -98,12 +100,12 @@ void vulkanRenderer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    vk::Buffer vertexBuffers[] = { object->getVertexBuffer() };
+    vk::Buffer vertexBuffers[] = { modelData->getVertexBuffer() };
     vk::DeviceSize offsets[] = { 0 };
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-    commandBuffer.bindIndexBuffer(object->getIndexBuffer(), 0, vk::IndexType::eUint16);
+    commandBuffer.bindIndexBuffer(modelData->getIndexBuffer(), 0, vk::IndexType::eUint16);
 
-    commandBuffer.drawIndexed(static_cast<uint32_t>(object->getIndices().size()), 1, 0, 0, 0);
+    commandBuffer.drawIndexed(static_cast<uint32_t>(modelData->getIndices().size()), 1, 0, 0, 0);
     // commandBuffer.draw(static_cast<uint32_t>(object->getVertices().size()), 1, 0, 0);
     commandBuffer.endRenderPass();
 

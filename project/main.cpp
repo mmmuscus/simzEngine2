@@ -11,6 +11,7 @@
 #include "vulkanWrappers/include/vulkanObject.h"
 #include "vulkanWrappers/include/vulkanRenderPass.h"
 #include "vulkanWrappers/include/vulkanRenderer.h"
+#include "vulkanWrappers/include/vulkanModelData.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -32,6 +33,8 @@ private:
     vulkanObject object;
     vulkanRenderPass renderPass;
     vulkanRenderer renderer;
+
+    vulkanModelData modelData;
 
     void initWindow() {
         glfwInit();
@@ -87,8 +90,10 @@ private:
         renderer.initCommandBuffers();
 
         // Vertex + Index Buffer:
-        object.initVertexBuffer(&instance, renderer.getCommandPool());
-        object.initIndexBuffer(&instance, renderer.getCommandPool());
+        modelData.setDevice(instance.getDevice());
+        modelData.initVertexBuffer(&instance, renderer.getCommandPool());
+        modelData.initIndexBuffer(&instance, renderer.getCommandPool());
+        object.setModelData(&modelData);
 
         // SyncObjects:
         renderer.initSyncObjects();
