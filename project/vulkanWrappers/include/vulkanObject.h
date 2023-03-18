@@ -30,6 +30,9 @@ static std::vector<char> readFile(const std::string& filename) {
 
 class vulkanObject {
 private:
+    // Descriptor sets:
+    vk::DescriptorSetLayout descriptorSetLayout;
+    // Pipeline
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
     // Buffers:
@@ -48,6 +51,7 @@ public:
     vulkanModelData* getModelData() { return modelData; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
+    void initDescriptorSet();
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);

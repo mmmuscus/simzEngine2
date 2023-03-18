@@ -1,6 +1,8 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
+    device.destroyDescriptorSetLayout(descriptorSetLayout);
+
     device.destroyPipeline(graphicsPipeline);
     device.destroyPipelineLayout(pipelineLayout);
 }
@@ -92,7 +94,7 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
 
     auto pipelineLayoutInfo = vk::PipelineLayoutCreateInfo(
         vk::PipelineLayoutCreateFlags(),
-        0, nullptr,                     // set layouts
+        1, &descriptorSetLayout,        // set layouts
         0, nullptr                      // push constant range
     );
 
@@ -127,6 +129,27 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create graphics pipeline!");
+    }
+}
+
+void vulkanObject::initDescriptorSet() {
+    auto uboLayoutBinding = vk::DescriptorSetLayoutBinding(
+        0,                                      // binding
+        vk::DescriptorType::eUniformBuffer, 1,  // descriptor type, count
+        vk::ShaderStageFlagBits::eVertex,
+        nullptr
+    );
+
+    auto layoutInfo = vk::DescriptorSetLayoutCreateInfo(
+        vk::DescriptorSetLayoutCreateFlags(),
+        1, &uboLayoutBinding                    // binding count, bindings
+    );
+
+    try {
+        descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor set layout!");
     }
 }
 

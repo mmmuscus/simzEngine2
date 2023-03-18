@@ -142,6 +142,8 @@ void vulkanRenderer::drawFrame(
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
+    object->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
+
     device.resetFences(1, &inFlightFences[currentFrame]);
 
     vkResetCommandBuffer(commandBuffers[currentFrame], 0);

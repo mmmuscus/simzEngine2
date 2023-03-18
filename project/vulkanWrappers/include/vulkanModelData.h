@@ -1,9 +1,17 @@
 #ifndef VULKAN_MODEL_DATA_H_
 #define VULKAN_MODEL_DATA_H_
 
+#include <chrono>
+
 #include "generalIncludes.h"
 
 #include "vulkanInstance.h"
+
+struct UniformBufferObject {
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 proj;
+};
 
 struct Vertex {
     glm::vec2 pos;
@@ -44,6 +52,10 @@ private:
     vk::DeviceMemory vertexBufferMemory;
     vk::Buffer indexBuffer;
     vk::DeviceMemory indexBufferMemory;
+    // Uniform buffers:
+    std::vector<vk::Buffer> uniformBuffers;
+    std::vector<vk::DeviceMemory> uniformBuffersMemory;
+    std::vector<void*> uniformBuffersMapped;
 
     // Vertices + indices:
     const std::vector<Vertex> vertices = {
@@ -71,6 +83,9 @@ public:
 
     void initVertexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
     void initIndexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
+    void initUniformBuffers(vk::PhysicalDevice physicalDevice);
+
+    void updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent);
 
 private:
     void initBuffer(
@@ -78,8 +93,7 @@ private:
         vk::BufferUsageFlags usage,
         vk::MemoryPropertyFlags properties,
         vk::PhysicalDevice physicalDevice,
-        vk::Buffer& buffer,
-        vk::DeviceMemory& bufferMemory
+        vk::Buffer& buffer, vk::DeviceMemory& bufferMemory
     );
     void copyBuffer(
         vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,

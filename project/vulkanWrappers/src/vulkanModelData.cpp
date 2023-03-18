@@ -1,6 +1,11 @@
 #include "../include/vulkanModelData.h"
 
 vulkanModelData::~vulkanModelData() {
+    for (size_t i; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        device.destroyBuffer(uniformBuffers[i]);
+        device.freeMemory(uniformBuffersMemory[i]);
+    }
+
     device.destroyBuffer(indexBuffer);
     device.freeMemory(indexBufferMemory);
 
@@ -21,8 +26,7 @@ void vulkanModelData::initVertexBuffer(vulkanInstance* instance, vk::CommandPool
         vk::BufferUsageFlagBits::eTransferSrc,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
         physicalDevice,
-        stagingBuffer,
-        stagingBufferMemory
+        stagingBuffer, stagingBufferMemory
     );
 
     void* data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
@@ -34,8 +38,7 @@ void vulkanModelData::initVertexBuffer(vulkanInstance* instance, vk::CommandPool
         vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
         physicalDevice,
-        vertexBuffer,
-        vertexBufferMemory
+        vertexBuffer, vertexBufferMemory
     );
 
     copyBuffer(
@@ -60,8 +63,7 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance, vk::CommandPool 
         vk::BufferUsageFlagBits::eTransferSrc,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
         physicalDevice,
-        stagingBuffer,
-        stagingBufferMemory
+        stagingBuffer, stagingBufferMemory
     );
 
     void* data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
@@ -73,8 +75,7 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance, vk::CommandPool 
         vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
         physicalDevice,
-        indexBuffer,
-        indexBufferMemory
+        indexBuffer, indexBufferMemory
     );
 
     copyBuffer(
@@ -86,13 +87,32 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance, vk::CommandPool 
     device.freeMemory(stagingBufferMemory);
 }
 
+void vulkanModelData::initUniformBuffers(vk::PhysicalDevice physicalDevice) {
+    vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
+
+    uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        initBuffer(
+            bufferSize,
+            vk::BufferUsageFlagBits::eUniformBuffer,
+            vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+            physicalDevice,
+            uniformBuffers[i], uniformBuffersMemory[i]
+        );
+
+        uniformBuffersMapped[i] = device.mapMemory(uniformBuffersMemory[i], 0, bufferSize);
+    }
+}
+
 void vulkanModelData::initBuffer(
     vk::DeviceSize size,
     vk::BufferUsageFlags usage,
     vk::MemoryPropertyFlags properties,
     vk::PhysicalDevice physicalDevice,
-    vk::Buffer& buffer,
-    vk::DeviceMemory& bufferMemory
+    vk::Buffer& buffer, vk::DeviceMemory& bufferMemory
 ) {
     auto bufferInfo = vk::BufferCreateInfo(
         vk::BufferCreateFlags(),
@@ -166,4 +186,21 @@ uint32_t vulkanModelData::findMemoryType(
     }
 
     throw std::runtime_error("failed to find suitable memory type!");
+}
+
+void vulkanModelData::updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent) {
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = 
+        std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime)
+        .count();
+
+    UniformBufferObject ubo{};
+    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.proj = glm::perspective(glm::radians(45.0f), extent.width / (float)extent.height, 0.1f, 10.0f);
+    ubo.proj[1][1] *= -1;
+
+    memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
