@@ -29,8 +29,6 @@ public:
 	void setFrameBufferResized(bool val) { framebufferResized = val; }
 	void setDevice(vk::Device _device) { device = _device; }
 
-	vk::CommandPool getCommandPool() { return commandPool; }
-
 	void initCommandPool(vulkanInstance* instance);
 	void initCommandBuffers();
 	void initSyncObjects();
@@ -49,6 +47,9 @@ public:
 		vulkanObject* object,
 		vulkanRenderPass* renderPass
 	);
+
+	vk::CommandBuffer beginSingleTimeCommands();
+	void endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue);
 
 private:
 

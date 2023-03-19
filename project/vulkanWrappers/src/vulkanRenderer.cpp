@@ -7,17 +7,17 @@ vulkanRenderer::~vulkanRenderer() {
         device.destroyFence(inFlightFences[i]);
     }
 
-	device.destroyCommandPool(commandPool);
+    device.destroyCommandPool(commandPool);
 }
 
 void vulkanRenderer::initCommandPool(vulkanInstance* instance) {
-    QueueFamilyIndices queueFamilyIndices = 
+    QueueFamilyIndices queueFamilyIndices =
         instance->findQueueFamilies(instance->getPhysicalDevice());
 
     try {
         commandPool = device.createCommandPool(vk::CommandPoolCreateInfo(
-                vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
-                queueFamilyIndices.graphicsFamily.value()
+            vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
+            queueFamilyIndices.graphicsFamily.value()
         ));
     }
     catch (vk::SystemError err) {
@@ -66,8 +66,6 @@ void vulkanRenderer::recordCommandBuffer(
     vk::Extent2D extent,
     uint32_t imageIndex
 ) {
-    vulkanModelData* modelData = object->getModelData();
-
     auto beginInfo = vk::CommandBufferBeginInfo();
 
     try {
@@ -100,10 +98,10 @@ void vulkanRenderer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    vk::Buffer vertexBuffers[] = { modelData->getVertexBuffer() };
+    vk::Buffer vertexBuffers[] = { object->getModelData()->getVertexBuffer() };
     vk::DeviceSize offsets[] = { 0 };
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-    commandBuffer.bindIndexBuffer(modelData->getIndexBuffer(), 0, vk::IndexType::eUint16);
+    commandBuffer.bindIndexBuffer(object->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint16);
 
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,
@@ -113,8 +111,7 @@ void vulkanRenderer::recordCommandBuffer(
         nullptr
     );
 
-    commandBuffer.drawIndexed(static_cast<uint32_t>(modelData->getIndices().size()), 1, 0, 0, 0);
-    // commandBuffer.draw(static_cast<uint32_t>(object->getVertices().size()), 1, 0, 0);
+    commandBuffer.drawIndexed(static_cast<uint32_t>(object->getModelData()->getIndices().size()), 1, 0, 0, 0);
     commandBuffer.endRenderPass();
 
     try {
@@ -208,4 +205,32 @@ void vulkanRenderer::drawFrame(
     }
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+}
+
+vk::CommandBuffer vulkanRenderer::beginSingleTimeCommands() {
+    auto allocInfo = vk::CommandBufferAllocateInfo(
+        commandPool,
+        vk::CommandBufferLevel::ePrimary,
+        1
+    );
+
+    vk::CommandBuffer commandBuffer = device.allocateCommandBuffers(allocInfo)[0];
+    auto beginInfo = vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+    commandBuffer.begin(beginInfo);
+
+    return commandBuffer;
+}
+
+void vulkanRenderer::endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue) {
+    commandBuffer.end();
+
+    auto submitInfo = vk::SubmitInfo(
+        0, nullptr, nullptr,                // wait semaphores
+        0, &commandBuffer
+    );
+
+    graphicsQueue.submit(submitInfo, nullptr);
+    graphicsQueue.waitIdle();
+
+    device.freeCommandBuffers(commandPool, commandBuffer);
 }

@@ -1,12 +1,7 @@
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
 #include <vector>
-
-#include "vulkanWrappers/include/generalIncludes.h"
 
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
@@ -36,7 +31,6 @@ vulkanSurface surface;
 vulkanObject object;
 vulkanRenderPass renderPass;
 vulkanRenderer renderer;
-
 vulkanModelData modelData;
 
 void initWindow() {
@@ -96,9 +90,12 @@ void initVulkan() {
 
     // Vertex + Index Buffer:
     modelData.setDevice(instance.getDevice());
-    modelData.initVertexBuffer(&instance, renderer.getCommandPool());
-    modelData.initIndexBuffer(&instance, renderer.getCommandPool());
+    modelData.initVertexBuffer(&instance, &renderer);
+    modelData.initIndexBuffer(&instance, &renderer);
     object.setModelData(&modelData);
+
+    // Texture:
+    // modelData.initTextureImage(&instance, &renderer);
 
     // Uniform Buffer:
     modelData.initUniformBuffers(instance.getPhysicalDevice());
@@ -124,7 +121,8 @@ void initImGui() {
                 &surface,
                 &instance,
                 &object,
-                &renderPass);
+                &renderPass
+            );
         }
 
         instance.getDevice().waitIdle();

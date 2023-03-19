@@ -2,6 +2,7 @@
 #define VULKAN_OBJECT_H_
 
 #include "generalIncludes.h"
+#include "modelDataIncludes.h"
 
 #include "vulkanModelData.h"
 

@@ -4,46 +4,10 @@
 #include <chrono>
 
 #include "generalIncludes.h"
+#include "modelDataIncludes.h"
 
 #include "vulkanInstance.h"
-
-struct UniformBufferObject {
-    glm::mat4 model;
-    glm::mat4 view;
-    glm::mat4 proj;
-};
-
-struct Vertex {
-    glm::vec2 pos;
-    glm::vec3 color;
-
-    static vk::VertexInputBindingDescription getBindingDescription() {
-        return vk::VertexInputBindingDescription(
-            0,
-            sizeof(Vertex),
-            vk::VertexInputRate::eVertex
-        );
-    }
-
-    static std::array<vk::VertexInputAttributeDescription, 2> getAttributeDescriptions() {
-        auto posInputAttributeDescription = vk::VertexInputAttributeDescription(
-            0, 0,                       // location, binding
-            vk::Format::eR32G32Sfloat,
-            offsetof(Vertex, pos)
-        );
-
-        auto colorInputAttributeDesciption = vk::VertexInputAttributeDescription(
-            1, 0,                       // location, binding
-            vk::Format::eR32G32B32Sfloat,
-            offsetof(Vertex, color)
-        );
-
-        return std::array<vk::VertexInputAttributeDescription, 2> {
-            posInputAttributeDescription,
-                colorInputAttributeDesciption
-        };
-    }
-};
+#include "vulkanRenderer.h"
 
 class vulkanModelData {
 private:
@@ -56,6 +20,9 @@ private:
     std::vector<vk::Buffer> uniformBuffers;
     std::vector<vk::DeviceMemory> uniformBuffersMemory;
     std::vector<void*> uniformBuffersMapped;
+    // Texture:
+    vk::Image textureImage;
+    vk::DeviceMemory textureImageMemory;
 
     // Vertices + indices:
     const std::vector<Vertex> vertices = {
@@ -82,9 +49,10 @@ public:
     std::vector<uint16_t> getIndices() { return indices; }
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
-    void initVertexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
-    void initIndexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
+    void initVertexBuffer(vulkanInstance* instance, vulkanRenderer* renderer);
+    void initIndexBuffer(vulkanInstance* instance, vulkanRenderer* renderer);
     void initUniformBuffers(vk::PhysicalDevice physicalDevice);
+    void initTextureImage(vulkanInstance* instance, vulkanRenderer* renderer);
 
     void updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent);
 
@@ -98,7 +66,27 @@ private:
     );
     void copyBuffer(
         vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
-        vk::CommandPool commandPool, vk::Queue graphicsQueue
+        vulkanRenderer* renderer, vk::Queue graphicsQueue
+    );
+
+    void initImage(
+        uint32_t width, uint32_t height,
+        vk::Format format,
+        vk::ImageTiling tiling,
+        vk::ImageUsageFlags usage,
+        vk::MemoryPropertyFlags properties,
+        vk::Image& image, vk::DeviceMemory& imageMemory,
+        vk::PhysicalDevice physicalDevice
+    );
+    void transitionImageLayout(
+        vk::Image image, vk::Format format,
+        vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
+        vulkanRenderer* renderer, vk::Queue graphicsQueue
+    );
+    void copyBufferToImage(
+        vk::Buffer buffer, vk::Image image,
+        uint32_t width, uint32_t height,
+        vulkanRenderer* renderer, vk::Queue graphicsQueue
     );
 
     uint32_t findMemoryType(
