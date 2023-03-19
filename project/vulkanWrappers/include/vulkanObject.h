@@ -32,6 +32,8 @@ class vulkanObject {
 private:
     // Descriptor sets:
     vk::DescriptorSetLayout descriptorSetLayout;
+    vk::DescriptorPool descriptorPool;
+    std::vector<vk::DescriptorSet> descriptorSets;
     // Pipeline
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
@@ -47,11 +49,15 @@ public:
     void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
     void setDevice(vk::Device _device) { device = _device; }
 
+    std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
+    vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vulkanModelData* getModelData() { return modelData; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
-    void initDescriptorSet();
+    void initDescriptorSetLayout();
+    void initDescriptorPool();
+    void initDescriptorSets();
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);

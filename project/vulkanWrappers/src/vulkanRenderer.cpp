@@ -105,6 +105,14 @@ void vulkanRenderer::recordCommandBuffer(
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
     commandBuffer.bindIndexBuffer(modelData->getIndexBuffer(), 0, vk::IndexType::eUint16);
 
+    commandBuffer.bindDescriptorSets(
+        vk::PipelineBindPoint::eGraphics,
+        object->getPipelineLayout(),
+        0,
+        object->getDescriptorSets()[currentFrame],
+        nullptr
+    );
+
     commandBuffer.drawIndexed(static_cast<uint32_t>(modelData->getIndices().size()), 1, 0, 0, 0);
     // commandBuffer.draw(static_cast<uint32_t>(object->getVertices().size()), 1, 0, 0);
     commandBuffer.endRenderPass();

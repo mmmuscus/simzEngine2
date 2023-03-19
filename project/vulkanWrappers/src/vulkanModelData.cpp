@@ -1,7 +1,7 @@
 #include "../include/vulkanModelData.h"
 
 vulkanModelData::~vulkanModelData() {
-    for (size_t i; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroyBuffer(uniformBuffers[i]);
         device.freeMemory(uniformBuffersMemory[i]);
     }

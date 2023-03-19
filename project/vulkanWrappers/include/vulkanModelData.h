@@ -80,6 +80,7 @@ public:
     vk::Buffer getIndexBuffer() { return indexBuffer; }
     std::vector<Vertex> getVertices() { return vertices; }
     std::vector<uint16_t> getIndices() { return indices; }
+    std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
     void initVertexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
     void initIndexBuffer(vulkanInstance* instance, vk::CommandPool commandPool);
