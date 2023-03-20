@@ -19,6 +19,7 @@ private:
     std::vector<vk::Buffer> uniformBuffers;
     std::vector<vk::DeviceMemory> uniformBuffersMemory;
     std::vector<void*> uniformBuffersMapped;
+    // TODO: move to seperate TextureData class
     // Texture:
     vk::Image textureImage;
     vk::DeviceMemory textureImageMemory;
