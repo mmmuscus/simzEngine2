@@ -136,15 +136,24 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
 
 void vulkanObject::initDescriptorSetLayout() {
     auto uboLayoutBinding = vk::DescriptorSetLayoutBinding(
-        0,                                      // binding
-        vk::DescriptorType::eUniformBuffer, 1,  // descriptor type, count
+        0,                                              // binding
+        vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
         vk::ShaderStageFlagBits::eVertex,
         nullptr
     );
 
+    auto samplerLayoutBinding = vk::DescriptorSetLayoutBinding(
+        1,                                              // bining
+        vk::DescriptorType::eCombinedImageSampler, 1,   // decriptor type, count
+        vk::ShaderStageFlagBits::eFragment,
+        nullptr
+    );
+
+    std::array<vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
+
     auto layoutInfo = vk::DescriptorSetLayoutCreateInfo(
         vk::DescriptorSetLayoutCreateFlags(),
-        1, &uboLayoutBinding                    // binding count, bindings
+        static_cast<uint32_t>(bindings.size()), bindings.data()
     );
 
     try {
@@ -155,15 +164,21 @@ void vulkanObject::initDescriptorSetLayout() {
 }
 
 void vulkanObject::initDescriptorPool() {
-    auto poolSize = vk::DescriptorPoolSize(
-        vk::DescriptorType::eUniformBuffer,
-        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
-    );
+    std::array<vk::DescriptorPoolSize, 2> poolSizes = {
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBuffer,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        ),
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eCombinedImageSampler,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        )
+    };
 
     auto poolInfo = vk::DescriptorPoolCreateInfo(
         vk::DescriptorPoolCreateFlags(),
         static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
-        1, &poolSize                                    // poolsize count, sizes
+        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
     );
 
     try {
@@ -193,17 +208,30 @@ void vulkanObject::initDescriptorSets() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         auto bufferInfo = vk::DescriptorBufferInfo(
             modelData->getUniformBuffers()[i],
-            0, sizeof(UniformBufferObject)              // offset, range
+            0, sizeof(UniformBufferObject)                      // offset, range
         );
 
-        auto descriptorWrite = vk::WriteDescriptorSet(
-            descriptorSets[i], 0, 0,                    // dest set, binding, array element
-            1, vk::DescriptorType::eUniformBuffer,      // descriptor count, type
-            nullptr,                                    // image info
-            &bufferInfo
+        auto imageInfo = vk::DescriptorImageInfo(
+            modelData->getSampler(),
+            modelData->getImageView(),
+            vk::ImageLayout::eShaderReadOnlyOptimal
         );
 
-        device.updateDescriptorSets(descriptorWrite, 0);
+        std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {
+            vk::WriteDescriptorSet(
+                descriptorSets[i], 0, 0,                        // dest set, binding, array element
+                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
+                nullptr,                                        // image info
+                &bufferInfo
+            ),
+            vk::WriteDescriptorSet(
+                descriptorSets[i], 1, 0,                        // dest set, binding, array element
+                1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
+                &imageInfo
+            )
+        };
+
+        device.updateDescriptorSets(descriptorWrites, 0);
     }
 }
 

@@ -12,6 +12,7 @@ struct UniformBufferObject {
 struct Vertex {
     glm::vec2 pos;
     glm::vec3 color;
+    glm::vec2 texCoord;
 
     static vk::VertexInputBindingDescription getBindingDescription() {
         return vk::VertexInputBindingDescription(
@@ -21,7 +22,7 @@ struct Vertex {
         );
     }
 
-    static std::array<vk::VertexInputAttributeDescription, 2> getAttributeDescriptions() {
+    static std::array<vk::VertexInputAttributeDescription, 3> getAttributeDescriptions() {
         auto posInputAttributeDescription = vk::VertexInputAttributeDescription(
             0, 0,                       // location, binding
             vk::Format::eR32G32Sfloat,
@@ -34,9 +35,16 @@ struct Vertex {
             offsetof(Vertex, color)
         );
 
-        return std::array<vk::VertexInputAttributeDescription, 2> {
+        auto textureInputAttributeDescription = vk::VertexInputAttributeDescription(
+            2, 0,                       // loaction, binding
+            vk::Format::eR32G32Sfloat,
+            offsetof(Vertex, texCoord)
+        );
+
+        return std::array<vk::VertexInputAttributeDescription, 3> {
             posInputAttributeDescription,
-                colorInputAttributeDesciption
+            colorInputAttributeDesciption,
+            textureInputAttributeDescription
         };
     }
 };

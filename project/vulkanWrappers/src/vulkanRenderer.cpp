@@ -6,24 +6,7 @@ vulkanRenderer::~vulkanRenderer() {
         device.destroySemaphore(imageAvailableSemaphores[i]);
         device.destroyFence(inFlightFences[i]);
     }
-
-    // device.destroyCommandPool(commandPool);
 }
-/*
-void vulkanRenderer::initCommandPool(vulkanInstance* instance) {
-    QueueFamilyIndices queueFamilyIndices =
-        instance->findQueueFamilies(instance->getPhysicalDevice());
-
-    try {
-        commandPool = device.createCommandPool(vk::CommandPoolCreateInfo(
-            vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
-            queueFamilyIndices.graphicsFamily.value()
-        ));
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create command pool!");
-    }
-}*/
 
 void vulkanRenderer::initCommandBuffers(vk::CommandPool commandPool) {
     commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
@@ -206,32 +189,3 @@ void vulkanRenderer::drawFrame(
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
-
-/*
-vk::CommandBuffer vulkanRenderer::beginSingleTimeCommands() {
-    auto allocInfo = vk::CommandBufferAllocateInfo(
-        commandPool,
-        vk::CommandBufferLevel::ePrimary,
-        1
-    );
-
-    vk::CommandBuffer commandBuffer = device.allocateCommandBuffers(allocInfo)[0];
-    auto beginInfo = vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-    commandBuffer.begin(beginInfo);
-
-    return commandBuffer;
-}
-
-void vulkanRenderer::endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue) {
-    commandBuffer.end();
-
-    auto submitInfo = vk::SubmitInfo(
-        0, nullptr, nullptr,                // wait semaphores
-        0, &commandBuffer
-    );
-
-    graphicsQueue.submit(submitInfo, nullptr);
-    graphicsQueue.waitIdle();
-
-    device.freeCommandBuffers(commandPool, commandBuffer);
-}*/
