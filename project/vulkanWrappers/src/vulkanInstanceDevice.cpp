@@ -36,6 +36,7 @@ void vulkanInstance::initDevice() {
     }
 
     auto deviceFeatures = vk::PhysicalDeviceFeatures();
+    deviceFeatures.samplerAnisotropy = VK_TRUE;
     auto createInfo = vk::DeviceCreateInfo(
         vk::DeviceCreateFlags(),
         static_cast<uint32_t>(queueCreateInfos.size()),
@@ -72,7 +73,12 @@ bool vulkanInstance::isDeviceSuitable(const vk::PhysicalDevice& physDevice) {
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
-    return indices.isComplete() && extensionsSupported && swapChainAdequate;
+    vk::PhysicalDeviceFeatures supportedFeatures = physDevice.getFeatures();
+
+    return indices.isComplete() && 
+        extensionsSupported && 
+        swapChainAdequate && 
+        supportedFeatures.samplerAnisotropy;
 }
 
 bool vulkanInstance::checkDeviceExtensionSupport(const vk::PhysicalDevice& physDevice) {

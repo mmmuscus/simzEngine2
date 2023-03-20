@@ -56,6 +56,10 @@ public:
 	vk::CommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(vk::CommandBuffer commandBuffer);
 
+	// TODO:
+	// Possibly create an initImageView function to use w swapchains and textures
+	vk::ImageView initImageView(vk::Image image, vk::Format format);
+
 private:
 	// Instance:
 	bool checkValidationLayerSupport();

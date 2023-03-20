@@ -4,6 +4,8 @@
 #include <stb_image.h>
 
 vulkanModelData::~vulkanModelData() {
+    device.destroySampler(textureSampler);
+    device.destroyImageView(textureImageView);
     device.destroyImage(textureImage);
     device.freeMemory(textureImageMemory);
 
@@ -170,6 +172,53 @@ void vulkanModelData::initTextureImage(vulkanInstance* instance) {
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);
+}
+
+void vulkanModelData::initTextureImageView() {
+    auto viewInfo = vk::ImageViewCreateInfo(
+        vk::ImageViewCreateFlags(),
+        textureImage,
+        vk::ImageViewType::e2D,
+        vk::Format::eR8G8B8A8Srgb,
+        vk::ComponentMapping(),
+        vk::ImageSubresourceRange(
+            vk::ImageAspectFlagBits::eColor,
+            0, 1,                                   // base mip level, count
+            0, 1                                    // base array layer, count
+        )
+    );
+
+    try {
+        textureImageView = device.createImageView(viewInfo);
+    } catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create texture image view!");
+    }
+}
+
+void vulkanModelData::initTextureSampler(vk::PhysicalDevice physicalDevice) {
+    vk::PhysicalDeviceProperties properties = physicalDevice.getProperties();
+
+    auto samplerInfo = vk::SamplerCreateInfo(
+        vk::SamplerCreateFlags(),
+        vk::Filter::eLinear, vk::Filter::eLinear,   // mag, min filter
+        vk::SamplerMipmapMode::eLinear,
+        vk::SamplerAddressMode::eRepeat,
+        vk::SamplerAddressMode::eRepeat,
+        vk::SamplerAddressMode::eRepeat,
+        0,
+        VK_TRUE,
+        properties.limits.maxSamplerAnisotropy,
+        VK_FALSE, vk::CompareOp::eAlways,           // compare op enable, compare op
+        0, 0,                                       // min, max Lod
+        vk::BorderColor::eIntOpaqueBlack,
+        VK_FALSE
+    );
+
+    try {
+        textureSampler = device.createSampler(samplerInfo);
+    } catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create texture sampler!");
+    }
 }
 
 void vulkanModelData::initBuffer(

@@ -90,6 +90,8 @@ void initVulkan() {
     // Texture:
     modelData.setDevice(instance.getDevice());
     modelData.initTextureImage(&instance);
+    modelData.initTextureImageView();
+    modelData.initTextureSampler(instance.getPhysicalDevice());
 
     // Vertex + Index Buffer:
     modelData.initVertexBuffer(&instance);

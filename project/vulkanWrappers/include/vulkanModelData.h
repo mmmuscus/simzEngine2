@@ -22,6 +22,8 @@ private:
     // Texture:
     vk::Image textureImage;
     vk::DeviceMemory textureImageMemory;
+    vk::ImageView textureImageView;
+    vk::Sampler textureSampler;
 
     // Vertices + indices:
     const std::vector<Vertex> vertices = {
@@ -52,6 +54,8 @@ public:
     void initIndexBuffer(vulkanInstance* instance);
     void initUniformBuffers(vk::PhysicalDevice physicalDevice);
     void initTextureImage(vulkanInstance* instance);
+    void initTextureImageView();
+    void initTextureSampler(vk::PhysicalDevice physicalDevice);
 
     void updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent);
 
