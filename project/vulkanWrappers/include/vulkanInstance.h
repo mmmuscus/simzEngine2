@@ -56,13 +56,20 @@ public:
 	vk::CommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(vk::CommandBuffer commandBuffer);
 
-	// TODO:
-	// Possibly create an initImageView function to use w swapchains and textures
+	// Misc:
 	vk::ImageView initImageView(
 		vk::Image image,
 		vk::Format format,
 		vk::ImageAspectFlags aspectFlags
 	);
+	/*void initImage(
+		uint32_t width, uint32_t height,
+		vk::Format format,
+		vk::ImageTiling tiling,
+		vk::ImageUsageFlags usage,
+		vk::MemoryPropertyFlags properties,
+		vk::Image& image, vk::DeviceMemory& imageMemory
+	);*/
 
 private:
 	// Instance:

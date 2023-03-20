@@ -87,6 +87,9 @@ void initVulkan() {
     // CommandPool:
     instance.initCommandPool();
 
+    // Depth resources:
+    // renderPass.initDepthResources();
+
     // Texture:
     modelData.setDevice(instance.getDevice());
     modelData.initTextureImage(&instance);
