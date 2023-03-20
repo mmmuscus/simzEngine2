@@ -102,7 +102,7 @@ void initVulkan() {
     object.setModelData(&modelData);
 
     // Uniform Buffer:
-    modelData.initUniformBuffers(instance.getPhysicalDevice());
+    modelData.initUniformBuffers(&instance);
 
     // Descriptor Pool + Sets:
     object.initDescriptorPool();

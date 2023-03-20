@@ -62,14 +62,23 @@ public:
 		vk::Format format,
 		vk::ImageAspectFlags aspectFlags
 	);
-	/*void initImage(
+
+	void initBuffer(
+		vk::DeviceSize size,
+		vk::BufferUsageFlags usage,
+		vk::MemoryPropertyFlags properties,
+		vk::Buffer& buffer, vk::DeviceMemory& bufferMemory
+	);
+	void initImage(
 		uint32_t width, uint32_t height,
 		vk::Format format,
 		vk::ImageTiling tiling,
 		vk::ImageUsageFlags usage,
 		vk::MemoryPropertyFlags properties,
 		vk::Image& image, vk::DeviceMemory& imageMemory
-	);*/
+	);
+
+	uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties);
 
 private:
 	// Instance:

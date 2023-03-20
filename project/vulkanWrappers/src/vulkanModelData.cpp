@@ -29,11 +29,10 @@ void vulkanModelData::initVertexBuffer(vulkanInstance* instance) {
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
-    initBuffer(
+    instance->initBuffer(
         bufferSize,
         vk::BufferUsageFlagBits::eTransferSrc,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        physicalDevice,
         stagingBuffer, stagingBufferMemory
     );
 
@@ -41,11 +40,10 @@ void vulkanModelData::initVertexBuffer(vulkanInstance* instance) {
     memcpy(data, vertices.data(), (size_t)bufferSize);
     device.unmapMemory(stagingBufferMemory);
 
-    initBuffer(
+    instance->initBuffer(
         bufferSize,
         vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        physicalDevice,
         vertexBuffer, vertexBufferMemory
     );
 
@@ -66,11 +64,10 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
-    initBuffer(
+    instance->initBuffer(
         bufferSize,
         vk::BufferUsageFlagBits::eTransferSrc,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        physicalDevice,
         stagingBuffer, stagingBufferMemory
     );
 
@@ -78,11 +75,10 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
     memcpy(data, indices.data(), (size_t)bufferSize);
     device.unmapMemory(stagingBufferMemory);
 
-    initBuffer(
+    instance->initBuffer(
         bufferSize,
         vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        physicalDevice,
         indexBuffer, indexBufferMemory
     );
 
@@ -95,7 +91,7 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
     device.freeMemory(stagingBufferMemory);
 }
 
-void vulkanModelData::initUniformBuffers(vk::PhysicalDevice physicalDevice) {
+void vulkanModelData::initUniformBuffers(vulkanInstance* instance) {
     vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
 
     uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
@@ -103,11 +99,10 @@ void vulkanModelData::initUniformBuffers(vk::PhysicalDevice physicalDevice) {
     uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        initBuffer(
+        instance->initBuffer(
             bufferSize,
             vk::BufferUsageFlagBits::eUniformBuffer,
             vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-            physicalDevice,
             uniformBuffers[i], uniformBuffersMemory[i]
         );
 
@@ -131,11 +126,10 @@ void vulkanModelData::initTextureImage(vulkanInstance* instance) {
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
-    initBuffer(
+    instance->initBuffer(
         imageSize,
         vk::BufferUsageFlagBits::eTransferSrc,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        instance->getPhysicalDevice(),
         stagingBuffer, stagingBufferMemory
     );
 
@@ -144,14 +138,13 @@ void vulkanModelData::initTextureImage(vulkanInstance* instance) {
     device.unmapMemory(stagingBufferMemory);
     stbi_image_free(pixels);
 
-    initImage(
+    instance->initImage(
         texWidth, texHeight,
         vk::Format::eR8G8B8A8Srgb,
         vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal,
-        textureImage, textureImageMemory,
-        instance->getPhysicalDevice()
+        textureImage, textureImageMemory
     );
 
     transitionImageLayout(
@@ -204,42 +197,6 @@ void vulkanModelData::initTextureSampler(vk::PhysicalDevice physicalDevice) {
     }
 }
 
-void vulkanModelData::initBuffer(
-    vk::DeviceSize size,
-    vk::BufferUsageFlags usage,
-    vk::MemoryPropertyFlags properties,
-    vk::PhysicalDevice physicalDevice,
-    vk::Buffer& buffer, vk::DeviceMemory& bufferMemory
-) {
-    auto bufferInfo = vk::BufferCreateInfo(
-        vk::BufferCreateFlags(),
-        size, usage, vk::SharingMode::eExclusive
-    );
-
-    try {
-        buffer = device.createBuffer(bufferInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create buffer!");
-    }
-
-    vk::MemoryRequirements memRequirements = device.getBufferMemoryRequirements(buffer);
-
-    auto allocInfo = vk::MemoryAllocateInfo(
-        memRequirements.size,
-        findMemoryType(memRequirements.memoryTypeBits, properties, physicalDevice)
-    );
-
-    try {
-        bufferMemory = device.allocateMemory(allocInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to allocate buffer memory!");
-    }
-
-    device.bindBufferMemory(buffer, bufferMemory, 0);
-}
-
 void vulkanModelData::copyBuffer(
     vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
     vulkanInstance* instance
@@ -250,56 +207,6 @@ void vulkanModelData::copyBuffer(
     commandBuffer.copyBuffer(src, dst, copyRegion);
 
     instance->endSingleTimeCommands(commandBuffer);
-}
-
-void vulkanModelData::initImage(
-    uint32_t width, uint32_t height,
-    vk::Format format,
-    vk::ImageTiling tiling,
-    vk::ImageUsageFlags usage,
-    vk::MemoryPropertyFlags properties,
-    vk::Image& image, vk::DeviceMemory& imageMemory,
-    vk::PhysicalDevice physicalDevice
-) {
-    auto imageInfo = vk::ImageCreateInfo(
-        vk::ImageCreateFlags(),
-        vk::ImageType::e2D,
-        format,
-        vk::Extent3D(width, height, 1),
-        1, 1,                               // mip, array levels
-        vk::SampleCountFlagBits::e1,
-        tiling,
-        usage,
-        vk::SharingMode::eExclusive,
-        0, nullptr,                         // queue family inex count, indices
-        vk::ImageLayout::eUndefined
-    );
-
-    try {
-        image = device.createImage(imageInfo);
-    } catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create image!");
-    }
-
-    vk::MemoryRequirements memRequirements;
-    device.getImageMemoryRequirements(image, &memRequirements);
-    
-    auto allocInfo = vk::MemoryAllocateInfo(
-        memRequirements.size,
-        findMemoryType(
-            memRequirements.memoryTypeBits, 
-            properties,
-            physicalDevice
-        )
-    );
-
-    try {
-        imageMemory = device.allocateMemory(allocInfo);
-    } catch (vk::SystemError err) {
-        throw std::runtime_error("failed to allocate image memory!");
-    }
-
-    device.bindImageMemory(image, imageMemory, 0);
 }
 
 void vulkanModelData::transitionImageLayout(
@@ -378,22 +285,6 @@ void vulkanModelData::copyBufferToImage(
     );
 
     instance->endSingleTimeCommands(commandBuffer);
-}
-
-uint32_t vulkanModelData::findMemoryType(
-    uint32_t typeFilter,
-    vk::MemoryPropertyFlags properties,
-    vk::PhysicalDevice physicalDevice
-) {
-    vk::PhysicalDeviceMemoryProperties memProperties = physicalDevice.getMemoryProperties();
-
-    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
-        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-            return i;
-        }
-    }
-
-    throw std::runtime_error("failed to find suitable memory type!");
 }
 
 void vulkanModelData::updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent) {
