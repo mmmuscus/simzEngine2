@@ -86,7 +86,7 @@ void vulkanRenderer::recordCommandBuffer(
     vk::Buffer vertexBuffers[] = { object->getModelData()->getVertexBuffer() };
     vk::DeviceSize offsets[] = { 0 };
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-    commandBuffer.bindIndexBuffer(object->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint16);
+    commandBuffer.bindIndexBuffer(object->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
 
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,

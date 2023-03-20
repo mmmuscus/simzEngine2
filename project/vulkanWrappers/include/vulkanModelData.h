@@ -2,6 +2,7 @@
 #define VULKAN_MODEL_DATA_H_
 
 #include <chrono>
+#include <unordered_map>
 
 #include "generalIncludes.h"
 #include "modelDataIncludes.h"
@@ -27,21 +28,8 @@ private:
     vk::Sampler textureSampler;
 
     // Vertices + indices:
-    const std::vector<Vertex> vertices = {
-        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-        {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-        {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-
-        {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-        {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-        {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-        {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-    };
-    const std::vector<uint16_t> indices = {
-        0, 1, 2, 2, 3, 0,
-        4, 5, 6, 6, 7, 4
-    };
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
 
     // Not maintained by the class:
     vk::Device device;
@@ -54,10 +42,12 @@ public:
     vk::Buffer getVertexBuffer() { return vertexBuffer; }
     vk::Buffer getIndexBuffer() { return indexBuffer; }
     std::vector<Vertex> getVertices() { return vertices; }
-    std::vector<uint16_t> getIndices() { return indices; }
+    std::vector<uint32_t> getIndices() { return indices; }
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
     vk::ImageView getImageView() { return textureImageView; }
     vk::Sampler getSampler() { return textureSampler; }
+
+    void loadModel();
 
     void initVertexBuffer(vulkanInstance* instance);
     void initIndexBuffer(vulkanInstance* instance);
