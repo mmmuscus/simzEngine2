@@ -58,7 +58,11 @@ public:
 
 	// TODO:
 	// Possibly create an initImageView function to use w swapchains and textures
-	vk::ImageView initImageView(vk::Image image, vk::Format format);
+	vk::ImageView initImageView(
+		vk::Image image,
+		vk::Format format,
+		vk::ImageAspectFlags aspectFlags
+	);
 
 private:
 	// Instance:

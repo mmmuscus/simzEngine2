@@ -160,6 +160,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceMisc.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanObject.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp" />

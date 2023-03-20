@@ -174,25 +174,8 @@ void vulkanModelData::initTextureImage(vulkanInstance* instance) {
     device.freeMemory(stagingBufferMemory);
 }
 
-void vulkanModelData::initTextureImageView() {
-    auto viewInfo = vk::ImageViewCreateInfo(
-        vk::ImageViewCreateFlags(),
-        textureImage,
-        vk::ImageViewType::e2D,
-        vk::Format::eR8G8B8A8Srgb,
-        vk::ComponentMapping(),
-        vk::ImageSubresourceRange(
-            vk::ImageAspectFlagBits::eColor,
-            0, 1,                                   // base mip level, count
-            0, 1                                    // base array layer, count
-        )
-    );
-
-    try {
-        textureImageView = device.createImageView(viewInfo);
-    } catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create texture image view!");
-    }
+void vulkanModelData::initTextureImageView(vulkanInstance* instance) {
+    textureImageView = instance->initImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor);
 }
 
 void vulkanModelData::initTextureSampler(vk::PhysicalDevice physicalDevice) {

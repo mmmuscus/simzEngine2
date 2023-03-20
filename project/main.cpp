@@ -68,7 +68,7 @@ void initVulkan() {
     // SwapChain:
     surface.setDevice(instance.getDevice());
     surface.initSwapChain(&instance);
-    surface.initImageViews();
+    surface.initImageViews(&instance);
 
     // Render Pass:
     renderPass.setDevice(instance.getDevice());
@@ -90,7 +90,7 @@ void initVulkan() {
     // Texture:
     modelData.setDevice(instance.getDevice());
     modelData.initTextureImage(&instance);
-    modelData.initTextureImageView();
+    modelData.initTextureImageView(&instance);
     modelData.initTextureSampler(instance.getPhysicalDevice());
 
     // Vertex + Index Buffer:

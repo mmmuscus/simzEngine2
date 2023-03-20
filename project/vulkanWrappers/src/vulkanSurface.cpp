@@ -76,34 +76,11 @@ void vulkanSurface::initSwapChain(vulkanInstance* inst) {
     extent = choosenExtent;
 }
 
-void vulkanSurface::initImageViews() {
+void vulkanSurface::initImageViews(vulkanInstance* instance) {
     imageViews.resize(images.size());
 
-    for (size_t i = 0; i < images.size(); i++) {
-        auto createInfo = vk::ImageViewCreateInfo(
-            vk::ImageViewCreateFlags(),
-            images[i],
-            vk::ImageViewType::e2D,
-            imageFormat,
-            vk::ComponentMapping(
-                vk::ComponentSwizzle::eIdentity,
-                vk::ComponentSwizzle::eIdentity,
-                vk::ComponentSwizzle::eIdentity,
-                vk::ComponentSwizzle::eIdentity
-            ),
-            vk::ImageSubresourceRange(
-                vk::ImageAspectFlagBits::eColor,
-                0, 1, 0, 1
-            )
-        );
-
-        try {
-            imageViews[i] = device.createImageView(createInfo);
-        }
-        catch (vk::SystemError err) {
-            throw std::runtime_error("failed to create image views!");
-        }
-    }
+    for (size_t i = 0; i < images.size(); i++)
+        imageViews[i] = instance->initImageView(images[i], imageFormat, vk::ImageAspectFlagBits::eColor);
 }
 
 void vulkanSurface::cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers) {
@@ -134,7 +111,7 @@ void vulkanSurface::recreateSwapChain(
     cleanupSwapChain(renderPass->getFramebuffers());
 
     initSwapChain(inst);
-    initImageViews();
+    initImageViews(inst);
     renderPass->initFrameBuffers(imageViews, extent);
 }
 

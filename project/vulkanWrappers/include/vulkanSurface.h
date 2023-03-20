@@ -39,7 +39,7 @@ public:
 
 	void initSurface();
 	void initSwapChain(vulkanInstance* inst);
-	void initImageViews();
+	void initImageViews(vulkanInstance* instance);
 
 	void cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers);
 	void recreateSwapChain(

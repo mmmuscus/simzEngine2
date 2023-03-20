@@ -10,7 +10,7 @@ struct UniformBufferObject {
 };
 
 struct Vertex {
-    glm::vec2 pos;
+    glm::vec3 pos;
     glm::vec3 color;
     glm::vec2 texCoord;
 
@@ -25,7 +25,7 @@ struct Vertex {
     static std::array<vk::VertexInputAttributeDescription, 3> getAttributeDescriptions() {
         auto posInputAttributeDescription = vk::VertexInputAttributeDescription(
             0, 0,                       // location, binding
-            vk::Format::eR32G32Sfloat,
+            vk::Format::eR32G32B32Sfloat,
             offsetof(Vertex, pos)
         );
 
