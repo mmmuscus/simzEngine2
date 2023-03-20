@@ -19,7 +19,7 @@ vulkanModelData::~vulkanModelData() {
     device.freeMemory(vertexBufferMemory);
 }
 
-void vulkanModelData::initVertexBuffer(vulkanInstance* instance, vulkanRenderer* renderer) {
+void vulkanModelData::initVertexBuffer(vulkanInstance* instance) {
     vk::PhysicalDevice physicalDevice = instance->getPhysicalDevice();
     vk::Queue graphicsQueue = instance->getGraphicsQueue();
 
@@ -49,14 +49,14 @@ void vulkanModelData::initVertexBuffer(vulkanInstance* instance, vulkanRenderer*
 
     copyBuffer(
         stagingBuffer, vertexBuffer, bufferSize,
-        renderer, graphicsQueue
+        instance
     );
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);
 }
 
-void vulkanModelData::initIndexBuffer(vulkanInstance* instance, vulkanRenderer* renderer) {
+void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
     vk::PhysicalDevice physicalDevice = instance->getPhysicalDevice();
     vk::Queue graphicsQueue = instance->getGraphicsQueue();
 
@@ -86,7 +86,7 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance, vulkanRenderer* 
 
     copyBuffer(
         stagingBuffer, indexBuffer, bufferSize,
-        renderer, graphicsQueue
+        instance
     );
 
     device.destroyBuffer(stagingBuffer);
@@ -113,7 +113,7 @@ void vulkanModelData::initUniformBuffers(vk::PhysicalDevice physicalDevice) {
     }
 }
 
-void vulkanModelData::initTextureImage(vulkanInstance* instance, vulkanRenderer* renderer) {
+void vulkanModelData::initTextureImage(vulkanInstance* instance) {
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load(
         "textures/texture.jpg", 
@@ -156,17 +156,17 @@ void vulkanModelData::initTextureImage(vulkanInstance* instance, vulkanRenderer*
     transitionImageLayout(
         textureImage, vk::Format::eR8G8B8A8Srgb,
         vk::ImageLayout(), vk::ImageLayout::eTransferDstOptimal,
-        renderer, instance->getGraphicsQueue()
+        instance
     );
     copyBufferToImage(
         stagingBuffer, textureImage,
         static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight),
-        renderer, instance->getGraphicsQueue()
+        instance
     );
     transitionImageLayout(
         textureImage, vk::Format::eR8G8B8A8Srgb,
         vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal,
-        renderer, instance->getGraphicsQueue()
+        instance
     );
 
     device.destroyBuffer(stagingBuffer);
@@ -211,14 +211,14 @@ void vulkanModelData::initBuffer(
 
 void vulkanModelData::copyBuffer(
     vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
-    vulkanRenderer* renderer, vk::Queue graphicsQueue
+    vulkanInstance* instance
 ) {
-    vk::CommandBuffer commandBuffer = renderer->beginSingleTimeCommands();
+    vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
 
     auto copyRegion = vk::BufferCopy(0, 0, size);   // src, dst offset
     commandBuffer.copyBuffer(src, dst, copyRegion);
-    
-    renderer->endSingleTimeCommands(commandBuffer, graphicsQueue);
+
+    instance->endSingleTimeCommands(commandBuffer);
 }
 
 void vulkanModelData::initImage(
@@ -274,9 +274,9 @@ void vulkanModelData::initImage(
 void vulkanModelData::transitionImageLayout(
     vk::Image image, vk::Format format,
     vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
-    vulkanRenderer* renderer, vk::Queue graphicsQueue
+    vulkanInstance* instance
 ) {
-    vk::CommandBuffer commandBuffer = renderer->beginSingleTimeCommands();
+    vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
 
     auto barrier = vk::ImageMemoryBarrier(
         vk::AccessFlags(), vk::AccessFlags(),   // temp values
@@ -318,15 +318,15 @@ void vulkanModelData::transitionImageLayout(
         barrier
     );
 
-    renderer->endSingleTimeCommands(commandBuffer, graphicsQueue);
+    instance->endSingleTimeCommands(commandBuffer);
 }
 
 void vulkanModelData::copyBufferToImage(
     vk::Buffer buffer, vk::Image image,
     uint32_t width, uint32_t height,
-    vulkanRenderer* renderer, vk::Queue graphicsQueue
+    vulkanInstance* instance
 ) {
-    vk::CommandBuffer commandBuffer = renderer->beginSingleTimeCommands();
+    vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
 
     auto region = vk::BufferImageCopy(
         0,                                  // buffer offset
@@ -346,7 +346,7 @@ void vulkanModelData::copyBufferToImage(
         region
     );
 
-    renderer->endSingleTimeCommands(commandBuffer, graphicsQueue);
+    instance->endSingleTimeCommands(commandBuffer);
 }
 
 uint32_t vulkanModelData::findMemoryType(

@@ -18,6 +18,8 @@ private:
 	// Queues:
 	vk::Queue graphicsQueue;
 	vk::Queue presentQueue;
+	// CommandPool:
+	vk::CommandPool commandPool;
 
 	const std::vector<const char*> deviceExtensions = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -36,6 +38,7 @@ public:
 	vk::Device getDevice() { return device.get(); }
 	vk::Queue getGraphicsQueue() { return graphicsQueue; }
 	vk::Queue getPresentQueue() { return presentQueue; }
+	vk::CommandPool getCommandPool() { return commandPool; }
 
 	void listExtensions();
 
@@ -43,10 +46,15 @@ public:
 	void initCallback();
 	void initPhysicalDevice();
 	void initDevice();
+	void initCommandPool();
 
 	// Devices:
 	QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice physDevice);
 	SwapChainSupportDetails querySwapChainSupport(const vk::PhysicalDevice& physDevice);
+
+	// CommandPool
+	vk::CommandBuffer beginSingleTimeCommands();
+	void endSingleTimeCommands(vk::CommandBuffer commandBuffer);
 
 private:
 	// Instance:

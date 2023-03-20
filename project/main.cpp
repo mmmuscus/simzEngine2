@@ -85,17 +85,16 @@ void initVulkan() {
     renderPass.initFrameBuffers(surface.getImageViews(), surface.getExtent());
 
     // CommandPool:
-    renderer.setDevice(instance.getDevice());
-    renderer.initCommandPool(&instance);
+    instance.initCommandPool();
+
+    // Texture:
+    // modelData.initTextureImage(&instance);
 
     // Vertex + Index Buffer:
     modelData.setDevice(instance.getDevice());
-    modelData.initVertexBuffer(&instance, &renderer);
-    modelData.initIndexBuffer(&instance, &renderer);
+    modelData.initVertexBuffer(&instance);
+    modelData.initIndexBuffer(&instance);
     object.setModelData(&modelData);
-
-    // Texture:
-    // modelData.initTextureImage(&instance, &renderer);
 
     // Uniform Buffer:
     modelData.initUniformBuffers(instance.getPhysicalDevice());
@@ -105,7 +104,8 @@ void initVulkan() {
     object.initDescriptorSets();
 
     // CommandBuffers:
-    renderer.initCommandBuffers();
+    renderer.setDevice(instance.getDevice());
+    renderer.initCommandBuffers(instance.getCommandPool());
 
     // SyncObjects:
     renderer.initSyncObjects();

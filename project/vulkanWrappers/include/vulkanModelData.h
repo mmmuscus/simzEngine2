@@ -7,7 +7,6 @@
 #include "modelDataIncludes.h"
 
 #include "vulkanInstance.h"
-#include "vulkanRenderer.h"
 
 class vulkanModelData {
 private:
@@ -49,10 +48,10 @@ public:
     std::vector<uint16_t> getIndices() { return indices; }
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
-    void initVertexBuffer(vulkanInstance* instance, vulkanRenderer* renderer);
-    void initIndexBuffer(vulkanInstance* instance, vulkanRenderer* renderer);
+    void initVertexBuffer(vulkanInstance* instance);
+    void initIndexBuffer(vulkanInstance* instance);
     void initUniformBuffers(vk::PhysicalDevice physicalDevice);
-    void initTextureImage(vulkanInstance* instance, vulkanRenderer* renderer);
+    void initTextureImage(vulkanInstance* instance);
 
     void updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent);
 
@@ -66,7 +65,7 @@ private:
     );
     void copyBuffer(
         vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
-        vulkanRenderer* renderer, vk::Queue graphicsQueue
+        vulkanInstance* instance
     );
 
     void initImage(
@@ -81,12 +80,12 @@ private:
     void transitionImageLayout(
         vk::Image image, vk::Format format,
         vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
-        vulkanRenderer* renderer, vk::Queue graphicsQueue
+        vulkanInstance* instance
     );
     void copyBufferToImage(
         vk::Buffer buffer, vk::Image image,
         uint32_t width, uint32_t height,
-        vulkanRenderer* renderer, vk::Queue graphicsQueue
+        vulkanInstance* instance
     );
 
     uint32_t findMemoryType(

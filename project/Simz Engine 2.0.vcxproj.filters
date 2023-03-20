@@ -42,7 +42,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vulkanWrappers\src\vulkanCommands.cpp">
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,9 +66,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vulkanWrappers\include\vulkanCommands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

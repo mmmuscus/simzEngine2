@@ -156,8 +156,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="vulkanWrappers\src\vulkanCommands.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp" />
@@ -169,7 +169,6 @@
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
-    <ClInclude Include="vulkanWrappers\include\vulkanCommands.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h" />

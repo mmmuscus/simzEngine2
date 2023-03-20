@@ -7,9 +7,9 @@ vulkanRenderer::~vulkanRenderer() {
         device.destroyFence(inFlightFences[i]);
     }
 
-    device.destroyCommandPool(commandPool);
+    // device.destroyCommandPool(commandPool);
 }
-
+/*
 void vulkanRenderer::initCommandPool(vulkanInstance* instance) {
     QueueFamilyIndices queueFamilyIndices =
         instance->findQueueFamilies(instance->getPhysicalDevice());
@@ -23,9 +23,9 @@ void vulkanRenderer::initCommandPool(vulkanInstance* instance) {
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create command pool!");
     }
-}
+}*/
 
-void vulkanRenderer::initCommandBuffers() {
+void vulkanRenderer::initCommandBuffers(vk::CommandPool commandPool) {
     commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
     auto allocInfo = vk::CommandBufferAllocateInfo(
@@ -207,6 +207,7 @@ void vulkanRenderer::drawFrame(
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
 
+/*
 vk::CommandBuffer vulkanRenderer::beginSingleTimeCommands() {
     auto allocInfo = vk::CommandBufferAllocateInfo(
         commandPool,
@@ -233,4 +234,4 @@ void vulkanRenderer::endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::
     graphicsQueue.waitIdle();
 
     device.freeCommandBuffers(commandPool, commandBuffer);
-}
+}*/

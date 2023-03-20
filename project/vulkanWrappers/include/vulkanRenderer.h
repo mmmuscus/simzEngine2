@@ -10,7 +10,7 @@
 class vulkanRenderer {
 private:
 	// CommandPool + CommandBuffers:
-	vk::CommandPool commandPool;
+	// vk::CommandPool commandPool;
 	std::vector<vk::CommandBuffer, std::allocator<vk::CommandBuffer>> commandBuffers;
 	// Syncobjects:
 	std::vector<vk::Semaphore> imageAvailableSemaphores;
@@ -29,8 +29,8 @@ public:
 	void setFrameBufferResized(bool val) { framebufferResized = val; }
 	void setDevice(vk::Device _device) { device = _device; }
 
-	void initCommandPool(vulkanInstance* instance);
-	void initCommandBuffers();
+	// void initCommandPool(vulkanInstance* instance);
+	void initCommandBuffers(vk::CommandPool commandPool);
 	void initSyncObjects();
 
 	void recordCommandBuffer(
@@ -48,8 +48,8 @@ public:
 		vulkanRenderPass* renderPass
 	);
 
-	vk::CommandBuffer beginSingleTimeCommands();
-	void endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue);
+	// vk::CommandBuffer beginSingleTimeCommands();
+	// void endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue);
 
 private:
 
