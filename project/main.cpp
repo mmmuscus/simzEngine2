@@ -88,10 +88,10 @@ void initVulkan() {
     instance.initCommandPool();
 
     // Texture:
-    // modelData.initTextureImage(&instance);
+    modelData.setDevice(instance.getDevice());
+    modelData.initTextureImage(&instance);
 
     // Vertex + Index Buffer:
-    modelData.setDevice(instance.getDevice());
     modelData.initVertexBuffer(&instance);
     modelData.initIndexBuffer(&instance);
     object.setModelData(&modelData);

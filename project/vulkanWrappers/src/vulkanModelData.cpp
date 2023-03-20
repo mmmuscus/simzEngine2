@@ -129,7 +129,6 @@ void vulkanModelData::initTextureImage(vulkanInstance* instance) {
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
-
     initBuffer(
         imageSize,
         vk::BufferUsageFlagBits::eTransferSrc,
