@@ -50,6 +50,7 @@ public:
     void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
     void setDevice(vk::Device _device) { device = _device; }
 
+    vk::DescriptorPool getDescriptorPool() { return descriptorPool; }
     std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }

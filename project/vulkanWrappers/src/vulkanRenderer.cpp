@@ -136,14 +136,15 @@ void vulkanRenderer::drawFrame(
 
     device.resetFences(1, &inFlightFences[currentFrame]);
 
-    vkResetCommandBuffer(commandBuffers[currentFrame], 0);
+    commandBuffers[currentFrame].reset();
     recordCommandBuffer(
         commandBuffers[currentFrame],
         object,
         renderPass,
         surface->getExtent(),
-        imageIndex);
-
+        imageIndex
+    );
+    
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
     vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
