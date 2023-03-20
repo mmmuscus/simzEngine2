@@ -121,3 +121,20 @@ SwapChainSupportDetails vulkanInstance::querySwapChainSupport(const vk::Physical
 
     return details;
 }
+
+vk::Format vulkanInstance::findSupportedFormat(
+    const std::vector<vk::Format>& candidates,
+    vk::ImageTiling tiling,
+    vk::FormatFeatureFlags features
+) {
+    for (vk::Format format : candidates) {
+        vk::FormatProperties properties = physicalDevice.getFormatProperties(format);
+
+        if (tiling == vk::ImageTiling::eLinear && (properties.linearTilingFeatures & features) == features)
+            return format;
+        else if (tiling == vk::ImageTiling::eOptimal && (properties.optimalTilingFeatures & features) == features)
+            return format;
+
+        throw std::runtime_error("failed to find supported format!");
+    }
+}

@@ -69,6 +69,16 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
         VK_FALSE
     );
 
+    auto depthStencil = vk::PipelineDepthStencilStateCreateInfo(
+        vk::PipelineDepthStencilStateCreateFlags(),
+        VK_TRUE, VK_TRUE,               // depth test, write enable
+        vk::CompareOp::eLess,
+        VK_FALSE,                       // depth bounds tet enable
+        VK_FALSE,                       // stencil test enable
+        vk::StencilOpState(), vk::StencilOpState(),
+        0.0f, 1.0f                      // min, max depth
+    );
+
     auto colorBlendAttachment = vk::PipelineColorBlendAttachmentState(
         VK_FALSE,
         vk::BlendFactor::eZero, vk::BlendFactor::eZero, vk::BlendOp::eAdd,      // color blend
@@ -116,7 +126,7 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
         &viewportState,
         &rasterizer,
         &multisampling,
-        nullptr,                        // depth stencil state
+        &depthStencil,
         &colorBlending,
         &dynamicState,
         pipelineLayout,

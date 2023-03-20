@@ -3,6 +3,8 @@
 
 #include "generalIncludes.h"
 
+#include "vulkanInstance.h"
+
 class vulkanRenderPass {
 private:
 	// Render pass + framebuffers:
@@ -24,20 +26,15 @@ public:
 	vk::RenderPass getRenderPass() { return renderPass; }
 	std::vector<vk::Framebuffer> getFramebuffers() { return framebuffers; }
 
-	void initRenderPass(vk::Format imageFormat);
+	void initRenderPass(vulkanInstance* instance, vk::Format imageFormat);
 	void initFrameBuffers(std::vector<vk::ImageView> imageViews, vk::Extent2D extent);
-	void initDepthResources(vk::PhysicalDevice physicalDevice);
+	void initDepthResources(vulkanInstance* instance, vk::Extent2D extent);
+
+	void destroyFramebuffers();
+	void destroyDepthResources();
 
 private:
-
-	vk::Format findSupportedFormat(
-		vk::PhysicalDevice physicalDevice,
-		const std::vector<vk::Format>& candidates,
-		vk::ImageTiling tiling,
-		vk::FormatFeatureFlags features
-	);
-
-	vk::Format findDepthFormat(vk::PhysicalDevice physicalDevice);
+	vk::Format findDepthFormat(vulkanInstance* instance);
 };
 
 #endif // VULKAN_RENDER_PASS_H_

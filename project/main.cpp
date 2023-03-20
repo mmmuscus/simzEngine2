@@ -72,7 +72,7 @@ void initVulkan() {
 
     // Render Pass:
     renderPass.setDevice(instance.getDevice());
-    renderPass.initRenderPass(surface.getFormat());
+    renderPass.initRenderPass(&instance, surface.getFormat());
 
     // Descriptor sets:
     object.setDevice(instance.getDevice());
@@ -81,14 +81,14 @@ void initVulkan() {
     // Pipeline:
     object.initPipeline(surface.getExtent(), renderPass.getRenderPass());
 
+    // Depth resources:
+    renderPass.initDepthResources(&instance, surface.getExtent());
+
     // Framebuffers:
     renderPass.initFrameBuffers(surface.getImageViews(), surface.getExtent());
 
     // CommandPool:
     instance.initCommandPool();
-
-    // Depth resources:
-    // renderPass.initDepthResources();
 
     // Texture:
     modelData.setDevice(instance.getDevice());

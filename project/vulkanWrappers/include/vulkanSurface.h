@@ -41,11 +41,8 @@ public:
 	void initSwapChain(vulkanInstance* inst);
 	void initImageViews(vulkanInstance* instance);
 
-	void cleanupSwapChain(std::vector<vk::Framebuffer> framebuffers);
-	void recreateSwapChain(
-		vulkanRenderPass* renderPass, 
-		vulkanInstance* inst
-	);
+	void cleanupSwapChain(vulkanRenderPass* renderPass);
+	void recreateSwapChain(vulkanRenderPass* renderPass, vulkanInstance* inst);
 
 private:
 

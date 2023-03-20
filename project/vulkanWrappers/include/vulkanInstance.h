@@ -51,6 +51,11 @@ public:
 	// Devices:
 	QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice physDevice);
 	SwapChainSupportDetails querySwapChainSupport(const vk::PhysicalDevice& physDevice);
+	vk::Format findSupportedFormat(
+		const std::vector<vk::Format>& candidates,
+		vk::ImageTiling tiling,
+		vk::FormatFeatureFlags features
+	);
 
 	// CommandPool
 	vk::CommandBuffer beginSingleTimeCommands();

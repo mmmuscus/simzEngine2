@@ -58,14 +58,16 @@ void vulkanRenderer::recordCommandBuffer(
         throw std::runtime_error("failed to begin recording command buffer!");
     }
 
-    vk::ClearValue clearColor = { std::array<float, 4>{ 0.0f, 0.0f, 0.0f, 1.0f } };
     auto renderArea = vk::Rect2D(vk::Offset2D(0, 0), extent);
+    std::array<vk::ClearValue, 2> clearValues;
+    clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
+    clearValues[1].depthStencil = vk::ClearDepthStencilValue(1.0f, 0.0f);
 
     auto renderPassInfo = vk::RenderPassBeginInfo(
         renderPass->getRenderPass(),
         renderPass->getFramebuffers()[imageIndex],
         renderArea,
-        1, &clearColor
+        static_cast<uint32_t>(clearValues.size()), clearValues.data()
     );
 
     commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
