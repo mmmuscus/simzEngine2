@@ -110,12 +110,13 @@ void vulkanRenderPass::initDepthResources(vulkanInstance* instance, vk::Extent2D
     instance->initImage(
         extent.width, extent.height,
         depthFormat,
+        1,
         vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eDepthStencilAttachment,
         vk::MemoryPropertyFlagBits::eDeviceLocal,
         depthImage, depthImageMemory
     );
-    depthImageView = instance->initImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
+    depthImageView = instance->initImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth, 1);
 }
 
 vk::Format vulkanRenderPass::findDepthFormat(vulkanInstance* instance) {

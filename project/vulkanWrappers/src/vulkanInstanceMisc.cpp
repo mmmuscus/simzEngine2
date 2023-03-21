@@ -3,7 +3,8 @@
 vk::ImageView vulkanInstance::initImageView(
 	vk::Image image, 
 	vk::Format format, 
-	vk::ImageAspectFlags aspectFlags
+	vk::ImageAspectFlags aspectFlags,
+    uint32_t mipLevels
 ) {
 	auto viewInfo = vk::ImageViewCreateInfo(
 		vk::ImageViewCreateFlags(),
@@ -13,7 +14,7 @@ vk::ImageView vulkanInstance::initImageView(
 		vk::ComponentMapping(),
 		vk::ImageSubresourceRange(
 			aspectFlags,
-			0, 1,							// base mip level, count
+			0, mipLevels,				    // base mip level, count
 			0, 1							// base array layer, count
 		)
 	);
@@ -67,6 +68,7 @@ void vulkanInstance::initBuffer(
 void vulkanInstance::initImage(
 	uint32_t width, uint32_t height,
 	vk::Format format,
+    uint32_t mipLevels,
 	vk::ImageTiling tiling,
 	vk::ImageUsageFlags usage,
 	vk::MemoryPropertyFlags properties,
@@ -77,7 +79,7 @@ void vulkanInstance::initImage(
         vk::ImageType::e2D,
         format,
         vk::Extent3D(width, height, 1),
-        1, 1,                               // mip, array levels
+        mipLevels, 1,                       // mip, array levels
         vk::SampleCountFlagBits::e1,
         tiling,
         usage,

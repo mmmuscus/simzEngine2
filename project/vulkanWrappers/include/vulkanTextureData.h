@@ -8,6 +8,7 @@
 class vulkanTextureData {
 private:
     // Textures:
+    uint32_t mipLevels;
     vk::Image textureImage;
     vk::DeviceMemory textureImageMemory;
     vk::ImageView textureImageView;
@@ -32,11 +33,19 @@ private:
     void transitionImageLayout(
         vk::Image image, vk::Format format,
         vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
+        uint32_t mipLevels,
         vulkanInstance* instance
     );
     void copyBufferToImage(
         vk::Buffer buffer, vk::Image image,
         uint32_t width, uint32_t height,
+        vulkanInstance* instance
+    );
+    
+    void generateMipmaps(
+        vk::Image image, vk::Format imageFormat,
+        int32_t texWidth, int32_t texHeight,
+        uint32_t mipLevels,
         vulkanInstance* instance
     );
 };

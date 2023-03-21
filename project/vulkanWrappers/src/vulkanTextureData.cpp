@@ -19,6 +19,7 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         &texChannels,
         STBI_rgb_alpha);
     vk::DeviceSize imageSize = texWidth * texHeight * 4;
+    mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
 
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");
@@ -41,8 +42,9 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
     instance->initImage(
         texWidth, texHeight,
         vk::Format::eR8G8B8A8Srgb,
+        mipLevels,
         vk::ImageTiling::eOptimal,
-        vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
+        vk::ImageUsageFlagBits::eTransferSrc | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal,
         textureImage, textureImageMemory
     );
@@ -50,6 +52,7 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
     transitionImageLayout(
         textureImage, vk::Format::eR8G8B8A8Srgb,
         vk::ImageLayout(), vk::ImageLayout::eTransferDstOptimal,
+        mipLevels,
         instance
     );
     copyBufferToImage(
@@ -57,18 +60,26 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight),
         instance
     );
-    transitionImageLayout(
+    /*transitionImageLayout(
         textureImage, vk::Format::eR8G8B8A8Srgb,
         vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal,
+        mipLevels,
         instance
-    );
+    );*/
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);
+
+    generateMipmaps(
+        textureImage, vk::Format::eR8G8B8A8Srgb,
+        texWidth, texHeight,
+        mipLevels,
+        instance
+    );
 }
 
 void vulkanTextureData::initTextureImageView(vulkanInstance* instance) {
-    textureImageView = instance->initImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor);
+    textureImageView = instance->initImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor, mipLevels);
 }
 
 void vulkanTextureData::initTextureSampler(vk::PhysicalDevice physicalDevice) {
@@ -85,7 +96,7 @@ void vulkanTextureData::initTextureSampler(vk::PhysicalDevice physicalDevice) {
         VK_TRUE,
         properties.limits.maxSamplerAnisotropy,
         VK_FALSE, vk::CompareOp::eAlways,           // compare op enable, compare op
-        0, 0,                                       // min, max Lod
+        0, static_cast<float>(mipLevels),           // min, max Lod
         vk::BorderColor::eIntOpaqueBlack,
         VK_FALSE
     );
@@ -101,6 +112,7 @@ void vulkanTextureData::initTextureSampler(vk::PhysicalDevice physicalDevice) {
 void vulkanTextureData::transitionImageLayout(
     vk::Image image, vk::Format format,
     vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
+    uint32_t mipLevels,
     vulkanInstance* instance
 ) {
     vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
@@ -112,7 +124,7 @@ void vulkanTextureData::transitionImageLayout(
         image,
         vk::ImageSubresourceRange(
             vk::ImageAspectFlagBits::eColor,
-            0, 1,                               // basemip level, level count
+            0, mipLevels,                       // basemip level, level count
             0, 1                                // base array layer, layer count
         )
     );
@@ -171,6 +183,105 @@ void vulkanTextureData::copyBufferToImage(
         buffer, image,
         vk::ImageLayout::eTransferDstOptimal,
         region
+    );
+
+    instance->endSingleTimeCommands(commandBuffer);
+}
+
+void vulkanTextureData::generateMipmaps(
+    vk::Image image, vk::Format imageFormat,
+    int32_t texWidth, int32_t texHeight,
+    uint32_t mipLevels,
+    vulkanInstance* instance
+) {
+    vk::FormatProperties formatProperties =
+        instance->getPhysicalDevice().getFormatProperties(imageFormat);
+
+    if (!(formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
+        throw std::runtime_error("texture image format does not support linear blitting!");
+
+    vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
+
+    auto barrier = vk::ImageMemoryBarrier(
+        vk::AccessFlags(), vk::AccessFlags(),
+        vk::ImageLayout::eUndefined, vk::ImageLayout::eUndefined,
+        0, 0,
+        image,
+        vk::ImageSubresourceRange(
+            vk::ImageAspectFlagBits::eColor,
+            0, 1,                               // basemip level, level count
+            0, 1                                // base array layer, layer count
+        )
+    );
+
+    int32_t mipWidth = texWidth;
+    int32_t mipHeight = texHeight;
+
+    for (uint32_t i = 1; i < mipLevels; i++) {
+        barrier.subresourceRange.baseMipLevel = i - 1;
+        barrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+        barrier.newLayout = vk::ImageLayout::eTransferSrcOptimal;
+        barrier.srcAccessMask = vk::AccessFlagBits::eTransferRead;
+        barrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
+
+        commandBuffer.pipelineBarrier(
+            vk::PipelineStageFlagBits::eTransfer,
+            vk::PipelineStageFlagBits::eTransfer,
+            vk::DependencyFlags(), 
+            nullptr, nullptr, barrier
+        );
+
+        auto blit = vk::ImageBlit(
+            vk::ImageSubresourceLayers(
+                vk::ImageAspectFlagBits::eColor,
+                i - 1,                      // mipLevel
+                0, 1                        // base array layer, count
+            ),
+            { vk::Offset3D(0, 0, 0), vk::Offset3D(mipWidth, mipHeight, 1) },
+            vk::ImageSubresourceLayers(
+                vk::ImageAspectFlagBits::eColor,
+                i,                          // mipLevel
+                0, 1                        // base array layer, count
+            ),
+            {
+                vk::Offset3D(0, 0, 0),
+                vk::Offset3D(mipWidth > 1 ? mipWidth / 2 : 1, mipHeight > 1 ? mipHeight / 2 : 1, 1)
+            }
+        );
+
+        commandBuffer.blitImage(
+            image, vk::ImageLayout::eTransferSrcOptimal,
+            image, vk::ImageLayout::eTransferDstOptimal,
+            blit, vk::Filter::eLinear
+        );
+
+        barrier.oldLayout = vk::ImageLayout::eTransferSrcOptimal;
+        barrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+        barrier.srcAccessMask = vk::AccessFlagBits::eTransferRead;
+        barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+        commandBuffer.pipelineBarrier(
+            vk::PipelineStageFlagBits::eTransfer,
+            vk::PipelineStageFlagBits::eFragmentShader,
+            vk::DependencyFlags(),
+            nullptr, nullptr, barrier
+        );
+
+        if (mipWidth > 1) mipWidth /= 2;
+        if (mipHeight > 1) mipHeight /= 2;
+    }
+
+    barrier.subresourceRange.baseMipLevel = mipLevels - 1;
+    barrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+    barrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+    barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+    barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+    commandBuffer.pipelineBarrier(
+        vk::PipelineStageFlagBits::eTransfer,
+        vk::PipelineStageFlagBits::eFragmentShader,
+        vk::DependencyFlags(),
+        nullptr, nullptr, barrier
     );
 
     instance->endSingleTimeCommands(commandBuffer);

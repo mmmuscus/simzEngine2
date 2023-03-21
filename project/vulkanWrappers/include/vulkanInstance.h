@@ -65,7 +65,8 @@ public:
 	vk::ImageView initImageView(
 		vk::Image image,
 		vk::Format format,
-		vk::ImageAspectFlags aspectFlags
+		vk::ImageAspectFlags aspectFlags,
+		uint32_t mipLevels
 	);
 
 	void initBuffer(
@@ -77,6 +78,7 @@ public:
 	void initImage(
 		uint32_t width, uint32_t height,
 		vk::Format format,
+		uint32_t mipLevels,
 		vk::ImageTiling tiling,
 		vk::ImageUsageFlags usage,
 		vk::MemoryPropertyFlags properties,

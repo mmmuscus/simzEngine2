@@ -80,7 +80,7 @@ void vulkanSurface::initImageViews(vulkanInstance* instance) {
     imageViews.resize(images.size());
 
     for (size_t i = 0; i < images.size(); i++)
-        imageViews[i] = instance->initImageView(images[i], imageFormat, vk::ImageAspectFlagBits::eColor);
+        imageViews[i] = instance->initImageView(images[i], imageFormat, vk::ImageAspectFlagBits::eColor, 1);
 }
 
 void vulkanSurface::cleanupSwapChain(vulkanRenderPass* renderPass) {
