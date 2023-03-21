@@ -75,6 +75,9 @@
     <ClCompile Include="C:\devTools\ImGui\imgui_impl_vulkan.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vulkanTextureData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vulkanSurface.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="C:\devTools\ImGui\imgui_impl_glfw.h">
       <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\vulkanTextureData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

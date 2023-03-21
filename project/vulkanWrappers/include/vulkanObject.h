@@ -5,6 +5,7 @@
 #include "modelDataIncludes.h"
 
 #include "vulkanModelData.h"
+#include "vulkanTextureData.h"
 
 #include <fstream>
 
@@ -40,6 +41,8 @@ private:
     vk::Pipeline graphicsPipeline;
     // Buffers:
     vulkanModelData* modelData;
+    // Textures:
+    vulkanTextureData* textureData;
 
     // Not maintained by the class:
     vk::Device device;
@@ -48,6 +51,7 @@ public:
     ~vulkanObject();
     
     void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
+    void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
     void setDevice(vk::Device _device) { device = _device; }
 
     vk::DescriptorPool getDescriptorPool() { return descriptorPool; }

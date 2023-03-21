@@ -222,8 +222,8 @@ void vulkanObject::initDescriptorSets() {
         );
 
         auto imageInfo = vk::DescriptorImageInfo(
-            modelData->getSampler(),
-            modelData->getImageView(),
+            textureData->getSampler(),
+            textureData->getImageView(),
             vk::ImageLayout::eShaderReadOnlyOptimal
         );
 

@@ -9,6 +9,7 @@
 #include "vulkanWrappers/include/vulkanRenderPass.h"
 #include "vulkanWrappers/include/vulkanRenderer.h"
 #include "vulkanWrappers/include/vulkanModelData.h"
+#include "vulkanWrappers/include/vulkanTextureData.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -32,6 +33,7 @@ vulkanObject object;
 vulkanRenderPass renderPass;
 vulkanRenderer renderer;
 vulkanModelData modelData;
+vulkanTextureData textureData;
 
 void initWindow() {
     glfwInit();
@@ -91,15 +93,17 @@ void initVulkan() {
     instance.initCommandPool();
 
     // Texture:
-    modelData.setDevice(instance.getDevice());
-    modelData.initTextureImage(&instance);
-    modelData.initTextureImageView(&instance);
-    modelData.initTextureSampler(instance.getPhysicalDevice());
+    textureData.setDevice(instance.getDevice());
+    textureData.initTextureImage("textures/viking_room.png", &instance);
+    textureData.initTextureImageView(&instance);
+    textureData.initTextureSampler(instance.getPhysicalDevice());
+    object.setTextureData(&textureData);
 
     // Model:
-    modelData.loadModel();
+    modelData.loadModel("models/viking_room.obj");
 
     // Vertex + Index Buffer:
+    modelData.setDevice(instance.getDevice());
     modelData.initVertexBuffer(&instance);
     modelData.initIndexBuffer(&instance);
     object.setModelData(&modelData);

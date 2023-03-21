@@ -20,12 +20,6 @@ private:
     std::vector<vk::Buffer> uniformBuffers;
     std::vector<vk::DeviceMemory> uniformBuffersMemory;
     std::vector<void*> uniformBuffersMapped;
-    // TODO: move to seperate TextureData class
-    // Texture:
-    vk::Image textureImage;
-    vk::DeviceMemory textureImageMemory;
-    vk::ImageView textureImageView;
-    vk::Sampler textureSampler;
 
     // Vertices + indices:
     std::vector<Vertex> vertices;
@@ -44,34 +38,18 @@ public:
     std::vector<Vertex> getVertices() { return vertices; }
     std::vector<uint32_t> getIndices() { return indices; }
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
-    vk::ImageView getImageView() { return textureImageView; }
-    vk::Sampler getSampler() { return textureSampler; }
 
-    void loadModel();
+    void loadModel(std::string modelPath);
 
     void initVertexBuffer(vulkanInstance* instance);
     void initIndexBuffer(vulkanInstance* instance);
     void initUniformBuffers(vulkanInstance* instance);
-    void initTextureImage(vulkanInstance* instance);
-    void initTextureImageView(vulkanInstance* instance);
-    void initTextureSampler(vk::PhysicalDevice physicalDevice);
 
     void updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent);
 
 private:
     void copyBuffer(
         vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
-        vulkanInstance* instance
-    );
-
-    void transitionImageLayout(
-        vk::Image image, vk::Format format,
-        vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
-        vulkanInstance* instance
-    );
-    void copyBufferToImage(
-        vk::Buffer buffer, vk::Image image,
-        uint32_t width, uint32_t height,
         vulkanInstance* instance
     );
 };
