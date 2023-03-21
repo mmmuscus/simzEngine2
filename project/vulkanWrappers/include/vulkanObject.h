@@ -60,7 +60,7 @@ public:
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vulkanModelData* getModelData() { return modelData; }
 
-    void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass);
+    void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
     void initDescriptorSetLayout();
     void initDescriptorPool();
     void initDescriptorSets();

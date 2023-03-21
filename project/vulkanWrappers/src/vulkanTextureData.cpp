@@ -43,6 +43,7 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         texWidth, texHeight,
         vk::Format::eR8G8B8A8Srgb,
         mipLevels,
+        vk::SampleCountFlagBits::e1,
         vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransferSrc | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal,

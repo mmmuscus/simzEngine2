@@ -79,6 +79,7 @@ public:
 		uint32_t width, uint32_t height,
 		vk::Format format,
 		uint32_t mipLevels,
+		vk::SampleCountFlagBits numSamples,
 		vk::ImageTiling tiling,
 		vk::ImageUsageFlags usage,
 		vk::MemoryPropertyFlags properties,

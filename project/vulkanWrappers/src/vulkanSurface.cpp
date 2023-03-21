@@ -84,6 +84,7 @@ void vulkanSurface::initImageViews(vulkanInstance* instance) {
 }
 
 void vulkanSurface::cleanupSwapChain(vulkanRenderPass* renderPass) {
+    renderPass->destroyColorResources();
     renderPass->destroyDepthResources();
     renderPass->destroyFramebuffers();
 
@@ -108,6 +109,7 @@ void vulkanSurface::recreateSwapChain(vulkanRenderPass* renderPass, vulkanInstan
 
     initSwapChain(inst);
     initImageViews(inst);
+    renderPass->initColorResources(inst, imageFormat, extent);
     renderPass->initDepthResources(inst, extent);
     renderPass->initFrameBuffers(imageViews, extent);
 }

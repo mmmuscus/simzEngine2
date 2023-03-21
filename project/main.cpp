@@ -72,6 +72,9 @@ void initVulkan() {
     surface.initSwapChain(&instance);
     surface.initImageViews(&instance);
 
+    // Msaa Samples:
+    renderPass.initMsaaSamples(instance.getPhysicalDevice());
+
     // Render Pass:
     renderPass.setDevice(instance.getDevice());
     renderPass.initRenderPass(&instance, surface.getFormat());
@@ -81,7 +84,10 @@ void initVulkan() {
     object.initDescriptorSetLayout();
 
     // Pipeline:
-    object.initPipeline(surface.getExtent(), renderPass.getRenderPass());
+    object.initPipeline(surface.getExtent(), renderPass.getRenderPass(), renderPass.getMsaaSamples());
+
+    // Color resources:
+    renderPass.initColorResources(&instance, surface.getFormat(), surface.getExtent());
 
     // Depth resources:
     renderPass.initDepthResources(&instance, surface.getExtent());

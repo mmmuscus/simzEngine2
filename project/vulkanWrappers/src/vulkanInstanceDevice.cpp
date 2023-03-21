@@ -37,6 +37,7 @@ void vulkanInstance::initDevice() {
 
     auto deviceFeatures = vk::PhysicalDeviceFeatures();
     deviceFeatures.samplerAnisotropy = VK_TRUE;
+    deviceFeatures.sampleRateShading = VK_TRUE;
     auto createInfo = vk::DeviceCreateInfo(
         vk::DeviceCreateFlags(),
         static_cast<uint32_t>(queueCreateInfos.size()),

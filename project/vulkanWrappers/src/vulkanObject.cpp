@@ -9,7 +9,7 @@ vulkanObject::~vulkanObject() {
     device.destroyPipelineLayout(pipelineLayout);
 }
 
-void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) {
+void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples) {
     auto vertShaderCode = readFile("shaders/vertexShaders/vert.spv");
     auto fragShaderCode = readFile("shaders/fragmentShaders/frag.spv");
 
@@ -65,8 +65,9 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass) 
 
     auto multisampling = vk::PipelineMultisampleStateCreateInfo(
         vk::PipelineMultisampleStateCreateFlags(),
-        vk::SampleCountFlagBits::e1,
-        VK_FALSE
+        msaaSamples,
+        VK_TRUE,                        // sample shading enable
+        .2f                             // min sample shading
     );
 
     auto depthStencil = vk::PipelineDepthStencilStateCreateInfo(

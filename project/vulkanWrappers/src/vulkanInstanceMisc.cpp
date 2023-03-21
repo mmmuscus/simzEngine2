@@ -69,6 +69,7 @@ void vulkanInstance::initImage(
 	uint32_t width, uint32_t height,
 	vk::Format format,
     uint32_t mipLevels,
+    vk::SampleCountFlagBits numSamples,
 	vk::ImageTiling tiling,
 	vk::ImageUsageFlags usage,
 	vk::MemoryPropertyFlags properties,
@@ -80,7 +81,7 @@ void vulkanInstance::initImage(
         format,
         vk::Extent3D(width, height, 1),
         mipLevels, 1,                       // mip, array levels
-        vk::SampleCountFlagBits::e1,
+        numSamples,
         tiling,
         usage,
         vk::SharingMode::eExclusive,
