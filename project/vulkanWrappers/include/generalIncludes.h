@@ -1,10 +1,6 @@
 #ifndef GENERAL_INCLUDES_H_
 #define GENERAL_INCLUDES_H_
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_vulkan.h>
-
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 

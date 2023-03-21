@@ -1,7 +1,7 @@
 #include "../include/vulkanTextureData.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "../../external/stb/stb_image.h"
 
 vulkanTextureData::~vulkanTextureData() {
     device.destroySampler(textureSampler);

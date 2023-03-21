@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\devTools\ImGui;C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;C:\devTools\stb;C:\devTools\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\devTools\ImGui;C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;C:\devTools\stb;C:\devTools\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\devTools\ImGui;C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;C:\devTools\stb;C:\devTools\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\devTools\ImGui;C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;C:\devTools\stb;C:\devTools\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\devTools\vulkan\Include;C:\devTools\glm;C:\devTools\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -155,13 +155,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\devTools\ImGui\imgui.cpp" />
-    <ClCompile Include="C:\devTools\ImGui\imgui_demo.cpp" />
-    <ClCompile Include="C:\devTools\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="C:\devTools\ImGui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="C:\devTools\ImGui\imgui_impl_vulkan.cpp" />
-    <ClCompile Include="C:\devTools\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="C:\devTools\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
@@ -176,14 +169,6 @@
     <ClCompile Include="vulkanWrappers\src\vulkanTextureData.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\devTools\ImGui\imconfig.h" />
-    <ClInclude Include="C:\devTools\ImGui\imgui.h" />
-    <ClInclude Include="C:\devTools\ImGui\imgui_impl_glfw.h" />
-    <ClInclude Include="C:\devTools\ImGui\imgui_impl_vulkan.h" />
-    <ClInclude Include="C:\devTools\ImGui\imgui_internal.h" />
-    <ClInclude Include="C:\devTools\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="C:\devTools\ImGui\imstb_textedit.h" />
-    <ClInclude Include="C:\devTools\ImGui\imstb_truetype.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />

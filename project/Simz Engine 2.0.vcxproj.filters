@@ -54,27 +54,6 @@
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceMisc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui_tables.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui_widgets.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui_demo.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui_draw.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui_impl_glfw.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\devTools\ImGui\imgui_impl_vulkan.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="vulkanWrappers\src\vulkanTextureData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,30 +79,6 @@
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imgui_impl_vulkan.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imgui_internal.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imstb_rectpack.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imstb_textedit.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imstb_truetype.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imconfig.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imgui.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\devTools\ImGui\imgui_impl_glfw.h">
-      <Filter>Header Files\imgui</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\vulkanTextureData.h">
       <Filter>Header Files</Filter>
