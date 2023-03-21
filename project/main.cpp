@@ -6,8 +6,8 @@
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
 #include "vulkanWrappers/include/vulkanObject.h"
-#include "vulkanWrappers/include/vulkanRenderPass.h"
 #include "vulkanWrappers/include/vulkanRenderer.h"
+#include "vulkanWrappers/include/vulkanDrawer.h"
 #include "vulkanWrappers/include/vulkanModelData.h"
 #include "vulkanWrappers/include/vulkanTextureData.h"
 
@@ -30,8 +30,8 @@ GLFWwindow* window;
 vulkanInstance instance;
 vulkanSurface surface;
 vulkanObject object;
-vulkanRenderPass renderPass;
 vulkanRenderer renderer;
+vulkanDrawer drawer;
 vulkanModelData modelData;
 vulkanTextureData textureData;
 
@@ -47,7 +47,7 @@ void initWindow() {
 
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
     auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
-    app->renderer.setFrameBufferResized(true);
+    app->drawer.setFrameBufferResized(true);
 }
 
 void initVulkan() {
@@ -73,27 +73,27 @@ void initVulkan() {
     surface.initImageViews(&instance);
 
     // Msaa Samples:
-    renderPass.initMsaaSamples(instance.getPhysicalDevice());
+    renderer.initMsaaSamples(instance.getPhysicalDevice());
+
+    // Depth resources:
+    renderer.initDepthResources(&instance, surface.getExtent());
 
     // Render Pass:
-    renderPass.setDevice(instance.getDevice());
-    renderPass.initRenderPass(&instance, surface.getFormat());
+    renderer.setDevice(instance.getDevice());
+    renderer.initRenderPass(surface.getFormat());
 
     // Descriptor sets:
     object.setDevice(instance.getDevice());
     object.initDescriptorSetLayout();
 
     // Pipeline:
-    object.initPipeline(surface.getExtent(), renderPass.getRenderPass(), renderPass.getMsaaSamples());
+    object.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
 
     // Color resources:
-    renderPass.initColorResources(&instance, surface.getFormat(), surface.getExtent());
-
-    // Depth resources:
-    renderPass.initDepthResources(&instance, surface.getExtent());
+    renderer.initColorResources(&instance, surface.getFormat(), surface.getExtent());
 
     // Framebuffers:
-    renderPass.initFrameBuffers(surface.getImageViews(), surface.getExtent());
+    renderer.initFrameBuffers(surface.getImageViews(), surface.getExtent());
 
     // CommandPool:
     instance.initCommandPool();
@@ -122,11 +122,11 @@ void initVulkan() {
     object.initDescriptorSets();
 
     // CommandBuffers:
-    renderer.setDevice(instance.getDevice());
-    renderer.initCommandBuffers(instance.getCommandPool());
+    drawer.setDevice(instance.getDevice());
+    drawer.initCommandBuffers(instance.getCommandPool());
 
     // SyncObjects:
-    renderer.initSyncObjects();
+    drawer.initSyncObjects();
 }
 
 void initImGui() {
@@ -196,11 +196,11 @@ void initImGui() {
             ImGui::ShowDemoWindow();
             ImGui::Render();*/
 
-            renderer.drawFrame(
+            drawer.drawFrame(
                 &surface,
                 &instance,
                 &object,
-                &renderPass
+                &renderer
             );
         }
 

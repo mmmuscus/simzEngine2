@@ -4,7 +4,7 @@
 #include "generalIncludes.h"
 
 #include "vulkanInstance.h"
-#include "vulkanRenderPass.h"
+#include "vulkanRenderer.h"
 
 class vulkanSurface {
 private:
@@ -41,8 +41,8 @@ public:
 	void initSwapChain(vulkanInstance* inst);
 	void initImageViews(vulkanInstance* instance);
 
-	void cleanupSwapChain(vulkanRenderPass* renderPass);
-	void recreateSwapChain(vulkanRenderPass* renderPass, vulkanInstance* inst);
+	void cleanupSwapChain(vulkanRenderer* renderer);
+	void recreateSwapChain(vulkanRenderer* renderer, vulkanInstance* inst);
 
 private:
 

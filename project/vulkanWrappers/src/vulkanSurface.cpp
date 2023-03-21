@@ -83,10 +83,10 @@ void vulkanSurface::initImageViews(vulkanInstance* instance) {
         imageViews[i] = instance->initImageView(images[i], imageFormat, vk::ImageAspectFlagBits::eColor, 1);
 }
 
-void vulkanSurface::cleanupSwapChain(vulkanRenderPass* renderPass) {
-    renderPass->destroyColorResources();
-    renderPass->destroyDepthResources();
-    renderPass->destroyFramebuffers();
+void vulkanSurface::cleanupSwapChain(vulkanRenderer* renderer) {
+    renderer->destroyColorResources();
+    renderer->destroyDepthResources();
+    renderer->destroyFramebuffers();
 
     for (auto imageView : imageViews) {
         device.destroyImageView(imageView);
@@ -95,7 +95,7 @@ void vulkanSurface::cleanupSwapChain(vulkanRenderPass* renderPass) {
     device.destroySwapchainKHR(swapChain);
 }
 
-void vulkanSurface::recreateSwapChain(vulkanRenderPass* renderPass, vulkanInstance* inst) {
+void vulkanSurface::recreateSwapChain(vulkanRenderer* renderer, vulkanInstance* inst) {
     int width = 0, height = 0;
     glfwGetFramebufferSize(window, &width, &height);
     while (width == 0 || height == 0) {
@@ -105,13 +105,13 @@ void vulkanSurface::recreateSwapChain(vulkanRenderPass* renderPass, vulkanInstan
 
     device.waitIdle();
 
-    cleanupSwapChain(renderPass);
+    cleanupSwapChain(renderer);
 
     initSwapChain(inst);
     initImageViews(inst);
-    renderPass->initColorResources(inst, imageFormat, extent);
-    renderPass->initDepthResources(inst, extent);
-    renderPass->initFrameBuffers(imageViews, extent);
+    renderer->initColorResources(inst, imageFormat, extent);
+    renderer->initDepthResources(inst, extent);
+    renderer->initFrameBuffers(imageViews, extent);
 }
 
 vk::SurfaceFormatKHR vulkanSurface::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) {

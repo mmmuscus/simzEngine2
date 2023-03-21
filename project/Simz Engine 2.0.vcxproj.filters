@@ -39,10 +39,10 @@
     <ClCompile Include="vulkanWrappers\src\vulkanObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vulkanWrappers\src\vulkanRenderPass.cpp">
+    <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp">
+    <ClCompile Include="vulkanWrappers\src\vulkanDrawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp">
@@ -86,10 +86,10 @@
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vulkanWrappers\include\vulkanRenderPass.h">
+    <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h">
+    <ClInclude Include="vulkanWrappers\include\vulkanDrawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h">
