@@ -106,7 +106,7 @@ void initVulkan() {
     object.setTextureData(&textureData);
 
     // Model:
-    modelData.loadModel("models/viking_room.obj");
+    modelData.loadModel("models/viking_room.objj");
 
     // Vertex + Index Buffer:
     modelData.setDevice(instance.getDevice());
