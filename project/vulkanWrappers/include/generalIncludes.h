@@ -11,6 +11,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/hash.hpp>
 
+#include <imGui/imgui.h>
+#include <imGui/imgui_impl_glfw.h>
+#include <imGui/imgui_impl_vulkan.h>
+
 #include <optional>
 
 #ifdef NDEBUG

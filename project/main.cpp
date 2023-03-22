@@ -133,7 +133,7 @@ void initImGui() {
     // ~~~Following:
     // https://vkguide.dev/docs/extra-chapter/implementing_imgui/
     // https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
-    /*VkDescriptorPoolSize poolSizes[] =
+    VkDescriptorPoolSize poolSizes[] =
     {
         { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
         { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
@@ -168,22 +168,34 @@ void initImGui() {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
+    ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForVulkan(window, true);
     ImGui_ImplVulkan_InitInfo info;
     info.Instance = instance.getInstance();
     info.PhysicalDevice = instance.getPhysicalDevice();
     info.Device = instance.getDevice();
+    // info.QueueFamily = 
+    info.Queue = instance.getGraphicsQueue();
+    // info.PipelineCache = 
     info.DescriptorPool = imguiPool;
+    info.Subpass = 0;
+    info.MinImageCount = 1;
     info.ImageCount = MAX_FRAMES_IN_FLIGHT;
-    ImGui_ImplVulkan_Init(&info, renderPass.getRenderPass());
+    info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; // find conversion between c and cpp impl
+    // info.Allocator = 
+    // info.CheckVkResultFn = 
+    ImGui_ImplVulkan_Init(&info, renderer.getRenderPass());
 
     vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
     ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
     instance.endSingleTimeCommands(commandBuffer);
 
     instance.getDevice().waitIdle();
-    ImGui_ImplVulkan_DestroyFontUploadObjects();*/
+    ImGui_ImplVulkan_DestroyFontUploadObjects();
 }
 
     void mainLoop() {
@@ -208,9 +220,9 @@ void initImGui() {
     }
 
     void cleanup() {
-        /*ImGui_ImplVulkan_Shutdown();
+        ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();*/
+        ImGui::DestroyContext();
 
         glfwDestroyWindow(window);
         glfwTerminate();

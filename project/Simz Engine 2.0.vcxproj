@@ -155,6 +155,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="external\imGui\imgui.cpp" />
+    <ClCompile Include="external\imGui\imgui_demo.cpp" />
+    <ClCompile Include="external\imGui\imgui_draw.cpp" />
+    <ClCompile Include="external\imGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="external\imGui\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="external\imGui\imgui_tables.cpp" />
+    <ClCompile Include="external\imGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
@@ -169,6 +176,11 @@
     <ClCompile Include="vulkanWrappers\src\vulkanTextureData.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\imGui\imconfig.h" />
+    <ClInclude Include="external\imGui\imgui_internal.h" />
+    <ClInclude Include="external\imGui\imstb_rectpack.h" />
+    <ClInclude Include="external\imGui\imstb_textedit.h" />
+    <ClInclude Include="external\imGui\imstb_truetype.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />
