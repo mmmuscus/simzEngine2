@@ -129,6 +129,14 @@ void initVulkan() {
     drawer.initSyncObjects();
 }
 
+static void checkVkResult(VkResult err) {
+    if (err == 0)
+        return;
+
+    if (err < 0)
+        abort();
+}
+
 void initImGui() {
     // ~~~Following:
     // https://vkguide.dev/docs/extra-chapter/implementing_imgui/
@@ -180,14 +188,14 @@ void initImGui() {
     info.Device = instance.getDevice();
     // info.QueueFamily = 
     info.Queue = instance.getGraphicsQueue();
-    // info.PipelineCache = 
+    info.PipelineCache = VK_NULL_HANDLE;
     info.DescriptorPool = imguiPool;
     info.Subpass = 0;
     info.MinImageCount = 1;
     info.ImageCount = MAX_FRAMES_IN_FLIGHT;
     info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; // find conversion between c and cpp impl
-    // info.Allocator = 
-    // info.CheckVkResultFn = 
+    info.Allocator = nullptr;
+    info.CheckVkResultFn = checkVkResult;
     ImGui_ImplVulkan_Init(&info, renderer.getRenderPass());
 
     vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
@@ -202,11 +210,13 @@ void initImGui() {
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
 
-            /*ImGui_ImplVulkan_NewFrame();
+            /*
+            ImGui_ImplVulkan_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
             ImGui::ShowDemoWindow();
-            ImGui::Render();*/
+            ImGui::Render();
+            ImGui::EndFrame();*/
 
             drawer.drawFrame(
                 &surface,
