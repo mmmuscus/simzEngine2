@@ -21,6 +21,7 @@ public:
 
 	void addObject(object* _object) { objects.push_back(_object); }
 
+	vulkanSceneData* getSceneData() { return sceneData; }
 	camera* getCam() { return cam; }
 
 	std::vector<object*> getObjects() { return objects; }

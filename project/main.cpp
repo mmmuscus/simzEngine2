@@ -14,6 +14,7 @@
 
 #include "renderLogic/include/scene.h"
 #include "renderLogic/include/object.h"
+#include "renderLogic/include/camera.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -220,6 +221,8 @@ void initImGui() {
     void initScene() {
         // Scene setup:
         mainScene.setSceneData(&sceneData);
+        mainScene.setCam(nullptr);
+
         demoObj.setVulkanObject(&obj);
         demoObj.setModelData(&modelData);
         demoObj.setTextureData(&textureData);

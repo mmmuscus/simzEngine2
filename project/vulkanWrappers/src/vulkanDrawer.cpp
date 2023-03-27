@@ -135,6 +135,8 @@ void vulkanDrawer::drawFrame(
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
+    // glm::mat4 viewMat = currScene->getCam()->getViewMatrix();
+    currScene->getSceneData()->updateSceneBuffer(currentFrame, surface->getExtent(), glm::mat4());
     currScene->getObjects()[0]->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
     
     device.resetFences(1, &inFlightFences[currentFrame]);
