@@ -23,6 +23,7 @@ public:
         initWindow();
         initVulkan();
         initImGui();
+        initScene();
         mainLoop();
         cleanup();
     }
@@ -133,12 +134,6 @@ void initVulkan() {
 
     // SyncObjects:
     drawer.initSyncObjects();
-
-    // Scene setup:
-    demoObj.setVulkanObject(&obj);
-    demoObj.setModelData(&modelData);
-    demoObj.setTextureData(&textureData);
-    mainScene.setObj(&demoObj);
 }
 
 static void checkVkResult(VkResult err) {
@@ -217,6 +212,14 @@ void initImGui() {
     instance.getDevice().waitIdle();
     ImGui_ImplVulkan_DestroyFontUploadObjects();
 }
+
+    void initScene() {
+        // Scene setup:
+        demoObj.setVulkanObject(&obj);
+        demoObj.setModelData(&modelData);
+        demoObj.setTextureData(&textureData);
+        mainScene.addObject(&demoObj);
+    }
 
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {

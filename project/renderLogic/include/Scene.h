@@ -9,14 +9,16 @@
 class scene {
 private:
 	camera* cam;
-	object* obj;
+	std::vector<object*> objects;
 
 public:
 	void setCam(camera* _cam) { cam = _cam; }
-	void setObj(object* _obj) { obj = _obj; }
+
+	void addObject(object* _object) { objects.push_back(_object); }
 
 	camera* getCam() { return cam; }
-	object* getObj() { return obj; }
+
+	std::vector<object*> getObjects() { return objects; }
 
 private:
 

@@ -132,15 +132,14 @@ void vulkanDrawer::drawFrame(
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
-    // object->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
-    currScene->getObj()->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
-
+    currScene->getObjects()[0]->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
+    
     device.resetFences(1, &inFlightFences[currentFrame]);
 
     commandBuffers[currentFrame].reset();
     recordCommandBuffer(
         commandBuffers[currentFrame],
-        currScene->getObj()->getVulkanObject(),
+        currScene->getObjects()[0]->getVulkanObject(),
         renderer,
         surface->getExtent(),
         imageIndex
