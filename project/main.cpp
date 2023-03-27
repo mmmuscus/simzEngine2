@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <vector>
+#include <chrono>
 
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
@@ -46,6 +47,27 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     mainScene.getCam()->processMouseMovement(xOffset, yOffset);
 }
 
+void processInput(GLFWwindow* window, float deltaTime)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    camera* cam = mainScene.getCam();
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cam->processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cam->processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cam->processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cam->processKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        cam->processKeyboard(UP, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        cam->processKeyboard(DOWN, deltaTime);
+}
+
 class Application {
 public:
     void run() {
@@ -72,6 +94,13 @@ vulkanSceneData sceneData;
 
 object demoObj;
 camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+// for input processing:
+std::chrono::high_resolution_clock::time_point startTime;
+std::chrono::high_resolution_clock::time_point currentTime;
+std::chrono::high_resolution_clock::time_point lastTime;
+float time;
+float deltaTime;
 
 void initWindow() {
     glfwInit();
@@ -265,8 +294,14 @@ void initImGui() {
     }
 
     void mainLoop() {
+        startTime = std::chrono::high_resolution_clock::now();
+        lastTime = startTime;
+
         while (!glfwWindowShouldClose(window)) {
+            updateTime();
+
             glfwPollEvents();
+            processInput(window, deltaTime);
 
             /*
             ImGui_ImplVulkan_NewFrame();
@@ -285,6 +320,16 @@ void initImGui() {
         }
 
         instance.getDevice().waitIdle();
+    }
+
+    void updateTime()
+    {
+        currentTime = std::chrono::high_resolution_clock::now();
+
+        time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+        deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - lastTime).count();
+
+        lastTime = currentTime;
     }
 
     void cleanup() {
