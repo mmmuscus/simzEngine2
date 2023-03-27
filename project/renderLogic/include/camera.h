@@ -9,8 +9,8 @@ enum direction {
 };
 
 // Default values
-#define YAW		180.0f
-#define PITCH	0.0f
+#define YAW		225.0f
+#define PITCH	-30.0f
 #define SPEED	2.5f
 #define SENS	0.1f
 

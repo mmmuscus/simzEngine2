@@ -19,11 +19,39 @@
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
+// for the camera:
+float lastX = WIDTH / 2.0f;
+float lastY = HEIGHT / 2.0;
+bool firstMouse = true;
+
+scene mainScene;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    // reversed cos windows funykness(?)
+    // TODO: look into this
+    float xOffset = lastX - xpos;
+    float yOffset = lastY - ypos;
+
+    lastX = xpos;
+    lastY = ypos;
+
+    mainScene.getCam()->processMouseMovement(xOffset, yOffset);
+}
+
 class Application {
 public:
     void run() {
         initWindow();
         initVulkan();
+        initGlfwInputHandling();
         initImGui();
         initScene();
         mainLoop();
@@ -43,7 +71,6 @@ vulkanTextureData textureData;
 vulkanSceneData sceneData;
 
 object demoObj;
-scene mainScene;
 camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 void initWindow() {
@@ -59,6 +86,13 @@ void initWindow() {
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
     auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
     app->drawer.setFrameBufferResized(true);
+}
+
+void initGlfwInputHandling() {
+    glfwMakeContextCurrent(window);
+    glfwSetCursorPosCallback(window, mouse_callback);
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void initVulkan() {
