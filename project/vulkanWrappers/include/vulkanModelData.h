@@ -45,7 +45,7 @@ public:
     void initIndexBuffer(vulkanInstance* instance);
     void initUniformBuffers(vulkanInstance* instance);
 
-    void updateUniformBuffer(uint32_t currentImage, vk::Extent2D extent);
+    void updateModelUniformBuffer(uint32_t currentFrame);
 
 private:
     void copyBuffer(

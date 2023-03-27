@@ -2,31 +2,31 @@
 
 vulkanSceneData::~vulkanSceneData() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        device.destroyBuffer(sceneBuffers[i]);
-        device.freeMemory(sceneBuffersMemory[i]);
+        device.destroyBuffer(uniformBuffers[i]);
+        device.freeMemory(uniformBuffersMemory[i]);
     }
 }
 
-void vulkanSceneData::initSceneBuffers(vulkanInstance* instance) {
+void vulkanSceneData::initUniformBuffers(vulkanInstance* instance) {
     vk::DeviceSize bufferSize = sizeof(sceneUniformBufferObject);
 
-    sceneBuffers.resize(MAX_FRAMES_IN_FLIGHT);
-    sceneBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-    sceneBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         instance->initBuffer(
             bufferSize,
             vk::BufferUsageFlagBits::eUniformBuffer,
             vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-            sceneBuffers[i], sceneBuffersMemory[i]
+            uniformBuffers[i], uniformBuffersMemory[i]
         );
 
-        sceneBuffersMapped[i] = device.mapMemory(sceneBuffersMemory[i], 0, bufferSize);
+        uniformBuffersMapped[i] = device.mapMemory(uniformBuffersMemory[i], 0, bufferSize);
     }
 }
 
-void vulkanSceneData::updateSceneBuffer(uint32_t currentImage, vk::Extent2D extent, glm::mat4 viewMat) {
+void vulkanSceneData::updateSceneUniformBuffer(uint32_t currentFrame, vk::Extent2D extent, glm::mat4 viewMat) {
     static auto startTime = std::chrono::high_resolution_clock::now();
 
     auto currentTime = std::chrono::high_resolution_clock::now();
@@ -40,5 +40,5 @@ void vulkanSceneData::updateSceneBuffer(uint32_t currentImage, vk::Extent2D exte
     sbo.proj = glm::perspective(glm::radians(45.0f), extent.width / (float)extent.height, 0.1f, 10.0f);
     sbo.proj[1][1] *= -1;
 
-    memcpy(sceneBuffersMapped[currentImage], &sbo, sizeof(sbo));
+    memcpy(uniformBuffersMapped[currentFrame], &sbo, sizeof(sbo));
 }

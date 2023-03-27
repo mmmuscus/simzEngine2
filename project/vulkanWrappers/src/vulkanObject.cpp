@@ -146,7 +146,7 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, 
 }
 
 void vulkanObject::initDescriptorSetLayout() {
-    auto uboLayoutBinding = vk::DescriptorSetLayoutBinding(
+    auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
         0,                                              // binding
         vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
         vk::ShaderStageFlagBits::eVertex,
@@ -168,7 +168,7 @@ void vulkanObject::initDescriptorSetLayout() {
     );
 
     std::array<vk::DescriptorSetLayoutBinding, 3> bindings = { 
-        uboLayoutBinding, 
+        modelLayoutBinding, 
         samplerLayoutBinding,
         sceneLayoutBinding
     };
@@ -232,9 +232,9 @@ void vulkanObject::initDescriptorSets(
     }
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        auto bufferInfo = vk::DescriptorBufferInfo(
+        auto modelInfo = vk::DescriptorBufferInfo(
             modelData->getUniformBuffers()[i],
-            0, sizeof(UniformBufferObject)                      // offset, range
+            0, sizeof(modelUniformBufferObject)                      // offset, range
         );
 
         auto imageInfo = vk::DescriptorImageInfo(
@@ -244,7 +244,7 @@ void vulkanObject::initDescriptorSets(
         );
 
         auto sceneInfo = vk::DescriptorBufferInfo(
-            sceneData->getSceneBuffers()[i],
+            sceneData->getUniformBuffers()[i],
             0, sizeof(sceneUniformBufferObject)                 // offset, range
         );
 
@@ -253,7 +253,7 @@ void vulkanObject::initDescriptorSets(
                 descriptorSets[i], 0, 0,                        // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
                 nullptr,                                        // image info
-                &bufferInfo
+                &modelInfo
             ),
             vk::WriteDescriptorSet(
                 descriptorSets[i], 1, 0,                        // dest set, binding, array element

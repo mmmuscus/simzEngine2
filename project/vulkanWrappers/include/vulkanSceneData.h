@@ -14,9 +14,9 @@ struct sceneUniformBufferObject {
 
 class vulkanSceneData {
 private:
-	std::vector<vk::Buffer> sceneBuffers;
-	std::vector<vk::DeviceMemory> sceneBuffersMemory;
-	std::vector<void*> sceneBuffersMapped;
+	std::vector<vk::Buffer> uniformBuffers;
+	std::vector<vk::DeviceMemory> uniformBuffersMemory;
+	std::vector<void*> uniformBuffersMapped;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -26,11 +26,11 @@ public:
 
 	void setDevice(vk::Device _device) { device = _device; }
 
-	std::vector<vk::Buffer> getSceneBuffers() { return sceneBuffers; }
+	std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
-	void initSceneBuffers(vulkanInstance* instance);
+	void initUniformBuffers(vulkanInstance* instance);
 
-	void updateSceneBuffer(uint32_t currentImage, vk::Extent2D extent, glm::mat4 viewMat);
+	void updateSceneUniformBuffer(uint32_t currentImage, vk::Extent2D extent, glm::mat4 viewMat);
 
 private:
 
