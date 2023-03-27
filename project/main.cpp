@@ -10,6 +10,7 @@
 #include "vulkanWrappers/include/vulkanDrawer.h"
 #include "vulkanWrappers/include/vulkanModelData.h"
 #include "vulkanWrappers/include/vulkanTextureData.h"
+#include "vulkanWrappers/include/vulkanSceneData.h"
 
 #include "renderLogic/include/scene.h"
 #include "renderLogic/include/object.h"
@@ -38,6 +39,7 @@ vulkanRenderer renderer;
 vulkanDrawer drawer;
 vulkanModelData modelData;
 vulkanTextureData textureData;
+vulkanSceneData sceneData;
 
 object demoObj;
 scene mainScene;
@@ -121,6 +123,9 @@ void initVulkan() {
 
     // Uniform Buffer:
     modelData.initUniformBuffers(&instance);
+
+    // Scene Uniform Buffer:
+    // sceneData.initSceneBuffers(&instance);
 
     // Descriptor Pool + Sets:
     obj.initDescriptorPool();
@@ -213,6 +218,7 @@ void initImGui() {
 
     void initScene() {
         // Scene setup:
+        mainScene.setSceneData(&sceneData);
         demoObj.setVulkanObject(&obj);
         demoObj.setModelData(&modelData);
         demoObj.setTextureData(&textureData);

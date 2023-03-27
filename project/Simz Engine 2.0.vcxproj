@@ -175,6 +175,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanObject.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanDrawer.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanSceneData.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanSurface.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanTextureData.cpp" />
   </ItemGroup>
@@ -193,6 +194,7 @@
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanDrawer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h" />
+    <ClInclude Include="vulkanWrappers\include\vulkanSceneData.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanSurface.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanTextureData.h" />
   </ItemGroup>

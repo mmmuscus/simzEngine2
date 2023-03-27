@@ -160,7 +160,18 @@ void vulkanObject::initDescriptorSetLayout() {
         nullptr
     );
 
-    std::array<vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
+    auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
+        2,                                              // binding
+        vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
+        vk::ShaderStageFlagBits::eVertex,
+        nullptr
+    );
+
+    std::array<vk::DescriptorSetLayoutBinding, 3> bindings = { 
+        uboLayoutBinding, 
+        samplerLayoutBinding,
+        sceneLayoutBinding
+    };
 
     auto layoutInfo = vk::DescriptorSetLayoutCreateInfo(
         vk::DescriptorSetLayoutCreateFlags(),
