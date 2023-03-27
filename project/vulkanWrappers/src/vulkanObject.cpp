@@ -210,7 +210,11 @@ void vulkanObject::initDescriptorPool() {
     }
 }
 
-void vulkanObject::initDescriptorSets(vulkanModelData* modelData, vulkanTextureData* textureData) {
+void vulkanObject::initDescriptorSets(
+    vulkanModelData* modelData, 
+    vulkanTextureData* textureData,
+    vulkanSceneData* sceneData
+) {
     std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
     
     auto allocInfo = vk::DescriptorSetAllocateInfo(
@@ -239,7 +243,12 @@ void vulkanObject::initDescriptorSets(vulkanModelData* modelData, vulkanTextureD
             vk::ImageLayout::eShaderReadOnlyOptimal
         );
 
-        std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {
+        auto sceneInfo = vk::DescriptorBufferInfo(
+            sceneData->getSceneBuffers()[i],
+            0, sizeof(sceneUniformBufferObject)                 // offset, range
+        );
+
+        std::array<vk::WriteDescriptorSet, 3> descriptorWrites = {
             vk::WriteDescriptorSet(
                 descriptorSets[i], 0, 0,                        // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
@@ -250,6 +259,12 @@ void vulkanObject::initDescriptorSets(vulkanModelData* modelData, vulkanTextureD
                 descriptorSets[i], 1, 0,                        // dest set, binding, array element
                 1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
                 &imageInfo
+            ),
+            vk::WriteDescriptorSet(
+                descriptorSets[i], 2, 0,                        // dest set, binding, array element
+                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
+                nullptr,
+                &sceneInfo
             )
         };
 

@@ -6,6 +6,7 @@
 
 #include "vulkanModelData.h"
 #include "vulkanTextureData.h"
+#include "vulkanSceneData.h"
 
 #include <fstream>
 
@@ -56,7 +57,11 @@ public:
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
     void initDescriptorSetLayout();
     void initDescriptorPool();
-    void initDescriptorSets(vulkanModelData* modelData, vulkanTextureData* textureData);
+    void initDescriptorSets(
+        vulkanModelData* modelData,
+        vulkanTextureData* textureData,
+        vulkanSceneData* sceneData
+    );
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);

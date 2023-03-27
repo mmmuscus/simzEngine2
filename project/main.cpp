@@ -125,11 +125,12 @@ void initVulkan() {
     modelData.initUniformBuffers(&instance);
 
     // Scene Uniform Buffer:
-    // sceneData.initSceneBuffers(&instance);
+    sceneData.setDevice(instance.getDevice());
+    sceneData.initSceneBuffers(&instance);
 
     // Descriptor Pool + Sets:
     obj.initDescriptorPool();
-    obj.initDescriptorSets(&modelData, &textureData);
+    obj.initDescriptorSets(&modelData, &textureData, &sceneData);
 
     // CommandBuffers:
     drawer.setDevice(instance.getDevice());

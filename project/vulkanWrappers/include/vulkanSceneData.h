@@ -26,6 +26,8 @@ public:
 
 	void setDevice(vk::Device _device) { device = _device; }
 
+	std::vector<vk::Buffer> getSceneBuffers() { return sceneBuffers; }
+
 	void initSceneBuffers(vulkanInstance* instance);
 
 	void updateSceneBuffer(uint32_t currentImage, vk::Extent2D extent, glm::mat4 viewMat);
