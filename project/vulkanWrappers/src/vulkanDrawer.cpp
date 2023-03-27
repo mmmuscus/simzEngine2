@@ -44,7 +44,7 @@ void vulkanDrawer::initSyncObjects() {
 
 void vulkanDrawer::recordCommandBuffer(
     vk::CommandBuffer commandBuffer,
-    vulkanObject* object,
+    vulkanObject* obj,
     vulkanRenderer* renderer,
     vk::Extent2D extent,
     uint32_t imageIndex
@@ -71,7 +71,7 @@ void vulkanDrawer::recordCommandBuffer(
     );
 
     commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-    commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, object->getPipeline());
+    commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, obj->getPipeline());
 
     auto viewport = vk::Viewport(
         0.0f, 0.0f,                 // x, y
@@ -83,20 +83,20 @@ void vulkanDrawer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    vk::Buffer vertexBuffers[] = { object->getModelData()->getVertexBuffer() };
+    vk::Buffer vertexBuffers[] = { obj->getModelData()->getVertexBuffer() };
     vk::DeviceSize offsets[] = { 0 };
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-    commandBuffer.bindIndexBuffer(object->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
+    commandBuffer.bindIndexBuffer(obj->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
 
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,
-        object->getPipelineLayout(),
+        obj->getPipelineLayout(),
         0,
-        object->getDescriptorSets()[currentFrame],
+        obj->getDescriptorSets()[currentFrame],
         nullptr
     );
 
-    commandBuffer.drawIndexed(static_cast<uint32_t>(object->getModelData()->getIndices().size()), 1, 0, 0, 0);
+    commandBuffer.drawIndexed(static_cast<uint32_t>(obj->getModelData()->getIndices().size()), 1, 0, 0, 0);
     commandBuffer.endRenderPass();
 
     try {
@@ -110,8 +110,8 @@ void vulkanDrawer::recordCommandBuffer(
 void vulkanDrawer::drawFrame(
     vulkanSurface* surface,
     vulkanInstance* instance,
-    vulkanObject* object,
-    vulkanRenderer* renderer
+    vulkanRenderer* renderer,
+    scene* currScene
 ) {
     device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
@@ -132,14 +132,15 @@ void vulkanDrawer::drawFrame(
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
-    object->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
+    // object->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
+    currScene->getObj()->getModelData()->updateUniformBuffer(currentFrame, surface->getExtent());
 
     device.resetFences(1, &inFlightFences[currentFrame]);
 
     commandBuffers[currentFrame].reset();
     recordCommandBuffer(
         commandBuffers[currentFrame],
-        object,
+        currScene->getObj()->getVulkanObject(),
         renderer,
         surface->getExtent(),
         imageIndex

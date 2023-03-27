@@ -11,6 +11,9 @@
 #include "vulkanWrappers/include/vulkanModelData.h"
 #include "vulkanWrappers/include/vulkanTextureData.h"
 
+#include "renderLogic/include/scene.h"
+#include "renderLogic/include/object.h"
+
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
@@ -29,11 +32,14 @@ GLFWwindow* window;
 
 vulkanInstance instance;
 vulkanSurface surface;
-vulkanObject object;
+vulkanObject obj;
 vulkanRenderer renderer;
 vulkanDrawer drawer;
 vulkanModelData modelData;
 vulkanTextureData textureData;
+
+object demoObj;
+scene mainScene;
 
 void initWindow() {
     glfwInit();
@@ -83,11 +89,11 @@ void initVulkan() {
     renderer.initRenderPass(surface.getFormat());
 
     // Descriptor sets:
-    object.setDevice(instance.getDevice());
-    object.initDescriptorSetLayout();
+    obj.setDevice(instance.getDevice());
+    obj.initDescriptorSetLayout();
 
     // Pipeline:
-    object.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
+    obj.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
 
     // Color resources:
     renderer.initColorResources(&instance, surface.getFormat(), surface.getExtent());
@@ -103,7 +109,7 @@ void initVulkan() {
     textureData.initTextureImage("textures/viking_room.png", &instance);
     textureData.initTextureImageView(&instance);
     textureData.initTextureSampler(instance.getPhysicalDevice());
-    object.setTextureData(&textureData);
+    obj.setTextureData(&textureData);
 
     // Model:
     modelData.loadModel("models/viking_room.objj");
@@ -112,14 +118,14 @@ void initVulkan() {
     modelData.setDevice(instance.getDevice());
     modelData.initVertexBuffer(&instance);
     modelData.initIndexBuffer(&instance);
-    object.setModelData(&modelData);
+    obj.setModelData(&modelData);
 
     // Uniform Buffer:
     modelData.initUniformBuffers(&instance);
 
     // Descriptor Pool + Sets:
-    object.initDescriptorPool();
-    object.initDescriptorSets();
+    obj.initDescriptorPool();
+    obj.initDescriptorSets();
 
     // CommandBuffers:
     drawer.setDevice(instance.getDevice());
@@ -127,6 +133,12 @@ void initVulkan() {
 
     // SyncObjects:
     drawer.initSyncObjects();
+
+    // Scene setup:
+    demoObj.setVulkanObject(&obj);
+    demoObj.setModelData(&modelData);
+    demoObj.setTextureData(&textureData);
+    mainScene.setObj(&demoObj);
 }
 
 static void checkVkResult(VkResult err) {
@@ -221,8 +233,8 @@ void initImGui() {
             drawer.drawFrame(
                 &surface,
                 &instance,
-                &object,
-                &renderer
+                &renderer,
+                &mainScene
             );
         }
 

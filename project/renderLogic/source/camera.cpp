@@ -2,8 +2,8 @@
 
 camera::camera(
 	glm::vec3 _pos, glm::vec3 _worldUp,
-	float _yaw = YAW, float _pitch = PITCH,
-	float _speed = SPEED, float _sens = SENS
+	float _yaw, float _pitch,
+	float _speed, float _sens
 ) :
 	pos(_pos), worldUp(_worldUp),
 	yaw(_yaw), pitch(_pitch),

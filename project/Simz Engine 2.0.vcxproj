@@ -163,6 +163,9 @@
     <ClCompile Include="external\imGui\imgui_tables.cpp" />
     <ClCompile Include="external\imGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="renderLogic\source\camera.cpp" />
+    <ClCompile Include="renderLogic\source\object.cpp" />
+    <ClCompile Include="renderLogic\source\scene.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
@@ -181,6 +184,9 @@
     <ClInclude Include="external\imGui\imstb_rectpack.h" />
     <ClInclude Include="external\imGui\imstb_textedit.h" />
     <ClInclude Include="external\imGui\imstb_truetype.h" />
+    <ClInclude Include="renderLogic\include\camera.h" />
+    <ClInclude Include="renderLogic\include\object.h" />
+    <ClInclude Include="renderLogic\include\scene.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />

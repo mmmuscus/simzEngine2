@@ -3,9 +3,10 @@
 
 #include "generalIncludes.h"
 
-#include "vulkanObject.h"
 #include "vulkanRenderer.h"
 #include "vulkanSurface.h"
+
+#include "../../renderLogic/include/scene.h"
 
 class vulkanDrawer {
 private:
@@ -35,7 +36,7 @@ public:
 
 	void recordCommandBuffer(
 		vk::CommandBuffer commandBuffer,
-		vulkanObject* object,
+		vulkanObject* obj,
 		vulkanRenderer* renderer,
 		vk::Extent2D extent,
 		uint32_t imageIndex
@@ -44,8 +45,8 @@ public:
 	void drawFrame(
 		vulkanSurface* surface,
 		vulkanInstance* instance,
-		vulkanObject* object,
-		vulkanRenderer* renderer
+		vulkanRenderer* renderer,
+		scene* currScene
 	);
 
 	// vk::CommandBuffer beginSingleTimeCommands();
