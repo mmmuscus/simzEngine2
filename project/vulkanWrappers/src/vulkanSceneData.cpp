@@ -35,8 +35,7 @@ void vulkanSceneData::updateSceneUniformBuffer(uint32_t currentFrame, vk::Extent
         .count();
 
     sceneUniformBufferObject sbo{};
-    // sbo.view = viewMat;
-    sbo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    sbo.view = viewMat;
     sbo.proj = glm::perspective(glm::radians(45.0f), extent.width / (float)extent.height, 0.1f, 10.0f);
     sbo.proj[1][1] *= -1;
 

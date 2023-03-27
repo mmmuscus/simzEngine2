@@ -13,12 +13,6 @@ enum direction {
 #define PITCH	0.0f
 #define SPEED	2.5f
 #define SENS	0.1f
-/*
-const float YAW = 180.0f;
-const float PITCH = 0.0f;
-const float SPEED = 2.5f;
-const float SENS = 0.1f;
-*/
 
 class camera {
 private:

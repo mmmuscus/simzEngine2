@@ -44,6 +44,7 @@ vulkanSceneData sceneData;
 
 object demoObj;
 scene mainScene;
+camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 void initWindow() {
     glfwInit();
@@ -221,7 +222,7 @@ void initImGui() {
     void initScene() {
         // Scene setup:
         mainScene.setSceneData(&sceneData);
-        mainScene.setCam(nullptr);
+        mainScene.setCam(&cam);
 
         demoObj.setVulkanObject(&obj);
         demoObj.setModelData(&modelData);
