@@ -110,7 +110,6 @@ void initVulkan() {
     textureData.initTextureImage("textures/viking_room.png", &instance);
     textureData.initTextureImageView(&instance);
     textureData.initTextureSampler(instance.getPhysicalDevice());
-    obj.setTextureData(&textureData);
 
     // Model:
     modelData.loadModel("models/viking_room.objj");
@@ -119,14 +118,13 @@ void initVulkan() {
     modelData.setDevice(instance.getDevice());
     modelData.initVertexBuffer(&instance);
     modelData.initIndexBuffer(&instance);
-    obj.setModelData(&modelData);
 
     // Uniform Buffer:
     modelData.initUniformBuffers(&instance);
 
     // Descriptor Pool + Sets:
     obj.initDescriptorPool();
-    obj.initDescriptorSets();
+    obj.initDescriptorSets(&modelData, &textureData);
 
     // CommandBuffers:
     drawer.setDevice(instance.getDevice());

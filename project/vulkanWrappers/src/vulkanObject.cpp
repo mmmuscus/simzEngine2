@@ -199,7 +199,7 @@ void vulkanObject::initDescriptorPool() {
     }
 }
 
-void vulkanObject::initDescriptorSets() {
+void vulkanObject::initDescriptorSets(vulkanModelData* modelData, vulkanTextureData* textureData) {
     std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
     
     auto allocInfo = vk::DescriptorSetAllocateInfo(

@@ -39,10 +39,6 @@ private:
     // Pipeline
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
-    // Buffers:
-    vulkanModelData* modelData;
-    // Textures:
-    vulkanTextureData* textureData;
 
     // Not maintained by the class:
     vk::Device device;
@@ -50,20 +46,17 @@ private:
 public:
     ~vulkanObject();
     
-    void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
-    void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
     void setDevice(vk::Device _device) { device = _device; }
 
     vk::DescriptorPool getDescriptorPool() { return descriptorPool; }
     std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
-    vulkanModelData* getModelData() { return modelData; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
     void initDescriptorSetLayout();
     void initDescriptorPool();
-    void initDescriptorSets();
+    void initDescriptorSets(vulkanModelData* modelData, vulkanTextureData* textureData);
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);

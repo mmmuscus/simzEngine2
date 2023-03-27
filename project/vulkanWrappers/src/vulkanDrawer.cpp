@@ -47,8 +47,11 @@ void vulkanDrawer::recordCommandBuffer(
     vulkanObject* obj,
     vulkanRenderer* renderer,
     vk::Extent2D extent,
-    uint32_t imageIndex
+    uint32_t imageIndex,
+    scene* currScene
 ) {
+    object* gameObject = currScene->getObjects()[0];
+
     auto beginInfo = vk::CommandBufferBeginInfo();
 
     try {
@@ -83,10 +86,10 @@ void vulkanDrawer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    vk::Buffer vertexBuffers[] = { obj->getModelData()->getVertexBuffer() };
+    vk::Buffer vertexBuffers[] = { gameObject->getModelData()->getVertexBuffer() };
     vk::DeviceSize offsets[] = { 0 };
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-    commandBuffer.bindIndexBuffer(obj->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
+    commandBuffer.bindIndexBuffer(gameObject->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
 
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,
@@ -96,7 +99,7 @@ void vulkanDrawer::recordCommandBuffer(
         nullptr
     );
 
-    commandBuffer.drawIndexed(static_cast<uint32_t>(obj->getModelData()->getIndices().size()), 1, 0, 0, 0);
+    commandBuffer.drawIndexed(static_cast<uint32_t>(gameObject->getModelData()->getIndices().size()), 1, 0, 0, 0);
     commandBuffer.endRenderPass();
 
     try {
@@ -142,7 +145,8 @@ void vulkanDrawer::drawFrame(
         currScene->getObjects()[0]->getVulkanObject(),
         renderer,
         surface->getExtent(),
-        imageIndex
+        imageIndex,
+        currScene
     );
     
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };

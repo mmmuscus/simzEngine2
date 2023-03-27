@@ -39,7 +39,8 @@ public:
 		vulkanObject* obj,
 		vulkanRenderer* renderer,
 		vk::Extent2D extent,
-		uint32_t imageIndex
+		uint32_t imageIndex,
+		scene* currScene
 	);
 
 	void drawFrame(
