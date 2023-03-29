@@ -267,7 +267,7 @@ void initImGui() {
     info.PipelineCache = VK_NULL_HANDLE;
     info.DescriptorPool = imguiPool;
     info.Subpass = 0;
-    info.MinImageCount = 1;
+    info.MinImageCount = 2;
     info.ImageCount = MAX_FRAMES_IN_FLIGHT;
     info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; // find conversion between c and cpp impl
     info.Allocator = nullptr;

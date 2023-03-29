@@ -186,13 +186,17 @@ void vulkanObject::initDescriptorSetLayout() {
 }
 
 void vulkanObject::initDescriptorPool() {
-    std::array<vk::DescriptorPoolSize, 2> poolSizes = {
+    std::array<vk::DescriptorPoolSize, 3> poolSizes = {
         vk::DescriptorPoolSize(
             vk::DescriptorType::eUniformBuffer,
             static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
         ),
         vk::DescriptorPoolSize(
             vk::DescriptorType::eCombinedImageSampler,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        ),
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBuffer,
             static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
         )
     };
