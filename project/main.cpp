@@ -4,6 +4,9 @@
 #include <vector>
 #include <chrono>
 
+#define STB_IMAGE_IMPLEMENTATION
+#define TINYOBJLOADER_IMPLEMENTATION
+
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
 #include "vulkanWrappers/include/vulkanObject.h"
@@ -74,7 +77,7 @@ public:
         initWindow();
         initVulkan();
         initGlfwInputHandling();
-        initImGui();
+        // initImGui();
         initScene();
         mainLoop();
         cleanup();
@@ -333,9 +336,9 @@ void initImGui() {
     }
 
     void cleanup() {
-        ImGui_ImplVulkan_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        // ImGui_ImplVulkan_Shutdown();
+        // ImGui_ImplGlfw_Shutdown();
+        // ImGui::DestroyContext();
 
         glfwDestroyWindow(window);
         glfwTerminate();

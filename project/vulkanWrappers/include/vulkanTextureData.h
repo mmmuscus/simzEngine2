@@ -5,6 +5,8 @@
 
 #include "vulkanInstance.h"
 
+#include <stb/stb_image.h>
+
 class vulkanTextureData {
 private:
     // Textures:

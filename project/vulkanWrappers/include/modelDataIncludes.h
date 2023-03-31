@@ -3,6 +3,8 @@
 
 #include "generalIncludes.h"
 
+#include <tinyobjloader/tiny_obj_loader.h>
+
 struct modelUniformBufferObject {
     alignas(16) glm::mat4 model;
 };

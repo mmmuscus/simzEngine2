@@ -1,8 +1,5 @@
 #include "../include/vulkanTextureData.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
 vulkanTextureData::~vulkanTextureData() {
     device.destroySampler(textureSampler);
     device.destroyImageView(textureImageView);
