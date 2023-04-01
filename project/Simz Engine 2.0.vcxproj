@@ -185,9 +185,10 @@
     <ClInclude Include="external\imGui\imstb_rectpack.h" />
     <ClInclude Include="external\imGui\imstb_textedit.h" />
     <ClInclude Include="external\imGui\imstb_truetype.h" />
+    <ClInclude Include="general\include\timer.h" />
     <ClInclude Include="renderLogic\include\camera.h" />
     <ClInclude Include="renderLogic\include\object.h" />
-    <ClInclude Include="renderLogic\include\scene.h" />
+    <ClInclude Include="renderLogic\include\Scene.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />

@@ -134,13 +134,16 @@
     <ClInclude Include="renderLogic\include\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="renderLogic\include\scene.h">
+    <ClInclude Include="renderLogic\include\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="renderLogic\include\object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\vulkanSceneData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="general\include\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

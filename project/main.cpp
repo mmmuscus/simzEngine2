@@ -7,6 +7,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYOBJLOADER_IMPLEMENTATION
 
+#include "general/include/timer.h"
+
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
 #include "vulkanWrappers/include/vulkanObject.h"
@@ -99,11 +101,7 @@ object demoObj;
 camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 // for input processing:
-std::chrono::high_resolution_clock::time_point startTime;
-std::chrono::high_resolution_clock::time_point currentTime;
-std::chrono::high_resolution_clock::time_point lastTime;
-float time;
-float deltaTime;
+timer inputTimer;
 
 void initWindow() {
     glfwInit();
@@ -297,14 +295,13 @@ void initImGui() {
     }
 
     void mainLoop() {
-        startTime = std::chrono::high_resolution_clock::now();
-        lastTime = startTime;
+        inputTimer = timer();
 
         while (!glfwWindowShouldClose(window)) {
-            updateTime();
+            inputTimer.updateTime();
 
             glfwPollEvents();
-            processInput(window, deltaTime);
+            processInput(window, inputTimer.getDeltaTime());
 
             /*
             ImGui_ImplVulkan_NewFrame();
@@ -323,16 +320,6 @@ void initImGui() {
         }
 
         instance.getDevice().waitIdle();
-    }
-
-    void updateTime()
-    {
-        currentTime = std::chrono::high_resolution_clock::now();
-
-        time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-        deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - lastTime).count();
-
-        lastTime = currentTime;
     }
 
     void cleanup() {

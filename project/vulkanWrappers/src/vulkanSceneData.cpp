@@ -27,13 +27,6 @@ void vulkanSceneData::initUniformBuffers(vulkanInstance* instance) {
 }
 
 void vulkanSceneData::updateSceneUniformBuffer(uint32_t currentFrame, vk::Extent2D extent, glm::mat4 viewMat) {
-    static auto startTime = std::chrono::high_resolution_clock::now();
-
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time =
-        std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime)
-        .count();
-
     sceneUniformBufferObject sbo{};
     sbo.view = viewMat;
     sbo.proj = glm::perspective(glm::radians(45.0f), extent.width / (float)extent.height, 0.1f, 10.0f);
