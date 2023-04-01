@@ -38,22 +38,24 @@ bool frstMouse = true;
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (frstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        frstMouse = false;
-    }
+    input.processMouseInput(window, xpos, ypos);
+
+    //if (frstMouse)
+    //{
+    //    lastX = xpos;
+    //    lastY = ypos;
+    //    frstMouse = false;
+    //}
 
     // reversed cos windows funykness(?)
     // TODO: look into this
-    float xOffset = lastX - xpos;
-    float yOffset = lastY - ypos;
+    //float xOffset = lastX - xpos;
+    //float yOffset = lastY - ypos;
 
-    lastX = xpos;
-    lastY = ypos;
+    //lastX = xpos;
+    //lastY = ypos;
 
-    mainScene.getCam()->processMouseMovement(xOffset, yOffset);
+    //mainScene.getCam()->processMouseMovement(xOffset, yOffset);
 }
 
 void processInput(GLFWwindow* window, float deltaTime)
@@ -124,7 +126,7 @@ static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 
 void initGlfwInputHandling() {
     glfwMakeContextCurrent(window);
-    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetCursorPosCallback(window, input.processMouseInput);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
@@ -307,6 +309,11 @@ void initImGui() {
             glfwPollEvents();
             input.processKeyboardInput(window);
             mainScene.getCam()->processKeyboard(UP, inputTimer.getDeltaTime());
+            mainScene.getCam()->processMouseMovement(
+                input.getOffsetX(),
+                input.getOffsetY()
+            );
+            input.resetOffset();
             //processInput(window, inputTimer.getDeltaTime());
 
             /*

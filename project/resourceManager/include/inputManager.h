@@ -24,10 +24,17 @@ private:
 	static bool escapeKey;
 
 public:
+	void resetOffset() { 
+		mouseOffset.x = 0;
+		mouseOffset.y = 0;
+	}
 
 	mousePoint getMouse() { return mousePos; }
 	float getMouseX() { return mousePos.x; }
 	float getMouseY() { return mousePos.y; }
+	mousePoint getOffset() { return mouseOffset; }
+	float getOffsetX() { return mouseOffset.x; }
+	float getOffsetY() { return mouseOffset.y; }
 
 	bool getWKey() { return wKey; }
 	bool getSKey() { return sKey; }
