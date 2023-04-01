@@ -3,19 +3,35 @@
 
 #include <GLFW/glfw3.h>
 
-// default width and height
-//#define WIDTH	800
-//#define HEIGHT	600
+#include "resourceManagerGeneralIncludes.h"
+#include "inputManager.h"
+
+#include "../../vulkanWrappers/include/vulkanDrawer.h"
 
 class windowManager {
 private:
 	GLFWwindow* window;
 
+	// Holding input
+	inputManager input;
+	vulkanDrawer* drawer;
+
 public:
+	~windowManager();
+
+	GLFWwindow* getWindow() { return window; }
+
 	void initWindow();
 
-	bool frameBufferResizeCallback(int width, int height);
 	void initGlfwInputHandling();
+	static void framebufferResizeCallback(GLFWwindow* wndw, int, int) {
+		//framebufferResizeCallbackImpl(wndw);
+	}
+
+	void framebufferResizeCallbackImpl(GLFWwindow* wndw) {
+		auto wnd = reinterpret_cast<windowManager*>(glfwGetWindowUserPointer(wndw));
+		drawer->setFrameBufferResized(true);
+	}
 
 private:
 };

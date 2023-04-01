@@ -25,59 +25,14 @@
 #include "renderLogic/include/object.h"
 #include "renderLogic/include/camera.h"
 
-const uint32_t WIDTH = 800;
-const uint32_t HEIGHT = 600;
+// const uint32_t WIDTH = 800;
+// const uint32_t HEIGHT = 600;
 
 // for the camera:
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0;
 
-scene mainScene;
 inputManager input;
-bool frstMouse = true;
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    input.processMouseInput(window, xpos, ypos);
-
-    //if (frstMouse)
-    //{
-    //    lastX = xpos;
-    //    lastY = ypos;
-    //    frstMouse = false;
-    //}
-
-    // reversed cos windows funykness(?)
-    // TODO: look into this
-    //float xOffset = lastX - xpos;
-    //float yOffset = lastY - ypos;
-
-    //lastX = xpos;
-    //lastY = ypos;
-
-    //mainScene.getCam()->processMouseMovement(xOffset, yOffset);
-}
-
-void processInput(GLFWwindow* window, float deltaTime)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    camera* cam = mainScene.getCam();
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cam->processKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cam->processKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cam->processKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cam->processKeyboard(RIGHT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        cam->processKeyboard(UP, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        cam->processKeyboard(DOWN, deltaTime);
-}
 
 class Application {
 public:
@@ -103,6 +58,7 @@ vulkanModelData modelData;
 vulkanTextureData textureData;
 vulkanSceneData sceneData;
 
+scene mainScene;
 object demoObj;
 camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -314,7 +270,6 @@ void initImGui() {
                 input.getOffsetY()
             );
             input.resetOffset();
-            //processInput(window, inputTimer.getDeltaTime());
 
             /*
             ImGui_ImplVulkan_NewFrame();

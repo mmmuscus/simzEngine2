@@ -158,6 +158,9 @@
     <ClInclude Include="resourceManager\include\inputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resourceManager\include\resourceManagerGeneralIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\vertexShaders\baseShader.vert" />

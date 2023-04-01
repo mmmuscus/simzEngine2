@@ -3,6 +3,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "resourceManagerGeneralIncludes.h"
+
 struct mousePoint {
 	float x;
 	float y;
