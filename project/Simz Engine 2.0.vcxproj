@@ -166,6 +166,8 @@
     <ClCompile Include="renderLogic\source\camera.cpp" />
     <ClCompile Include="renderLogic\source\object.cpp" />
     <ClCompile Include="renderLogic\source\scene.cpp" />
+    <ClCompile Include="resourceManager\source\inputManager.cpp" />
+    <ClCompile Include="resourceManager\source\windowManager.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
@@ -189,6 +191,8 @@
     <ClInclude Include="renderLogic\include\camera.h" />
     <ClInclude Include="renderLogic\include\object.h" />
     <ClInclude Include="renderLogic\include\Scene.h" />
+    <ClInclude Include="resourceManager\include\inputManager.h" />
+    <ClInclude Include="resourceManager\include\windowManager.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />

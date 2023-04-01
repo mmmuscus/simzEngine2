@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "../../resourceManager/include/inputManager.h"
+
 enum direction {
 	FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN
 };
@@ -27,6 +29,9 @@ private:
 
 	float sens;
 	float speed;
+
+	// for moving around
+	inputManager input;
 
 public:
 	camera(

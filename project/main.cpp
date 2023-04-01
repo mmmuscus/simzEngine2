@@ -9,6 +9,9 @@
 
 #include "general/include/timer.h"
 
+#include "resourceManager/include/windowManager.h"
+#include "resourceManager/include/inputManager.h"
+
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
 #include "vulkanWrappers/include/vulkanObject.h"
@@ -28,17 +31,18 @@ const uint32_t HEIGHT = 600;
 // for the camera:
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0;
-bool firstMouse = true;
 
 scene mainScene;
+inputManager input;
+bool frstMouse = true;
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (firstMouse)
+    if (frstMouse)
     {
         lastX = xpos;
         lastY = ypos;
-        firstMouse = false;
+        frstMouse = false;
     }
 
     // reversed cos windows funykness(?)
@@ -301,7 +305,9 @@ void initImGui() {
             inputTimer.updateTime();
 
             glfwPollEvents();
-            processInput(window, inputTimer.getDeltaTime());
+            input.processKeyboardInput(window);
+            mainScene.getCam()->processKeyboard(UP, inputTimer.getDeltaTime());
+            //processInput(window, inputTimer.getDeltaTime());
 
             /*
             ImGui_ImplVulkan_NewFrame();

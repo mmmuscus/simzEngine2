@@ -19,7 +19,7 @@ glm::mat4 camera::getViewMatrix() {
 void camera::processKeyboard(direction dir, float deltaTime) {
 	float velocity = speed * deltaTime;
 
-	switch (dir) {
+	/*switch (dir) {
 		case FORWARD:	pos += forward * velocity;	break;
 		case BACKWARD:	pos -= forward * velocity;	break;
 		case RIGHT:		pos += right * velocity;	break;
@@ -27,7 +27,14 @@ void camera::processKeyboard(direction dir, float deltaTime) {
 		case UP:		pos += up * velocity;		break;
 		case DOWN:		pos -= up * velocity;		break;
 		default:		break;
-	}
+	}*/
+
+	if (input.getWKey())		pos += forward * velocity;
+	if (input.getSKey())		pos -= forward * velocity;
+	if (input.getDKey())		pos += right * velocity;
+	if (input.getAKey())		pos -= right * velocity;
+	if (input.getSpaceKey())	pos += up * velocity;
+	if (input.getLShiftKey())	pos -= up * velocity;
 }
 
 void camera::processMouseMovement(float x, float y) {
