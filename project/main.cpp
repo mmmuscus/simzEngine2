@@ -25,15 +25,6 @@
 #include "renderLogic/include/object.h"
 #include "renderLogic/include/camera.h"
 
-// const uint32_t WIDTH = 800;
-// const uint32_t HEIGHT = 600;
-
-// for the camera:
-float lastX = WIDTH / 2.0f;
-float lastY = HEIGHT / 2.0;
-
-inputManager input;
-
 class Application {
 public:
     void run() {
@@ -48,6 +39,8 @@ public:
 
 private:
 GLFWwindow* window;
+
+inputManager input;
 
 vulkanInstance instance;
 vulkanSurface surface;
@@ -264,11 +257,8 @@ void initImGui() {
 
             glfwPollEvents();
             input.processKeyboardInput(window);
-            mainScene.getCam()->processKeyboard(UP, inputTimer.getDeltaTime());
-            mainScene.getCam()->processMouseMovement(
-                input.getOffsetX(),
-                input.getOffsetY()
-            );
+            mainScene.getCam()->processKeyboard(inputTimer.getDeltaTime());
+            mainScene.getCam()->processMouseMovement();
             input.resetOffset();
 
             /*

@@ -16,7 +16,7 @@ glm::mat4 camera::getViewMatrix() {
 	return glm::lookAt(pos, pos + forward, up);
 }
 
-void camera::processKeyboard(direction dir, float deltaTime) {
+void camera::processKeyboard(float deltaTime) {
 	float velocity = speed * deltaTime;
 
 	if (input.getWKey())		pos += forward * velocity;
@@ -27,13 +27,11 @@ void camera::processKeyboard(direction dir, float deltaTime) {
 	if (input.getLShiftKey())	pos -= up * velocity;
 }
 
-void camera::processMouseMovement(float x, float y) {
-	x *= sens;
-	y *= sens;
+void camera::processMouseMovement() {
+	yaw += (input.getOffsetX() * sens);
+	pitch += (input.getOffsetY() * sens);
 
-	yaw += x;
-	pitch += y;
-
+	// maybe we could use clamp
 	if (pitch > 89.0f)
 		pitch = 89.0f;
 	if (pitch < -89.0f)

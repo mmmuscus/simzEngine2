@@ -42,8 +42,8 @@ public:
 
 	glm::mat4 getViewMatrix();
 
-	void processKeyboard(direction dir, float deltaTime);
-	void processMouseMovement(float x, float y);
+	void processKeyboard(float deltaTime);
+	void processMouseMovement();
 
 private:
 	void updateCameraVectors();
