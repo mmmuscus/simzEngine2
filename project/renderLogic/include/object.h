@@ -18,6 +18,17 @@ private:
 	vulkanTextureData* textureData;
 
 public:
+	object() : vkObject(nullptr), modelData(nullptr), textureData(nullptr) {}
+	object(
+		vulkanObject* _vkObject,
+		vulkanModelData* _modelData,
+		vulkanTextureData* _textureData
+	) :
+		vkObject(_vkObject),
+		modelData(_modelData),
+		textureData(_textureData)
+	{};
+
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }

@@ -58,8 +58,7 @@ camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 // for input processing:
 timer inputTimer;
 
-
-
+// ImGui variables PLS REMOVE
 vk::RenderPass imGuiRenderPass;
 
 void initWindow() {
