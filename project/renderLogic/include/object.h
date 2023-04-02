@@ -9,6 +9,7 @@ class object {
 private:
 	// model matrix:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	// stores the rotation for all main axis
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -30,7 +31,7 @@ public:
 	{};
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
-	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
+	void setRotationAxis(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
 
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
