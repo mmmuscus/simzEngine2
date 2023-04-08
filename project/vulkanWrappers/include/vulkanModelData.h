@@ -45,7 +45,7 @@ public:
     void initIndexBuffer(vulkanInstance* instance);
     void initUniformBuffers(vulkanInstance* instance);
 
-    void updateModelUniformBuffer(uint32_t currentFrame);
+    void updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame);
 
 private:
     void copyBuffer(

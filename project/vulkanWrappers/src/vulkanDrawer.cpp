@@ -139,8 +139,9 @@ void vulkanDrawer::drawFrame(
         currentFrame, surface->getExtent(), 
         currScene->getCam()->getViewMatrix()
     );
-    currScene->getObjects()[0]->getModelData()->updateModelUniformBuffer(currentFrame);
-    
+    currScene->getObjects()[0]->updateTranslationVectors();
+    currScene->getObjects()[0]->updateModelTranslation(currentFrame);
+
     device.resetFences(1, &inFlightFences[currentFrame]);
 
     commandBuffers[currentFrame].reset();

@@ -153,16 +153,9 @@ void vulkanModelData::copyBuffer(
     instance->endSingleTimeCommands(commandBuffer);
 }
 
-void vulkanModelData::updateModelUniformBuffer(uint32_t currentFrame) {
-    static auto startTime = std::chrono::high_resolution_clock::now();
-
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = 
-        std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime)
-        .count();
-
+void vulkanModelData::updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame) {
     modelUniformBufferObject mbo{};
-    mbo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    mbo.model = modelMat;
 
     memcpy(uniformBuffersMapped[currentFrame], &mbo, sizeof(mbo));
 }
