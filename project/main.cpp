@@ -272,9 +272,8 @@ void initImGui() {
         mainScene.setSceneData(&sceneData);
         mainScene.setCam(&cam);
 
-        demoObj.setVulkanObject(&obj);
-        demoObj.setModelData(&modelData);
-        demoObj.setTextureData(&textureData);
+        // Add object
+        demoObj = object(&obj, &modelData, &textureData);
         mainScene.addObject(&demoObj);
     }
 
