@@ -2,7 +2,7 @@
 
 mousePoint inputManager::mousePos = { WIDTH / 2.0f, HEIGHT / 2.0f };
 mousePoint inputManager::mouseOffset = { 0, 0 };
-bool inputManager::firstMouse = false;
+bool inputManager::firstMouse = true;
 
 bool inputManager::wKey = false;
 bool inputManager::sKey = false;

@@ -6,10 +6,6 @@
 
 #include "../../resourceManager/include/inputManager.h"
 
-enum direction {
-	FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN
-};
-
 // Default values
 #define YAW		225.0f
 #define PITCH	-30.0f
