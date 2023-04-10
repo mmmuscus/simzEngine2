@@ -1,6 +1,8 @@
 #ifndef OBJECT_H_
 #define OBJECT_H_
 
+#include "../../general/include/timer.h"
+
 #include "../../vulkanWrappers/include/vulkanObject.h"
 #include "../../vulkanWrappers/include/vulkanModelData.h"
 #include "../../vulkanWrappers/include/vulkanTextureData.h"
@@ -15,18 +17,22 @@ private:
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
+	// timer
+	timer* sceneTimer;
+
 	// vulkan buffers, pipeline
 	vulkanObject* vkObject;
 	vulkanModelData* modelData;
 	vulkanTextureData* textureData;
 
 public:
-	object() : vkObject(nullptr), modelData(nullptr), textureData(nullptr) {}
+	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), textureData(nullptr) {}
 	object(
 		vulkanObject* _vkObject,
 		vulkanModelData* _modelData,
 		vulkanTextureData* _textureData
 	) :
+		sceneTimer(nullptr),
 		vkObject(_vkObject),
 		modelData(_modelData),
 		textureData(_textureData)
@@ -36,6 +42,7 @@ public:
 	void setRotationAxis(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
 
+	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
 	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }

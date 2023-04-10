@@ -1,13 +1,10 @@
 #include "../include/object.h"
 
 void object::updateTranslationVectors() {
-	static auto startTime = std::chrono::high_resolution_clock::now();
-
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	sceneTimer->updateTime();
 
 	pos = pos;
-	rotation.x = time * glm::radians(90.0f);
+	rotation.x = sceneTimer->getTime() * glm::radians(90.0f);
 	scale = scale;
 }
 

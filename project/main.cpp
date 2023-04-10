@@ -257,6 +257,7 @@ private:
 
     void mainLoop() {
         inputTimer = timer();
+        mainScene.resetSceneTimer();
 
         while (!glfwWindowShouldClose(wndwManager.getWindow())) {
             inputTimer.updateTime();

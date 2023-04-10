@@ -1,6 +1,8 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
+#include "../../general/include/timer.h"
+
 #include "../../vulkanWrappers/include/vulkanSceneData.h"
 
 #include "camera.h"
@@ -15,6 +17,9 @@ private:
 	camera* cam;
 	std::vector<object*> objects;
 
+	// timer
+	timer* sceneTimer;
+
 public:
 	void setSceneData(vulkanSceneData* _sceneData) { sceneData = _sceneData; }
 	void setCam(camera* _cam) { cam = _cam; }
@@ -25,6 +30,8 @@ public:
 	camera* getCam() { return cam; }
 
 	std::vector<object*> getObjects() { return objects; }
+
+	void resetSceneTimer();
 
 private:
 
