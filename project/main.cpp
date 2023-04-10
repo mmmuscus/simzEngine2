@@ -216,7 +216,7 @@ private:
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
         ImGui::StyleColorsDark();
@@ -272,11 +272,11 @@ private:
             input.resetOffset();
 
             // rendering ImGui + engine
-            /*ImGui_ImplVulkan_NewFrame();
+            ImGui_ImplVulkan_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
             ImGui::ShowDemoWindow();
-            ImGui::Render();*/
+            ImGui::Render();
 
             drawer.drawFrame(
                 &surface,
@@ -284,24 +284,22 @@ private:
                 &renderer,
                 &mainScene
             );
-            
-            /*
-            VkRenderPassBeginInfo renderPassInfo = {};
-            renderPassInfo.renderPass = imGuiRenderPass;
-            renderPassInfo.framebuffer = nullptr;
-            renderPassInfo.renderArea.offset = vk::Offset2D{ 0, 0 };
-            renderPassInfo.renderArea.extent = surface.getExtent();
 
-            std::array<vk::ClearValue, 1> clearValues = {};
-            clearValues[0].color = vk::ClearColorValue{ std::array<float, 4> { 0.0f, 0.0f, 0.0f, 0.0f } };
-        
-            renderPassInfo.clearValueCount = clearValues.size();
-            renderPassInfo.pClearValues = clearValues.data();*/
+            auto renderArea = vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent());
+            std::array<vk::ClearValue, 1> clearValues;
+            clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-            // begin renderpass funct;
-            // ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), (VkCommandBuffer)ctx.cmd);
-            // end Render Pass funct
-            // ImGui::EndFrame();
+            auto renderPassInfo = vk::RenderPassBeginInfo(
+                imGuiRenderPass, renderer.getFramebuffers()[drawer.getImgIdx()],
+                renderArea,
+                static_cast<uint32_t>(clearValues.size()), clearValues.data()
+            );
+
+            vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
+            ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+            instance.endSingleTimeCommands(commandBuffer);
+
+            ImGui::EndFrame();
         }
 
         instance.getDevice().waitIdle();

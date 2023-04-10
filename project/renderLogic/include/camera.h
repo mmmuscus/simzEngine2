@@ -26,6 +26,9 @@ private:
 	float sens;
 	float speed;
 
+	// Non translation variables
+	bool isMouseMoveable = true;
+
 	// for moving around
 	inputManager input;
 

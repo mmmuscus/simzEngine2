@@ -135,6 +135,8 @@ void vulkanDrawer::drawFrame(
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
+    imgIdx = imageIndex;
+
     currScene->getSceneData()->updateSceneUniformBuffer(
         currentFrame, surface->getExtent(), 
         currScene->getCam()->getViewMatrix()

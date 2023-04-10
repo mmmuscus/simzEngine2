@@ -21,6 +21,7 @@ private:
 	static bool sKey;
 	static bool aKey;
 	static bool dKey;
+	static bool eKey;
 	static bool spaceKey;
 	static bool lShiftKey;
 	static bool escapeKey;
@@ -42,6 +43,7 @@ public:
 	bool getSKey() { return sKey; }
 	bool getAKey() { return aKey; }
 	bool getDKey() { return dKey; }
+	bool getEKey() { return eKey; }
 	bool getSpaceKey() { return spaceKey; }
 	bool getLShiftKey() { return lShiftKey; }
 	bool getEscapeKey() { return escapeKey; }

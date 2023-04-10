@@ -25,19 +25,24 @@ void camera::processKeyboard(float deltaTime) {
 	if (input.getAKey())		pos -= right * velocity;
 	if (input.getSpaceKey())	pos += up * velocity;
 	if (input.getLShiftKey())	pos -= up * velocity;
+
+	if (input.getEKey())
+		isMouseMoveable = !isMouseMoveable;
 }
 
 void camera::processMouseMovement() {
-	yaw += (input.getOffsetX() * sens);
-	pitch += (input.getOffsetY() * sens);
+	if (isMouseMoveable) {
+		yaw += (input.getOffsetX() * sens);
+		pitch += (input.getOffsetY() * sens);
 
-	// maybe we could use clamp
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
+		// maybe we could use clamp
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
 
-	updateCameraVectors();
+		updateCameraVectors();
+	}
 }
 
 void camera::updateCameraVectors() {
