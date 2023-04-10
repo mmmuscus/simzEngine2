@@ -28,9 +28,11 @@
 class Application {
 public:
     void run() {
+        //wndwManager.setDrawer(&drawer);
+        //wndwManager.initWindow();
         initWindow();
-        initVulkan();
         initGlfwInputHandling();
+        initVulkan();
         //initImGui();
         initScene();
         mainLoop();
@@ -40,6 +42,7 @@ public:
 private:
     GLFWwindow* window;
 
+    windowManager wndwManager;
     inputManager input;
 
     vulkanInstance instance;
@@ -303,7 +306,7 @@ private:
                 &renderer,
                 &mainScene
             );
-
+            
             /*
             VkRenderPassBeginInfo renderPassInfo = {};
             renderPassInfo.renderPass = imGuiRenderPass;
