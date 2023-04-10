@@ -28,12 +28,12 @@ public:
 		//framebufferResizeCallbackImpl(wndw);
 	}
 
+private:
+
 	void framebufferResizeCallbackImpl(GLFWwindow* wndw) {
 		auto wnd = reinterpret_cast<windowManager*>(glfwGetWindowUserPointer(wndw));
 		drawer->setFrameBufferResized(true);
 	}
-
-private:
 };
 
 #endif // WINDOW_MANAGER_H_

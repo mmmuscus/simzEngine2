@@ -13,9 +13,12 @@ void windowManager::initWindow() {
     window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
     glfwSetWindowUserPointer(window, this);
 
+    /*glfwSetFramebufferSizeCallback(window, [](GLFWwindow* wndw, int width, int height) {
+        auto wnd = reinterpret_cast<windowManager*>(glfwGetWindowUserPointer(wndw));
+        drawer->setFrameBufferResized(true);
+    });*/
 
-
-    // glfwSetFramebufferSizeCallback(window, frameBufferResizeCallback);
+    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
 }
 
 void windowManager::initGlfwInputHandling() {
