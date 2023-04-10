@@ -28,10 +28,9 @@
 class Application {
 public:
     void run() {
-        //wndwManager.setDrawer(&drawer);
-        //wndwManager.initWindow();
-        initWindow();
-        initGlfwInputHandling();
+        wndwManager.setDrawer(&drawer);
+        wndwManager.initWindow();
+        wndwManager.initGlfwInputHandling();
         initVulkan();
         //initImGui();
         initScene();
@@ -40,8 +39,6 @@ public:
     }
 
 private:
-    GLFWwindow* window;
-
     windowManager wndwManager;
     inputManager input;
 
@@ -64,28 +61,6 @@ private:
     // ImGui variables PLS REMOVE
     vk::RenderPass imGuiRenderPass;
 
-    void initWindow() {
-        glfwInit();
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-        glfwSetWindowUserPointer(window, this);
-        glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
-    }
-
-    static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-        auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->drawer.setFrameBufferResized(true);
-    }
-
-    void initGlfwInputHandling() {
-        glfwMakeContextCurrent(window);
-        glfwSetCursorPosCallback(window, input.processMouseInput);
-
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    }
-
     void initVulkan() {
         instance.listExtensions();
 
@@ -94,7 +69,7 @@ private:
         instance.initCallback();
 
         // Surface:
-        surface.setWindow(window);
+        surface.setWindow(wndwManager.getWindow());
         surface.setInstance(instance.getInstance());
         surface.initSurface();
 
@@ -245,7 +220,7 @@ private:
 
         ImGui::StyleColorsDark();
 
-        ImGui_ImplGlfw_InitForVulkan(window, true);
+        ImGui_ImplGlfw_InitForVulkan(wndwManager.getWindow(), true);
         ImGui_ImplVulkan_InitInfo info;
         info.Instance = instance.getInstance();
         info.PhysicalDevice = instance.getPhysicalDevice();
@@ -283,12 +258,13 @@ private:
     void mainLoop() {
         inputTimer = timer();
 
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(wndwManager.getWindow())) {
             inputTimer.updateTime();
 
             // Process inputs
             glfwPollEvents();
-            input.processKeyboardInput(window);
+            input.processKeyboardInput(wndwManager.getWindow());
+            wndwManager.checkIfWindowShouldClose();
             mainScene.getCam()->processKeyboard(inputTimer.getDeltaTime());
             mainScene.getCam()->processMouseMovement();
             input.resetOffset();
@@ -333,9 +309,6 @@ private:
         //ImGui_ImplVulkan_Shutdown();
         //ImGui_ImplGlfw_Shutdown();
         //ImGui::DestroyContext();
-
-        glfwDestroyWindow(window);
-        glfwTerminate();
     }
 };
 

@@ -24,3 +24,13 @@ void windowManager::initGlfwInputHandling() {
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
+
+void windowManager::framebufferResizeCallback(GLFWwindow* wndw, int height, int width) {
+    auto wnd = reinterpret_cast<windowManager*>(glfwGetWindowUserPointer(wndw));
+    drawer->setFrameBufferResized(true);
+}
+
+void windowManager::checkIfWindowShouldClose() {
+    if (input.getEscapeKey())
+        glfwSetWindowShouldClose(window, true);
+}

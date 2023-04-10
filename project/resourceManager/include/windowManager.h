@@ -26,10 +26,9 @@ public:
 	void initWindow();
 
 	void initGlfwInputHandling();
-	static void framebufferResizeCallback(GLFWwindow* wndw, int height, int width) {
-		auto wnd = reinterpret_cast<windowManager*>(glfwGetWindowUserPointer(wndw));
-		drawer->setFrameBufferResized(true);
-	}
+	static void framebufferResizeCallback(GLFWwindow* wndw, int height, int width);
+
+	void checkIfWindowShouldClose();
 
 private:
 
