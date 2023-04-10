@@ -32,16 +32,19 @@ public:
         wndwManager.initWindow();
         wndwManager.initGlfwInputHandling();
         initVulkan();
-        //initImGui();
+        initImGui();
         initScene();
         mainLoop();
         cleanup();
     }
 
 private:
+    // Input + window managing
     windowManager wndwManager;
     inputManager input;
+    timer inputTimer;
 
+    // Vulkan variables:
     vulkanInstance instance;
     vulkanSurface surface;
     vulkanObject obj;
@@ -51,12 +54,10 @@ private:
     vulkanTextureData textureData;
     vulkanSceneData sceneData;
 
+    // Scene variables:
     scene mainScene;
     object demoObj;
     camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    // for input processing:
-    timer inputTimer;
 
     // ImGui variables PLS REMOVE
     vk::RenderPass imGuiRenderPass;
@@ -262,7 +263,7 @@ private:
         while (!glfwWindowShouldClose(wndwManager.getWindow())) {
             inputTimer.updateTime();
 
-            // Process inputs
+            // Process inputs and update camera
             glfwPollEvents();
             input.processKeyboardInput(wndwManager.getWindow());
             wndwManager.checkIfWindowShouldClose();
@@ -307,9 +308,9 @@ private:
     }
 
     void cleanup() {
-        //ImGui_ImplVulkan_Shutdown();
-        //ImGui_ImplGlfw_Shutdown();
-        //ImGui::DestroyContext();
+        ImGui_ImplVulkan_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
     }
 };
 
