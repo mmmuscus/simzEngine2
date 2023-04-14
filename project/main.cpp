@@ -25,6 +25,8 @@
 #include "renderLogic/include/object.h"
 #include "renderLogic/include/camera.h"
 
+const int IMGUI_MIN_IMAGE_COUNT = 2;
+
 class Application {
 public:
     void run() {
@@ -61,6 +63,7 @@ private:
 
     // ImGui variables PLS REMOVE
     vk::RenderPass imGuiRenderPass;
+    std::vector<vk::Framebuffer> imGuiFramebuffers;
 
     void initVulkan() {
         instance.listExtensions();
@@ -152,6 +155,30 @@ private:
     }
 
     void initImGui() {
+        // https://frguthmann.github.io/posts/vulkan_imgui/
+
+        // FRAMEBUFFERS FOR IMGUI
+        imGuiFramebuffers.resize(surface.getImageViews().size());
+
+        for (size_t i = 0; i < surface.getImageViews().size(); i++) {
+            VkImageView attachment[1] = { surface.getImageViews()[i] };
+
+            VkFramebufferCreateInfo framebufferInfo = {};
+            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebufferInfo.renderPass = imGuiRenderPass;
+            framebufferInfo.pAttachments = attachment;
+            framebufferInfo.width = surface.getExtent().width;
+            framebufferInfo.height = surface.getExtent().height;
+            framebufferInfo.layers = 1;
+
+            try {
+                imGuiFramebuffers[i] = instance.getDevice().createFramebuffer(framebufferInfo);
+            }
+            catch(vk::SystemError err) {
+                throw std::runtime_error("failed to create imgui framebuffer!");
+            }
+        }
+
         // DESCRIPTOR POOL FOR IMGUI:
         VkDescriptorPoolSize poolSizes[] =
         {
@@ -209,7 +236,12 @@ private:
         renderPassInfo.dependencyCount = 1;
         renderPassInfo.pDependencies = &dependency;
 
-        imGuiRenderPass = instance.getDevice().createRenderPass(renderPassInfo);
+        try {
+            imGuiRenderPass = instance.getDevice().createRenderPass(renderPassInfo);
+        } 
+        catch (vk::SystemError err) {
+            throw std::runtime_error("failed to create render pass for imgui!");
+        }
 
         // imgui init
         IMGUI_CHECKVERSION();
@@ -231,7 +263,7 @@ private:
         info.PipelineCache = VK_NULL_HANDLE;
         info.DescriptorPool = imguiPool;
         info.Subpass = 0;
-        info.MinImageCount = 2;
+        info.MinImageCount = IMGUI_MIN_IMAGE_COUNT;
         info.ImageCount = MAX_FRAMES_IN_FLIGHT;
         info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; // find conversion between c and cpp impl
         info.Allocator = nullptr;
@@ -296,7 +328,9 @@ private:
             );
 
             vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
+            commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+            commandBuffer.endRenderPass();
             instance.endSingleTimeCommands(commandBuffer);
 
             ImGui::EndFrame();

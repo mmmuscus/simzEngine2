@@ -60,7 +60,8 @@ void vulkanRenderer::initRenderPass(vk::Format imageFormat) {
         vk::AttachmentLoadOp::eDontCare,
         vk::AttachmentStoreOp::eDontCare,
         vk::ImageLayout::eUndefined,
-        vk::ImageLayout::ePresentSrcKHR
+        // vk::ImageLayout::ePresentSrcKHR
+        vk::ImageLayout::eColorAttachmentOptimal
     );
 
     auto colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
