@@ -64,9 +64,9 @@ void vulkanDrawer::getNextImage(vulkanSurface* surface) {
 
 void vulkanDrawer::drawFrame(
     vulkanSurface* surface,
-    vulkanInstance* instance,
     vulkanRenderer* renderer,
-    scene* currScene
+    scene* currScene,
+    vk::Queue graphicsQueue
 ) {
     if (surface->getShouldRecreateSwapChain())
         return;
@@ -82,7 +82,7 @@ void vulkanDrawer::drawFrame(
         imageIndex,
         currScene
     );
-    
+
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
     vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
@@ -94,7 +94,7 @@ void vulkanDrawer::drawFrame(
     );
 
     try {
-        instance->getGraphicsQueue().submit(submitInfo, inFlightFences[currentFrame]);
+        graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to submit draw command buffer!");

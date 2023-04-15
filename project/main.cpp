@@ -303,7 +303,7 @@ private:
             mainScene.getCam()->processMouseMovement();
             input.resetOffset();
 
-            // Recreate Swapchin if necessary
+            // Recreate Swapchain if necessary
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
@@ -317,25 +317,12 @@ private:
             // Update translation of scene (and its objects)
             mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
 
-            // rendering ImGui + engine
-            /*ImGui_ImplVulkan_NewFrame();
+            // rendering ImGui
+            ImGui_ImplVulkan_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
             ImGui::ShowDemoWindow();
-            ImGui::Render();*/
-
-            // Record and submit command buffer
-            drawer.drawFrame(
-                &surface,
-                &instance,
-                &renderer,
-                &mainScene
-            );
-
-            // Present the frame
-            drawer.presentFrame(&surface, instance.getPresentQueue());
-
-            /*uint32_t imageIndex = drawer.getImgIdx();
+            ImGui::Render();
 
             vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
 
@@ -343,7 +330,7 @@ private:
             clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
             auto renderPassInfo = vk::RenderPassBeginInfo(
-                imGuiRenderPass, imGuiFramebuffers[imageIndex],
+                imGuiRenderPass, imGuiFramebuffers[drawer.getImageIdex()],
                 vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent()),
                 static_cast<uint32_t>(clearValues.size()), clearValues.data()
             );
@@ -353,18 +340,18 @@ private:
             commandBuffer.endRenderPass();
             instance.endSingleTimeCommands(commandBuffer);
 
-            vk::SwapchainKHR swapChains[] = { surface.getSwapChain() };
-
-            auto presentInfo = vk::PresentInfoKHR(
-                0, nullptr,
-                1, swapChains,
-                &imageIndex
+            // Record and submit command buffer
+            drawer.drawFrame(
+                &surface,
+                &renderer,
+                &mainScene,
+                instance.getGraphicsQueue()
             );
 
-            vk::Result resultPresent;
-            resultPresent = instance.getPresentQueue().presentKHR(presentInfo);
+            // Present the frame
+            drawer.presentFrame(&surface, instance.getPresentQueue());
 
-            ImGui::EndFrame();*/
+            ImGui::EndFrame();
         }
 
         instance.getDevice().waitIdle();

@@ -44,11 +44,12 @@ public:
 
 	void getNextImage(vulkanSurface* surface);
 
+	// TODO: rename function
 	void drawFrame(
 		vulkanSurface* surface,
-		vulkanInstance* instance,
 		vulkanRenderer* renderer,
-		scene* currScene
+		scene* currScene,
+		vk::Queue graphicsQueue
 	);
 
 	void recordCommandBuffer(
