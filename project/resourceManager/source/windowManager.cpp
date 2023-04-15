@@ -1,6 +1,6 @@
 #include "../include/windowManager.h"
 
-vulkanDrawer* windowManager::drawer = nullptr;
+vulkanSurface* windowManager::surface = nullptr;
 
 windowManager::~windowManager() {
 	glfwDestroyWindow(window);
@@ -27,7 +27,7 @@ void windowManager::initGlfwInputHandling() {
 
 void windowManager::framebufferResizeCallback(GLFWwindow* wndw, int height, int width) {
     auto wnd = reinterpret_cast<windowManager*>(glfwGetWindowUserPointer(wndw));
-    drawer->setFrameBufferResized(true);
+    surface->setShouldRecreateSwapChain(true);
 }
 
 void windowManager::checkIfWindowShouldClose() {

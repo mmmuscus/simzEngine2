@@ -127,9 +127,7 @@ void vulkanDrawer::drawFrame(
             nullptr);
         imageIndex = result.value;
     } catch (vk::OutOfDateKHRError err) {
-        surface->recreateSwapChain(
-            renderer,
-            instance);
+        surface->setShouldRecreateSwapChain(true);
         return;
     } catch (vk::SystemError err) {
         throw std::runtime_error("failed to acquire swap chain image!");
@@ -192,14 +190,8 @@ void vulkanDrawer::drawFrame(
         throw std::runtime_error("failed to present swap chain image!");
     }
 
-    if (resultPresent == vk::Result::eSuboptimalKHR || framebufferResized) {
-        std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
-        framebufferResized = false;
-        surface->recreateSwapChain(
-            renderer,
-            instance);
+    if (resultPresent == vk::Result::eSuboptimalKHR || surface->getShouldRecreateSwapChain())
         return;
-    }
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

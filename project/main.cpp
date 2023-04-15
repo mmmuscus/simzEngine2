@@ -30,7 +30,7 @@ const int IMGUI_MIN_IMAGE_COUNT = 2;
 class Application {
 public:
     void run() {
-        wndwManager.setDrawer(&drawer);
+        wndwManager.setSurface(&surface);
         wndwManager.initWindow();
         wndwManager.initGlfwInputHandling();
         initVulkan();
@@ -302,6 +302,12 @@ private:
             mainScene.getCam()->processKeyboard(inputTimer.getDeltaTime());
             mainScene.getCam()->processMouseMovement();
             input.resetOffset();
+
+            if (surface.getShouldRecreateSwapChain()) {
+                std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
+                surface.recreateSwapChain(&renderer, &instance);
+                surface.setShouldRecreateSwapChain(false);
+            }
 
             // rendering ImGui + engine
             /*ImGui_ImplVulkan_NewFrame();

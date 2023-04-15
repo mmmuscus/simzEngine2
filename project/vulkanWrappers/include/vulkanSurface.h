@@ -19,6 +19,9 @@ private:
 	// An ImageView is a View to an image (like databases)
 	std::vector<vk::ImageView> imageViews;
 
+	// flags:
+	bool shouldRecreateSwapChain = false;
+
 	// Not maintained by the class:
 	GLFWwindow* window;
 	vk::Instance instance;
@@ -27,6 +30,9 @@ private:
 public:
 	~vulkanSurface();
 
+	bool getShouldRecreateSwapChain() { return shouldRecreateSwapChain; }
+
+	void setShouldRecreateSwapChain(bool _shouldRecreateSwapChain) { shouldRecreateSwapChain = _shouldRecreateSwapChain; }
 	void setWindow(GLFWwindow* _window) { window = _window; }
 	void setInstance(vk::Instance _instance) { instance = _instance; }
 	void setDevice(vk::Device _device) { device = _device; }

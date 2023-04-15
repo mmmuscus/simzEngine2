@@ -6,7 +6,7 @@
 #include "resourceManagerGeneralIncludes.h"
 #include "inputManager.h"
 
-#include "../../vulkanWrappers/include/vulkanDrawer.h"
+#include "../../vulkanWrappers/include/vulkanSurface.h"
 
 class windowManager {
 private:
@@ -14,14 +14,15 @@ private:
 
 	// Holding input
 	inputManager input;
-	static vulkanDrawer* drawer;
+
+	static vulkanSurface* surface;
 
 public:
 	~windowManager();
 
 	GLFWwindow* getWindow() { return window; }
 
-	void setDrawer(vulkanDrawer* _drawer) { drawer = _drawer; }
+	void setSurface(vulkanSurface* _surface) { surface = _surface; }
 
 	void initWindow();
 

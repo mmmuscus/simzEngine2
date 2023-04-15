@@ -19,7 +19,6 @@ private:
 	std::vector<vk::Fence> inFlightFences;
 	// Helper variables:
 	size_t currentFrame = 0;
-	bool framebufferResized = false;
 
 	// Needed for ImGui
 	uint32_t imgIdx;
@@ -36,7 +35,6 @@ public:
 	size_t getCurrentFrame() { return currentFrame; }
 	uint32_t getImgIdx() { return imgIdx; }
 
-	void setFrameBufferResized(bool val) { framebufferResized = val; }
 	void setDevice(vk::Device _device) { device = _device; }
 
 	// void initCommandPool(vulkanInstance* instance);
