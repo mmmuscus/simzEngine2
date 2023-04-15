@@ -317,30 +317,33 @@ private:
             // Update translation of scene (and its objects)
             mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
 
-            // rendering ImGui
-            ImGui_ImplVulkan_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-            ImGui::ShowDemoWindow();
-            ImGui::Render();
+            // record and submit ImGui commandBuffer
+            if (!surface.getShouldRecreateSwapChain())
+            {
+                ImGui_ImplVulkan_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+                ImGui::ShowDemoWindow();
+                ImGui::Render();
 
-            vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
+                vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
 
-            std::array<vk::ClearValue, 1> clearValues;
-            clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
+                std::array<vk::ClearValue, 1> clearValues;
+                clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-            auto renderPassInfo = vk::RenderPassBeginInfo(
-                imGuiRenderPass, imGuiFramebuffers[drawer.getImageIdex()],
-                vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent()),
-                static_cast<uint32_t>(clearValues.size()), clearValues.data()
-            );
+                auto renderPassInfo = vk::RenderPassBeginInfo(
+                    imGuiRenderPass, imGuiFramebuffers[drawer.getImageIdex()],
+                    vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent()),
+                    static_cast<uint32_t>(clearValues.size()), clearValues.data()
+                );
 
-            commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-            ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
-            commandBuffer.endRenderPass();
-            instance.endSingleTimeCommands(commandBuffer);
+                commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
+                ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+                commandBuffer.endRenderPass();
+                instance.endSingleTimeCommands(commandBuffer);
+            }
 
-            // Record and submit command buffer
+            // Record and submit engine command buffer
             drawer.drawFrame(
                 &surface,
                 &renderer,
