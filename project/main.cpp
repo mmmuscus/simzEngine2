@@ -156,29 +156,7 @@ private:
 
     void initImGui() {
         // https://frguthmann.github.io/posts/vulkan_imgui/
-
-        // FRAMEBUFFERS FOR IMGUI
-        imGuiFramebuffers.resize(surface.getImageViews().size());
-
-        for (size_t i = 0; i < surface.getImageViews().size(); i++) {
-            VkImageView attachment[1] = { surface.getImageViews()[i] };
-
-            VkFramebufferCreateInfo framebufferInfo = {};
-            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = imGuiRenderPass;
-            framebufferInfo.pAttachments = attachment;
-            framebufferInfo.width = surface.getExtent().width;
-            framebufferInfo.height = surface.getExtent().height;
-            framebufferInfo.layers = 1;
-
-            try {
-                imGuiFramebuffers[i] = instance.getDevice().createFramebuffer(framebufferInfo);
-            }
-            catch(vk::SystemError err) {
-                throw std::runtime_error("failed to create imgui framebuffer!");
-            }
-        }
-
+        
         // DESCRIPTOR POOL FOR IMGUI:
         VkDescriptorPoolSize poolSizes[] =
         {
@@ -241,6 +219,28 @@ private:
         } 
         catch (vk::SystemError err) {
             throw std::runtime_error("failed to create render pass for imgui!");
+        }
+
+        // FRAMEBUFFERS FOR IMGUI
+        imGuiFramebuffers.resize(surface.getImageViews().size());
+
+        for (size_t i = 0; i < surface.getImageViews().size(); i++) {
+            VkImageView attachment[1] = { surface.getImageViews()[i] };
+
+            VkFramebufferCreateInfo framebufferInfo = {};
+            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebufferInfo.renderPass = imGuiRenderPass;
+            framebufferInfo.pAttachments = attachment;
+            framebufferInfo.width = surface.getExtent().width;
+            framebufferInfo.height = surface.getExtent().height;
+            framebufferInfo.layers = 1;
+
+            try {
+                imGuiFramebuffers[i] = instance.getDevice().createFramebuffer(framebufferInfo);
+            }
+            catch (vk::SystemError err) {
+                throw std::runtime_error("failed to create imgui framebuffer!");
+            }
         }
 
         // imgui init
@@ -317,21 +317,56 @@ private:
                 &mainScene
             );
 
+            instance.getDevice().waitForFences(1, &drawer.getInFlightFences()[drawer.getCurrentFrame()], VK_TRUE, std::numeric_limits<uint64_t>::max());
+
+            vk::ResultValue result = instance.getDevice().acquireNextImageKHR(
+                surface.getSwapChain(),
+                std::numeric_limits<uint64_t>::max(),
+                drawer.getImageAvailableSemaphores()[drawer.getCurrentFrame()],
+                nullptr);
+            uint32_t imageIndex = result.value;
+
+            instance.getDevice().resetFences(1, &drawer.getInFlightFences()[drawer.getCurrentFrame()]);
+
+            vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
+
             auto renderArea = vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent());
             std::array<vk::ClearValue, 1> clearValues;
             clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
             auto renderPassInfo = vk::RenderPassBeginInfo(
-                imGuiRenderPass, renderer.getFramebuffers()[drawer.getImgIdx()],
+                imGuiRenderPass, imGuiFramebuffers[imageIndex],
                 renderArea,
                 static_cast<uint32_t>(clearValues.size()), clearValues.data()
             );
 
-            vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
             commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
             commandBuffer.endRenderPass();
+
+            vk::Semaphore waitSemaphores[] = { drawer.getImageAvailableSemaphores()[drawer.getCurrentFrame()] };
+            vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
+            vk::Semaphore signalSemaphores[] = { drawer.getRenderFinishedSemaphores()[drawer.getCurrentFrame()] };
+
+            auto submitInfo = vk::SubmitInfo(
+                1, waitSemaphores, waitStages,
+                1, &commandBuffer,
+                1, signalSemaphores
+            );
+
+            instance.getGraphicsQueue().submit(submitInfo, drawer.getInFlightFences()[drawer.getCurrentFrame()]);
             instance.endSingleTimeCommands(commandBuffer);
+
+            vk::SwapchainKHR swapChains[] = { surface.getSwapChain() };
+
+            auto presentInfo = vk::PresentInfoKHR(
+                1, signalSemaphores,
+                1, swapChains,
+                &imageIndex
+            );
+
+            vk::Result resultPresent;
+            resultPresent = instance.getPresentQueue().presentKHR(presentInfo);
 
             ImGui::EndFrame();
         }

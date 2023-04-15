@@ -30,6 +30,10 @@ private:
 public:
 	~vulkanDrawer();
 
+	std::vector<vk::Semaphore> getImageAvailableSemaphores() { return imageAvailableSemaphores; }
+	std::vector<vk::Semaphore> getRenderFinishedSemaphores() { return renderFinishedSemaphores; }
+	std::vector<vk::Fence> getInFlightFences() { return inFlightFences; }
+	size_t getCurrentFrame() { return currentFrame; }
 	uint32_t getImgIdx() { return imgIdx; }
 
 	void setFrameBufferResized(bool val) { framebufferResized = val; }

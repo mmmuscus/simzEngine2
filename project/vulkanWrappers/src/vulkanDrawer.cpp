@@ -116,7 +116,7 @@ void vulkanDrawer::drawFrame(
     vulkanRenderer* renderer,
     scene* currScene
 ) {
-    device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+    /*device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
     uint32_t imageIndex;
     try {
@@ -199,7 +199,7 @@ void vulkanDrawer::drawFrame(
             renderer,
             instance);
         return;
-    }
+    }*/
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
