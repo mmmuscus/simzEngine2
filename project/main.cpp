@@ -304,11 +304,11 @@ private:
             input.resetOffset();
 
             // rendering ImGui + engine
-            ImGui_ImplVulkan_NewFrame();
+            /*ImGui_ImplVulkan_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
             ImGui::ShowDemoWindow();
-            ImGui::Render();
+            ImGui::Render();*/
 
             drawer.drawFrame(
                 &surface,
@@ -317,50 +317,28 @@ private:
                 &mainScene
             );
 
-            instance.getDevice().waitForFences(1, &drawer.getInFlightFences()[drawer.getCurrentFrame()], VK_TRUE, std::numeric_limits<uint64_t>::max());
-
-            vk::ResultValue result = instance.getDevice().acquireNextImageKHR(
-                surface.getSwapChain(),
-                std::numeric_limits<uint64_t>::max(),
-                drawer.getImageAvailableSemaphores()[drawer.getCurrentFrame()],
-                nullptr);
-            uint32_t imageIndex = result.value;
-
-            instance.getDevice().resetFences(1, &drawer.getInFlightFences()[drawer.getCurrentFrame()]);
+            /*uint32_t imageIndex = drawer.getImgIdx();
 
             vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
 
-            auto renderArea = vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent());
             std::array<vk::ClearValue, 1> clearValues;
             clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
             auto renderPassInfo = vk::RenderPassBeginInfo(
                 imGuiRenderPass, imGuiFramebuffers[imageIndex],
-                renderArea,
+                vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent()),
                 static_cast<uint32_t>(clearValues.size()), clearValues.data()
             );
 
             commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
             commandBuffer.endRenderPass();
-
-            vk::Semaphore waitSemaphores[] = { drawer.getImageAvailableSemaphores()[drawer.getCurrentFrame()] };
-            vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
-            vk::Semaphore signalSemaphores[] = { drawer.getRenderFinishedSemaphores()[drawer.getCurrentFrame()] };
-
-            auto submitInfo = vk::SubmitInfo(
-                1, waitSemaphores, waitStages,
-                1, &commandBuffer,
-                1, signalSemaphores
-            );
-
-            instance.getGraphicsQueue().submit(submitInfo, drawer.getInFlightFences()[drawer.getCurrentFrame()]);
             instance.endSingleTimeCommands(commandBuffer);
 
             vk::SwapchainKHR swapChains[] = { surface.getSwapChain() };
 
             auto presentInfo = vk::PresentInfoKHR(
-                1, signalSemaphores,
+                0, nullptr,
                 1, swapChains,
                 &imageIndex
             );
@@ -368,7 +346,7 @@ private:
             vk::Result resultPresent;
             resultPresent = instance.getPresentQueue().presentKHR(presentInfo);
 
-            ImGui::EndFrame();
+            ImGui::EndFrame();*/
         }
 
         instance.getDevice().waitIdle();
