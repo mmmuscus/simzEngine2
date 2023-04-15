@@ -42,15 +42,6 @@ public:
 	void initCommandBuffers(vk::CommandPool commandPool);
 	void initSyncObjects();
 
-	void recordCommandBuffer(
-		vk::CommandBuffer commandBuffer,
-		vulkanObject* obj,
-		vulkanRenderer* renderer,
-		vk::Extent2D extent,
-		uint32_t imageIndex,
-		scene* currScene
-	);
-
 	void getNextImage(vulkanSurface* surface);
 
 	void drawFrame(
@@ -60,10 +51,16 @@ public:
 		scene* currScene
 	);
 
-	void presentFrame(vulkanSurface* surface, vk::Queue presentQueue);
+	void recordCommandBuffer(
+		vk::CommandBuffer commandBuffer,
+		vulkanObject* obj,
+		vulkanRenderer* renderer,
+		vk::Extent2D extent,
+		uint32_t imageIndex,
+		scene* currScene
+	);
 
-	// vk::CommandBuffer beginSingleTimeCommands();
-	// void endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue);
+	void presentFrame(vulkanSurface* surface, vk::Queue presentQueue);
 
 private:
 
