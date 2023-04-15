@@ -60,6 +60,8 @@ public:
 		scene* currScene
 	);
 
+	void presentFrame(vulkanSurface* surface, vk::Queue presentQueue);
+
 	// vk::CommandBuffer beginSingleTimeCommands();
 	// void endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Queue graphicsQueue);
 

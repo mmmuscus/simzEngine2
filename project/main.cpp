@@ -324,12 +324,16 @@ private:
             ImGui::ShowDemoWindow();
             ImGui::Render();*/
 
+            // Record and submit command buffer
             drawer.drawFrame(
                 &surface,
                 &instance,
                 &renderer,
                 &mainScene
             );
+
+            // Present the frame
+            drawer.presentFrame(&surface, instance.getPresentQueue());
 
             /*uint32_t imageIndex = drawer.getImgIdx();
 

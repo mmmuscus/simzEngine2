@@ -159,6 +159,9 @@ void vulkanDrawer::drawFrame(
     currScene->getObjects()[0]->updateTranslationVectors();
     currScene->getObjects()[0]->updateModelTranslation(currentFrame);*/
 
+    if (surface->getShouldRecreateSwapChain())
+        return;
+
     device.resetFences(1, &inFlightFences[currentFrame]);
 
     commandBuffers[currentFrame].reset();
@@ -188,7 +191,7 @@ void vulkanDrawer::drawFrame(
         throw std::runtime_error("failed to submit draw command buffer!");
     }
 
-    vk::SwapchainKHR swapChains[] = { surface->getSwapChain() };
+    /*vk::SwapchainKHR swapChains[] = {surface->getSwapChain()};
 
     auto presentInfo = vk::PresentInfoKHR(
         1, signalSemaphores,
@@ -199,6 +202,36 @@ void vulkanDrawer::drawFrame(
     vk::Result resultPresent;
     try {
         resultPresent = instance->getPresentQueue().presentKHR(presentInfo);
+    }
+    catch (vk::OutOfDateKHRError err) {
+        resultPresent = vk::Result::eErrorOutOfDateKHR;
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to present swap chain image!");
+    }
+
+    if (resultPresent == vk::Result::eSuboptimalKHR || surface->getShouldRecreateSwapChain())
+        return;
+
+    currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;*/
+}
+
+void vulkanDrawer::presentFrame(vulkanSurface* surface, vk::Queue presentQueue) {
+    if (surface->getShouldRecreateSwapChain())
+        return;
+
+    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
+    vk::SwapchainKHR swapChains[] = { surface->getSwapChain() };
+
+    auto presentInfo = vk::PresentInfoKHR(
+        1, signalSemaphores,
+        1, swapChains,
+        &imageIndex
+    );
+
+    vk::Result resultPresent;
+    try {
+        resultPresent = presentQueue.presentKHR(presentInfo);
     }
     catch (vk::OutOfDateKHRError err) {
         resultPresent = vk::Result::eErrorOutOfDateKHR;
