@@ -140,7 +140,7 @@
     <ClInclude Include="renderLogic\include\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="renderLogic\include\Scene.h">
+    <ClInclude Include="renderLogic\include\scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="renderLogic\include\object.h">

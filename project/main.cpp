@@ -303,11 +303,19 @@ private:
             mainScene.getCam()->processMouseMovement();
             input.resetOffset();
 
+            // Recreate Swapchin if necessary
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
                 surface.setShouldRecreateSwapChain(false);
+                drawer.resetImageIndex();
             }
+
+            // Acquire the next swapchain image
+            drawer.getNextImage(&surface);
+
+            // Update translation of scene (and its objects)
+            mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
 
             // rendering ImGui + engine
             /*ImGui_ImplVulkan_NewFrame();

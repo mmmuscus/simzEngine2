@@ -110,15 +110,34 @@ void vulkanDrawer::recordCommandBuffer(
     }
 }
 
+void vulkanDrawer::getNextImage(vulkanSurface* surface) {
+    device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+
+    try {
+        vk::ResultValue result = device.acquireNextImageKHR(
+            surface->getSwapChain(),
+            std::numeric_limits<uint64_t>::max(),
+            imageAvailableSemaphores[currentFrame],
+            nullptr);
+        imageIndex = result.value;
+    }
+    catch (vk::OutOfDateKHRError err) {
+        surface->setShouldRecreateSwapChain(true);
+        return;
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to acquire swap chain image!");
+    }
+}
+
 void vulkanDrawer::drawFrame(
     vulkanSurface* surface,
     vulkanInstance* instance,
     vulkanRenderer* renderer,
     scene* currScene
 ) {
-    device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+    /*device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
-    uint32_t imageIndex;
     try {
         vk::ResultValue result = device.acquireNextImageKHR(
             surface->getSwapChain(),
@@ -131,16 +150,14 @@ void vulkanDrawer::drawFrame(
         return;
     } catch (vk::SystemError err) {
         throw std::runtime_error("failed to acquire swap chain image!");
-    }
+    }*/
 
-    imgIdx = imageIndex;
-
-    currScene->getSceneData()->updateSceneUniformBuffer(
+    /*currScene->getSceneData()->updateSceneUniformBuffer(
         currentFrame, surface->getExtent(), 
         currScene->getCam()->getViewMatrix()
     );
     currScene->getObjects()[0]->updateTranslationVectors();
-    currScene->getObjects()[0]->updateModelTranslation(currentFrame);
+    currScene->getObjects()[0]->updateModelTranslation(currentFrame);*/
 
     device.resetFences(1, &inFlightFences[currentFrame]);
 

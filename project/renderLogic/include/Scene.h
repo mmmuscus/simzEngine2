@@ -33,6 +33,8 @@ public:
 
 	void resetSceneTimer();
 
+	void updateScene(size_t currentFrame, vk::Extent2D extent);
+
 private:
 
 };

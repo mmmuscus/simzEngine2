@@ -21,7 +21,7 @@ private:
 	size_t currentFrame = 0;
 
 	// Needed for ImGui
-	uint32_t imgIdx;
+	uint32_t imageIndex;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -33,8 +33,9 @@ public:
 	std::vector<vk::Semaphore> getRenderFinishedSemaphores() { return renderFinishedSemaphores; }
 	std::vector<vk::Fence> getInFlightFences() { return inFlightFences; }
 	size_t getCurrentFrame() { return currentFrame; }
-	uint32_t getImgIdx() { return imgIdx; }
+	uint32_t getImageIdex() { return imageIndex; }
 
+	void resetImageIndex() { imageIndex = 0; }
 	void setDevice(vk::Device _device) { device = _device; }
 
 	// void initCommandPool(vulkanInstance* instance);
@@ -49,6 +50,8 @@ public:
 		uint32_t imageIndex,
 		scene* currScene
 	);
+
+	void getNextImage(vulkanSurface* surface);
 
 	void drawFrame(
 		vulkanSurface* surface,
