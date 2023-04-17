@@ -39,12 +39,13 @@ public:
     std::vector<Vertex> getVertices() { return vertices; }
     std::vector<uint32_t> getIndices() { return indices; }
 
-    void loadModel(std::string modelPath);
+    void init(std::string modelPath, vulkanInstance* instance);
 
+private:
+    void loadModel(std::string modelPath);
     void initVertexBuffer(vulkanInstance* instance);
     void initIndexBuffer(vulkanInstance* instance);
 
-private:
     void copyBuffer(
         vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
         vulkanInstance* instance

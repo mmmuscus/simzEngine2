@@ -8,6 +8,13 @@ vulkanModelData::~vulkanModelData() {
     device.freeMemory(vertexBufferMemory);
 }
 
+void vulkanModelData::init(std::string modelPath, vulkanInstance* instance) {
+    device = instance->getDevice();
+    loadModel(modelPath);
+    initVertexBuffer(instance);
+    initIndexBuffer(instance);
+}
+
 void vulkanModelData::loadModel(std::string modelPath) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;

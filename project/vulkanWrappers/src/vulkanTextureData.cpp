@@ -7,6 +7,13 @@ vulkanTextureData::~vulkanTextureData() {
     device.freeMemory(textureImageMemory);
 }
 
+void vulkanTextureData::init(std::string texturePath, vulkanInstance* instance) {
+    device = instance->getDevice();
+    initTextureImage(texturePath, instance);
+    initTextureImageView(instance);
+    initTextureSampler(instance->getPhysicalDevice());
+}
+
 void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance* instance) {
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load(

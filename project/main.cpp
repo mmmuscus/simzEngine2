@@ -119,27 +119,13 @@ private:
         // CommandPool:
         instance.initCommandPool();
 
-        // Texture:
-        roomTextureData.setDevice(instance.getDevice());
-        roomTextureData.initTextureImage("textures/viking_room.png", &instance);
-        roomTextureData.initTextureImageView(&instance);
-        roomTextureData.initTextureSampler(instance.getPhysicalDevice());
-        tankTextureData.setDevice(instance.getDevice());
-        tankTextureData.initTextureImage("textures/demo_texture.jpg", &instance);
-        tankTextureData.initTextureImageView(&instance);
-        tankTextureData.initTextureSampler(instance.getPhysicalDevice());
+        // Textures:
+        roomTextureData.init("textures/viking_room.png", &instance);
+        tankTextureData.init("textures/demo_texture.jpg", &instance);
 
-        // Model:
-        roomModelData.loadModel("models/viking_room.objj");
-        tankModelData.loadModel("models/tank.objj");
-
-        // Vertex + Index Buffer:
-        roomModelData.setDevice(instance.getDevice());
-        roomModelData.initVertexBuffer(&instance);
-        roomModelData.initIndexBuffer(&instance);
-        tankModelData.setDevice(instance.getDevice());
-        tankModelData.initVertexBuffer(&instance);
-        tankModelData.initIndexBuffer(&instance);
+        // Models:
+        roomModelData.init("models/viking_room.objj", &instance);
+        tankModelData.init("models/tank.objj", &instance);
 
         // Uniform Buffer:
         modelsBuffer.setDevice(instance.getDevice());
@@ -358,7 +344,7 @@ private:
             );
 
             // record and submit ImGui commandBuffer
-            if (!surface.getShouldRecreateSwapChain())
+            /*if (!surface.getShouldRecreateSwapChain())
             {
                 ImGui_ImplVulkan_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
@@ -381,7 +367,7 @@ private:
                 ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
                 commandBuffer.endRenderPass();
                 instance.endSingleTimeCommands(commandBuffer);
-            }
+            }*/
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());

@@ -27,11 +27,13 @@ public:
     vk::ImageView getImageView() { return textureImageView; }
     vk::Sampler getSampler() { return textureSampler; }
 
+    void init(std::string texturePath, vulkanInstance* instance);
+
+private:
     void initTextureImage(std::string texturePath, vulkanInstance* instance);
     void initTextureImageView(vulkanInstance* instance);
     void initTextureSampler(vk::PhysicalDevice physicalDevice);
 
-private:
     void transitionImageLayout(
         vk::Image image, vk::Format format,
         vk::ImageLayout oldLayout, vk::ImageLayout newLayout,

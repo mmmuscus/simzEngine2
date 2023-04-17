@@ -5,10 +5,10 @@ vulkanObject::~vulkanObject() {
     device.destroyDescriptorPool(descriptorPool);
     device.destroyDescriptorSetLayout(descriptorSetLayout);
     // New descriptor sets:
-    device.destroyDescriptorPool(sceneDescriptorPool);
+    /*device.destroyDescriptorPool(sceneDescriptorPool);
     device.destroyDescriptorSetLayout(sceneDescriptorSetLayout);
     device.destroyDescriptorPool(modelDescriptorPool);
-    device.destroyDescriptorSetLayout(modelDescriptorSetLayout);
+    device.destroyDescriptorSetLayout(modelDescriptorSetLayout);*/
 
     device.destroyPipeline(graphicsPipeline);
     device.destroyPipelineLayout(pipelineLayout);
@@ -223,7 +223,7 @@ void vulkanObject::initSceneDescriptorSets(vulkanSceneData* sceneData) {
 
         std::array<vk::WriteDescriptorSet, 1> descriptorWrites = {
             vk::WriteDescriptorSet(
-                sceneDescriptorSets[i], 2, 0,                        // dest set, binding, array element
+                sceneDescriptorSets[i], 2, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
                 nullptr,
                 &sceneInfo
@@ -334,7 +334,7 @@ void vulkanObject::initModelDescriptorSets(
                 &modelInfo
             ),
             vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 1, 0,                    // dest set, binding, array element
+                modelDescriptorSets[i], 1, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
                 &imageInfo
             )
