@@ -8,6 +8,7 @@
 #include "modelDataIncludes.h"
 
 #include "vulkanInstance.h"
+#include "vulkanDynamicUniformBuffer.h"
 
 class vulkanModelData {
 private:
@@ -17,9 +18,7 @@ private:
     vk::Buffer indexBuffer;
     vk::DeviceMemory indexBufferMemory;
     // Uniform buffers:
-    std::vector<vk::Buffer> uniformBuffers;
-    size_t dynamicAlignment;
-    std::vector<vk::DeviceMemory> uniformBuffersMemory;
+    vulkanDynamicUniformBuffer* uniformBuffer;
 
     // Vertices + indices:
     std::vector<Vertex> vertices;
@@ -32,11 +31,11 @@ public:
     ~vulkanModelData();
 
     void setDevice(vk::Device _device) { device = _device; }
+    void setDynamicUniformBuffer(vulkanDynamicUniformBuffer* _uniformBuffer) { uniformBuffer = _uniformBuffer; }
 
     vk::Buffer getVertexBuffer() { return vertexBuffer; }
     vk::Buffer getIndexBuffer() { return indexBuffer; }
-    std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
-    size_t getDynamicAlignment() { return dynamicAlignment; }
+    vulkanDynamicUniformBuffer* getUniformBuffer() { return uniformBuffer; }
     std::vector<Vertex> getVertices() { return vertices; }
     std::vector<uint32_t> getIndices() { return indices; }
 
@@ -44,9 +43,6 @@ public:
 
     void initVertexBuffer(vulkanInstance* instance);
     void initIndexBuffer(vulkanInstance* instance);
-    void initUniformBuffers(vulkanInstance* instance);
-
-    void updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame, size_t objectNumber);
 
 private:
     void copyBuffer(

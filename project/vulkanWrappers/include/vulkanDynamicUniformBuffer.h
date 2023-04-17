@@ -21,6 +21,8 @@ public:
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
     size_t getDynamicAlignment() { return dynamicAlignment; }
 
+    void setDevice(vk::Device _device) { device = _device; }
+
     void initUniformBuffers(vulkanInstance* instance);
 
     void updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame, size_t objectNumber);

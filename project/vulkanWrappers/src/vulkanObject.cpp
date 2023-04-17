@@ -237,7 +237,7 @@ void vulkanObject::initDescriptorSets(
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         auto modelInfo = vk::DescriptorBufferInfo(
-            modelData->getUniformBuffers()[i],
+            modelData->getUniformBuffer()->getUniformBuffers()[i],
             0, sizeof(modelUniformBufferObject)                 // offset, range
         );
 

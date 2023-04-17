@@ -14,5 +14,5 @@ void object::updateModelTranslation(uint32_t currentFrame) {
 	trans = glm::rotate(trans, rotation.x, glm::vec3(0.0f, 0.0f, 1.0f));
 	trans = glm::scale(trans, scale);
 
-	modelData->updateModelUniformBuffer(trans, currentFrame, objectNumber);
+	modelData->getUniformBuffer()->updateModelUniformBuffer(trans, currentFrame, objectNumber);
 }

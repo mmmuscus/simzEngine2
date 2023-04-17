@@ -145,19 +145,26 @@ void vulkanDrawer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    vk::Buffer vertexBuffers[] = { gameObject->getModelData()->getVertexBuffer() };
+    std::vector<vk::Buffer> vertexBuffers;
+    for (size_t i = 0; i < currScene->getObjects().size(); i++)
+        vertexBuffers.push_back(currScene->getObjects()[i]->getModelData()->getVertexBuffer());
     vk::DeviceSize offsets[] = { 0 };
-    commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
+    commandBuffer.bindVertexBuffers(0, 1, vertexBuffers.data(), offsets);
 
-    commandBuffer.bindIndexBuffer(gameObject->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
-    commandBuffer.bindDescriptorSets(
-        vk::PipelineBindPoint::eGraphics,
-        obj->getPipelineLayout(),
-        0,
-        obj->getDescriptorSets()[currentFrame],
-        gameObject->getObjectNumber() * static_cast<uint32_t>(gameObject->getModelData()->getDynamicAlignment())
-    );
-    commandBuffer.drawIndexed(static_cast<uint32_t>(gameObject->getModelData()->getIndices().size()), 1, 0, 0, 0);
+    for (size_t i = 0; i < currScene->getObjects().size(); i++) {
+        commandBuffer.bindIndexBuffer(currScene->getObjects()[i]->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
+        commandBuffer.bindDescriptorSets(
+            vk::PipelineBindPoint::eGraphics,
+            obj->getPipelineLayout(),
+            0,
+            obj->getDescriptorSets()[currentFrame],
+            currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
+        );
+        commandBuffer.drawIndexed(
+            static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getIndices().size()), 
+            1, 0, 0, 0
+        );
+    }
     
     commandBuffer.endRenderPass();
 

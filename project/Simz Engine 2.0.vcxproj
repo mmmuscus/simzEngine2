@@ -168,6 +168,7 @@
     <ClCompile Include="renderLogic\source\scene.cpp" />
     <ClCompile Include="resourceManager\source\inputManager.cpp" />
     <ClCompile Include="resourceManager\source\windowManager.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanDynamicUniformBuffer.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCallback.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceDevice.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="resourceManager\include\windowManager.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
+    <ClInclude Include="vulkanWrappers\include\vulkanDynamicUniformBuffer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanDrawer.h" />
