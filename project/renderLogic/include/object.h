@@ -17,6 +17,9 @@ private:
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
+	// Helper for uploading the dynamic uniformBuffer
+	uint32_t objectNumber;
+
 	// timer
 	timer* sceneTimer;
 
@@ -41,12 +44,13 @@ public:
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setRotationAxis(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
-
+	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
 	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
 
+	uint32_t getObjectNumber() { return objectNumber; }
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }
 	vulkanTextureData* getTextureData() { return textureData; }
