@@ -154,7 +154,7 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, 
 
 void vulkanObject::initSceneDescriptorSetLayout() {
     auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
-        2,                                              // binding
+        0,                                              // binding
         vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
         vk::ShaderStageFlagBits::eVertex,
         nullptr
@@ -223,7 +223,7 @@ void vulkanObject::initSceneDescriptorSets(vulkanSceneData* sceneData) {
 
         std::array<vk::WriteDescriptorSet, 1> descriptorWrites = {
             vk::WriteDescriptorSet(
-                sceneDescriptorSets[i], 2, 0,                   // dest set, binding, array element
+                sceneDescriptorSets[i], 0, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
                 nullptr,
                 &sceneInfo
@@ -236,14 +236,14 @@ void vulkanObject::initSceneDescriptorSets(vulkanSceneData* sceneData) {
 
 void vulkanObject::initModelDescriptorSetLayout() {
     auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
-        0,                                              // binding
+        1,                                              // binding
         vk::DescriptorType::eUniformBufferDynamic, 1,   // descriptor type, count
         vk::ShaderStageFlagBits::eVertex,
         nullptr
     );
 
     auto samplerLayoutBinding = vk::DescriptorSetLayoutBinding(
-        1,                                              // bining
+        2,                                              // bining
         vk::DescriptorType::eCombinedImageSampler, 1,   // decriptor type, count
         vk::ShaderStageFlagBits::eFragment,
         nullptr
@@ -328,13 +328,13 @@ void vulkanObject::initModelDescriptorSets(
 
         std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {
             vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 0, 0,                   // dest set, binding, array element
+                modelDescriptorSets[i], 1, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBufferDynamic,   // descriptor count, type
                 nullptr,                                        // image info
                 &modelInfo
             ),
             vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 1, 0,                   // dest set, binding, array element
+                modelDescriptorSets[i], 2, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
                 &imageInfo
             )
@@ -345,31 +345,31 @@ void vulkanObject::initModelDescriptorSets(
 }
 
 void vulkanObject::initDescriptorSetLayout() {
-    auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
+    auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
         0,                                              // binding
+        vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
+        vk::ShaderStageFlagBits::eVertex,
+        nullptr
+    );
+
+    auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
+        1,                                              // binding
         vk::DescriptorType::eUniformBufferDynamic, 1,   // descriptor type, count
         vk::ShaderStageFlagBits::eVertex,
         nullptr
     );
 
     auto samplerLayoutBinding = vk::DescriptorSetLayoutBinding(
-        1,                                              // bining
+        2,                                              // bining
         vk::DescriptorType::eCombinedImageSampler, 1,   // decriptor type, count
         vk::ShaderStageFlagBits::eFragment,
         nullptr
     );
 
-    auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
-        2,                                              // binding
-        vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
-        vk::ShaderStageFlagBits::eVertex,
-        nullptr
-    );
-
     std::array<vk::DescriptorSetLayoutBinding, 3> bindings = { 
+        sceneLayoutBinding,
         modelLayoutBinding, 
-        samplerLayoutBinding,
-        sceneLayoutBinding
+        samplerLayoutBinding
     };
 
     auto layoutInfo = vk::DescriptorSetLayoutCreateInfo(
@@ -387,15 +387,15 @@ void vulkanObject::initDescriptorSetLayout() {
 void vulkanObject::initDescriptorPool() {
     std::array<vk::DescriptorPoolSize, 3> poolSizes = {
         vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBuffer,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        ),
+        vk::DescriptorPoolSize(
             vk::DescriptorType::eUniformBufferDynamic,
             static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
         ),
         vk::DescriptorPoolSize(
             vk::DescriptorType::eCombinedImageSampler,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
-        ),
-        vk::DescriptorPoolSize(
-            vk::DescriptorType::eUniformBuffer,
             static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
         )
     };
@@ -435,6 +435,11 @@ void vulkanObject::initDescriptorSets(
     }
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        auto sceneInfo = vk::DescriptorBufferInfo(
+            sceneData->getUniformBuffers()[i],
+            0, sizeof(sceneUniformBufferObject)                 // offset, range
+        );
+        
         auto modelInfo = vk::DescriptorBufferInfo(
             uniformBuffer->getUniformBuffers()[i],
             0, sizeof(modelUniformBufferObject)                 // offset, range
@@ -446,28 +451,23 @@ void vulkanObject::initDescriptorSets(
             vk::ImageLayout::eShaderReadOnlyOptimal
         );
 
-        auto sceneInfo = vk::DescriptorBufferInfo(
-            sceneData->getUniformBuffers()[i],
-            0, sizeof(sceneUniformBufferObject)                 // offset, range
-        );
-
         std::array<vk::WriteDescriptorSet, 3> descriptorWrites = {
             vk::WriteDescriptorSet(
                 descriptorSets[i], 0, 0,                        // dest set, binding, array element
+                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
+                nullptr,
+                &sceneInfo
+            ),
+            vk::WriteDescriptorSet(
+                descriptorSets[i], 1, 0,                        // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBufferDynamic,   // descriptor count, type
                 nullptr,                                        // image info
                 &modelInfo
             ),
             vk::WriteDescriptorSet(
-                descriptorSets[i], 1, 0,                        // dest set, binding, array element
+                descriptorSets[i], 2, 0,                        // dest set, binding, array element
                 1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
                 &imageInfo
-            ),
-            vk::WriteDescriptorSet(
-                descriptorSets[i], 2, 0,                        // dest set, binding, array element
-                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
-                nullptr,
-                &sceneInfo
             )
         };
 

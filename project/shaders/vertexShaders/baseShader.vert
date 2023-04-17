@@ -2,14 +2,14 @@
 
 #extension GL_KHR_vulkan_glsl : enable
 
-layout(binding = 0) uniform UniformBufferObject {
-    mat4 model;
-} ubo;
-
-layout(binding = 2) uniform sceneBufferObject {
+layout(binding = 0) uniform sceneBufferObject {
     mat4 view;
     mat4 proj;
 } sbo;
+
+layout(binding = 1) uniform UniformBufferObject {
+    mat4 model;
+} ubo;
 
 layout(location = 0) in vec3 inPosition;
 layout(location = 1) in vec3 inColor;
