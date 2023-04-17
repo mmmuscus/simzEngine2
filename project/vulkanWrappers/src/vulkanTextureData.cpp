@@ -58,12 +58,6 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight),
         instance
     );
-    /*transitionImageLayout(
-        textureImage, vk::Format::eR8G8B8A8Srgb,
-        vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal,
-        mipLevels,
-        instance
-    );*/
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);

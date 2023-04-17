@@ -52,16 +52,17 @@ private:
     vulkanObject obj;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
-    vulkanModelData modelData;
+    vulkanModelData roomModelData;
     vulkanModelData tankModelData;
     vulkanDynamicUniformBuffer modelsBuffer;
-    vulkanTextureData textureData;
+    vulkanTextureData roomTextureData;
+    vulkanTextureData tankTextureData;
     vulkanSceneData sceneData;
 
     // Scene variables:
     scene mainScene;
-    object demoObj;
-    object demoObj1;
+    object roomObj;
+    object tankObj;
     camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     // ImGui variables PLS REMOVE
@@ -117,19 +118,23 @@ private:
         instance.initCommandPool();
 
         // Texture:
-        textureData.setDevice(instance.getDevice());
-        textureData.initTextureImage("textures/viking_room.png", &instance);
-        textureData.initTextureImageView(&instance);
-        textureData.initTextureSampler(instance.getPhysicalDevice());
+        roomTextureData.setDevice(instance.getDevice());
+        roomTextureData.initTextureImage("textures/viking_room.png", &instance);
+        roomTextureData.initTextureImageView(&instance);
+        roomTextureData.initTextureSampler(instance.getPhysicalDevice());
+        tankTextureData.setDevice(instance.getDevice());
+        tankTextureData.initTextureImage("textures/demo_texture.jpg", &instance);
+        tankTextureData.initTextureImageView(&instance);
+        tankTextureData.initTextureSampler(instance.getPhysicalDevice());
 
         // Model:
-        modelData.loadModel("models/viking_room.objj");
+        roomModelData.loadModel("models/viking_room.objj");
         tankModelData.loadModel("models/tank.objj");
 
         // Vertex + Index Buffer:
-        modelData.setDevice(instance.getDevice());
-        modelData.initVertexBuffer(&instance);
-        modelData.initIndexBuffer(&instance);
+        roomModelData.setDevice(instance.getDevice());
+        roomModelData.initVertexBuffer(&instance);
+        roomModelData.initIndexBuffer(&instance);
         tankModelData.setDevice(instance.getDevice());
         tankModelData.initVertexBuffer(&instance);
         tankModelData.initIndexBuffer(&instance);
@@ -137,16 +142,12 @@ private:
         // Uniform Buffer:
         modelsBuffer.setDevice(instance.getDevice());
         modelsBuffer.initUniformBuffers(&instance);
-        modelData.setDynamicUniformBuffer(&modelsBuffer);
+        roomModelData.setDynamicUniformBuffer(&modelsBuffer);
         tankModelData.setDynamicUniformBuffer(&modelsBuffer);
 
         // Scene Uniform Buffer:
         sceneData.setDevice(instance.getDevice());
         sceneData.initUniformBuffers(&instance);
-
-        // Descriptor Pool + Sets:
-        obj.initDescriptorPool();
-        obj.initDescriptorSets(&modelsBuffer, &textureData, &sceneData);
 
         // CommandBuffers:
         drawer.setDevice(instance.getDevice());
@@ -154,6 +155,10 @@ private:
 
         // SyncObjects:
         drawer.initSyncObjects();
+
+        // Descriptor Pool + Sets:
+        obj.initDescriptorPool();
+        obj.initDescriptorSets(&modelsBuffer, &roomTextureData, &sceneData);
     }
 
     static void checkVkResult(VkResult err) {
@@ -294,12 +299,12 @@ private:
         mainScene.setCam(&cam);
 
         // Add objects
-        demoObj = object(&obj, &modelData, &textureData);
-        mainScene.addObject(&demoObj);
+        roomObj = object(&obj, &roomModelData, &roomTextureData);
+        mainScene.addObject(&roomObj);
         
-        demoObj1 = object(&obj, &tankModelData, &textureData);
-        mainScene.addObject(&demoObj1);
-        demoObj1.setPos(glm::vec3(0.0f, 0.0f, 0.5f));
+        tankObj = object(&obj, &tankModelData, &tankTextureData);
+        mainScene.addObject(&tankObj);
+        tankObj.setPos(glm::vec3(0.0f, 0.0f, 0.5f));
 
         mainScene.defragmentObjectNumbers();
     }
