@@ -32,6 +32,7 @@ public:
 	std::vector<object*> getObjects() { return objects; }
 
 	void resetSceneTimer();
+	void defragmentObjectNumbers();
 
 	void updateScene(size_t currentFrame, vk::Extent2D extent);
 
