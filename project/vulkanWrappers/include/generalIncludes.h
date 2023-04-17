@@ -44,4 +44,6 @@ struct QueueFamilyIndices {
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
+const int MAX_OBJECT_COUNT = 100;
+
 #endif // GENERAL_INCLUDES_H_

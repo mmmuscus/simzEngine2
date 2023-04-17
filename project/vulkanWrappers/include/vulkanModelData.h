@@ -18,8 +18,8 @@ private:
     vk::DeviceMemory indexBufferMemory;
     // Uniform buffers:
     std::vector<vk::Buffer> uniformBuffers;
+    size_t dynamicAlignment;
     std::vector<vk::DeviceMemory> uniformBuffersMemory;
-    std::vector<void*> uniformBuffersMapped;
 
     // Vertices + indices:
     std::vector<Vertex> vertices;
@@ -35,9 +35,10 @@ public:
 
     vk::Buffer getVertexBuffer() { return vertexBuffer; }
     vk::Buffer getIndexBuffer() { return indexBuffer; }
+    std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
+    size_t getDynamicAlignment() { return dynamicAlignment; }
     std::vector<Vertex> getVertices() { return vertices; }
     std::vector<uint32_t> getIndices() { return indices; }
-    std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
     void loadModel(std::string modelPath);
 
@@ -45,7 +46,7 @@ public:
     void initIndexBuffer(vulkanInstance* instance);
     void initUniformBuffers(vulkanInstance* instance);
 
-    void updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame);
+    void updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame, size_t objectNumber);
 
 private:
     void copyBuffer(

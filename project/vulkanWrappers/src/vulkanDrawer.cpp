@@ -150,12 +150,13 @@ void vulkanDrawer::recordCommandBuffer(
     commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
     commandBuffer.bindIndexBuffer(gameObject->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
 
+    uint32_t dynamicOffset = 0 * static_cast<uint32_t>(gameObject->getModelData()->getDynamicAlignment());
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,
         obj->getPipelineLayout(),
         0,
         obj->getDescriptorSets()[currentFrame],
-        nullptr
+        dynamicOffset
     );
 
     commandBuffer.drawIndexed(static_cast<uint32_t>(gameObject->getModelData()->getIndices().size()), 1, 0, 0, 0);

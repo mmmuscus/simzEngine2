@@ -123,11 +123,18 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
 }
 
 void vulkanModelData::initUniformBuffers(vulkanInstance* instance) {
-    vk::DeviceSize bufferSize = sizeof(modelUniformBufferObject);
+    // Get the alignment for the dynamic uniform buffer
+    // https://github.com/SaschaWillems/Vulkan/tree/master/examples/dynamicuniformbuffer
+    vk::PhysicalDeviceProperties properties = instance->getPhysicalDevice().getProperties();
+    size_t minAlignment = properties.limits.minUniformBufferOffsetAlignment;
+    dynamicAlignment = sizeof(modelUniformBufferObject);
+    if (minAlignment > 0)
+        dynamicAlignment = (dynamicAlignment + minAlignment - 1) & ~(minAlignment - 1);
+
+    vk::DeviceSize bufferSize = MAX_OBJECT_COUNT * dynamicAlignment;
 
     uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
     uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-    uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         instance->initBuffer(
@@ -136,8 +143,6 @@ void vulkanModelData::initUniformBuffers(vulkanInstance* instance) {
             vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
             uniformBuffers[i], uniformBuffersMemory[i]
         );
-
-        uniformBuffersMapped[i] = device.mapMemory(uniformBuffersMemory[i], 0, bufferSize);
     }
 }
 
@@ -153,9 +158,15 @@ void vulkanModelData::copyBuffer(
     instance->endSingleTimeCommands(commandBuffer);
 }
 
-void vulkanModelData::updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame) {
+void vulkanModelData::updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame, size_t objectNumber) {
     modelUniformBufferObject mbo{};
     mbo.model = modelMat;
 
-    memcpy(uniformBuffersMapped[currentFrame], &mbo, sizeof(mbo));
+    void* mData = device.mapMemory(
+        uniformBuffersMemory[currentFrame],
+        objectNumber * dynamicAlignment, 
+        vk::DeviceSize(sizeof(mbo))
+    );
+    memcpy(mData, &mbo, sizeof(mbo));
+    device.unmapMemory(uniformBuffersMemory[currentFrame]);
 }
