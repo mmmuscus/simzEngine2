@@ -1,9 +1,14 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
+    // Old descriptor sets:
     device.destroyDescriptorPool(descriptorPool);
-
     device.destroyDescriptorSetLayout(descriptorSetLayout);
+    // New descriptor sets:
+    device.destroyDescriptorPool(sceneDescriptorPool);
+    device.destroyDescriptorSetLayout(sceneDescriptorSetLayout);
+    device.destroyDescriptorPool(modelDescriptorPool);
+    device.destroyDescriptorSetLayout(modelDescriptorSetLayout);
 
     device.destroyPipeline(graphicsPipeline);
     device.destroyPipelineLayout(pipelineLayout);
@@ -105,9 +110,11 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, 
         dynamicStates.data()
     );
 
+    // vk::DescriptorSetLayout descriptorSetLayouts[] = { modelDescriptorSetLayout, sceneDescriptorSetLayout };
     auto pipelineLayoutInfo = vk::PipelineLayoutCreateInfo(
         vk::PipelineLayoutCreateFlags(),
         1, &descriptorSetLayout,        // set layouts
+        //2, descriptorSetLayouts,        // set layouts
         0, nullptr                      // push constant range
     );
 
@@ -142,6 +149,198 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, 
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create graphics pipeline!");
+    }
+}
+
+void vulkanObject::initSceneDescriptorSetLayout() {
+    auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
+        2,                                              // binding
+        vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
+        vk::ShaderStageFlagBits::eVertex,
+        nullptr
+    );
+
+    std::array<vk::DescriptorSetLayoutBinding, 1> bindings = { sceneLayoutBinding };
+
+    auto layoutInfo = vk::DescriptorSetLayoutCreateInfo(
+        vk::DescriptorSetLayoutCreateFlags(),
+        static_cast<uint32_t>(bindings.size()), bindings.data()
+    );
+
+    try {
+        sceneDescriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor set layout!");
+    }
+}
+
+void vulkanObject::initSceneDescriptorPool() {
+    std::array<vk::DescriptorPoolSize, 1> poolSizes = {
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBuffer,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        )
+    };
+
+    auto poolInfo = vk::DescriptorPoolCreateInfo(
+        vk::DescriptorPoolCreateFlags(),
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
+        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
+    );
+
+    try {
+        sceneDescriptorPool = device.createDescriptorPool(poolInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor pool!");
+    }
+}
+
+void vulkanObject::initSceneDescriptorSets(vulkanSceneData* sceneData) {
+    std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, sceneDescriptorSetLayout);
+
+    auto allocInfo = vk::DescriptorSetAllocateInfo(
+        sceneDescriptorPool,
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // descriptor set count
+        layouts.data()                                  // descriptor set layouts
+    );
+
+    sceneDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+
+    try {
+        sceneDescriptorSets = device.allocateDescriptorSets(allocInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor sets!");
+    }
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        auto sceneInfo = vk::DescriptorBufferInfo(
+            sceneData->getUniformBuffers()[i],
+            0, sizeof(sceneUniformBufferObject)                 // offset, range
+        );
+
+        std::array<vk::WriteDescriptorSet, 1> descriptorWrites = {
+            vk::WriteDescriptorSet(
+                sceneDescriptorSets[i], 2, 0,                        // dest set, binding, array element
+                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
+                nullptr,
+                &sceneInfo
+            )
+        };
+
+        device.updateDescriptorSets(descriptorWrites, 0);
+    }
+}
+
+void vulkanObject::initModelDescriptorSetLayout() {
+    auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
+        0,                                              // binding
+        vk::DescriptorType::eUniformBufferDynamic, 1,   // descriptor type, count
+        vk::ShaderStageFlagBits::eVertex,
+        nullptr
+    );
+
+    auto samplerLayoutBinding = vk::DescriptorSetLayoutBinding(
+        1,                                              // bining
+        vk::DescriptorType::eCombinedImageSampler, 1,   // decriptor type, count
+        vk::ShaderStageFlagBits::eFragment,
+        nullptr
+    );
+
+    std::array<vk::DescriptorSetLayoutBinding, 2> bindings = {
+        modelLayoutBinding,
+        samplerLayoutBinding
+    };
+
+    auto layoutInfo = vk::DescriptorSetLayoutCreateInfo(
+        vk::DescriptorSetLayoutCreateFlags(),
+        static_cast<uint32_t>(bindings.size()), bindings.data()
+    );
+
+    try {
+        modelDescriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor set layout!");
+    }
+}
+
+void vulkanObject::initModelDescriptorPool() {
+    std::array<vk::DescriptorPoolSize, 2> poolSizes = {
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBufferDynamic,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        ),
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eCombinedImageSampler,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        )
+    };
+
+    auto poolInfo = vk::DescriptorPoolCreateInfo(
+        vk::DescriptorPoolCreateFlags(),
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
+        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
+    );
+
+    try {
+        modelDescriptorPool = device.createDescriptorPool(poolInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor pool!");
+    }
+}
+
+void vulkanObject::initModelDescriptorSets(
+    vulkanDynamicUniformBuffer* uniformBuffer,
+    vulkanTextureData* textureData
+) {
+    std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, modelDescriptorSetLayout);
+
+    auto allocInfo = vk::DescriptorSetAllocateInfo(
+        modelDescriptorPool,
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // descriptor set count
+        layouts.data()                                  // descriptor set layouts
+    );
+
+    modelDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+
+    try {
+        modelDescriptorSets = device.allocateDescriptorSets(allocInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor sets!");
+    }
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        auto modelInfo = vk::DescriptorBufferInfo(
+            uniformBuffer->getUniformBuffers()[i],
+            0, sizeof(modelUniformBufferObject)                 // offset, range
+        );
+
+        auto imageInfo = vk::DescriptorImageInfo(
+            textureData->getSampler(),
+            textureData->getImageView(),
+            vk::ImageLayout::eShaderReadOnlyOptimal
+        );
+
+        std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {
+            vk::WriteDescriptorSet(
+                modelDescriptorSets[i], 0, 0,                   // dest set, binding, array element
+                1, vk::DescriptorType::eUniformBufferDynamic,   // descriptor count, type
+                nullptr,                                        // image info
+                &modelInfo
+            ),
+            vk::WriteDescriptorSet(
+                modelDescriptorSets[i], 1, 0,                    // dest set, binding, array element
+                1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
+                &imageInfo
+            )
+        };
+
+        device.updateDescriptorSets(descriptorWrites, 0);
     }
 }
 

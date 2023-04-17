@@ -33,10 +33,17 @@ static std::vector<char> readFile(const std::string& filename) {
 
 class vulkanObject {
 private:
-    // Descriptor sets:
+    // Old descriptor sets:
     vk::DescriptorSetLayout descriptorSetLayout;
     vk::DescriptorPool descriptorPool;
     std::vector<vk::DescriptorSet> descriptorSets;
+    // New descriptor sets:
+    vk::DescriptorSetLayout sceneDescriptorSetLayout;
+    vk::DescriptorPool sceneDescriptorPool;
+    std::vector<vk::DescriptorSet> sceneDescriptorSets;
+    vk::DescriptorSetLayout modelDescriptorSetLayout;
+    vk::DescriptorPool modelDescriptorPool;
+    std::vector<vk::DescriptorSet> modelDescriptorSets;
     // Pipeline
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
@@ -49,18 +56,35 @@ public:
     
     void setDevice(vk::Device _device) { device = _device; }
 
+    // Old descriptor sets:
     vk::DescriptorPool getDescriptorPool() { return descriptorPool; }
     std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
+    // New descriptor sets:
+    vk::DescriptorPool getSceneDescriptorPool() { return sceneDescriptorPool; }
+    std::vector<vk::DescriptorSet> getSceneDescriptorSets() { return sceneDescriptorSets; }
+    vk::DescriptorPool getModelDescriptorPool() { return modelDescriptorPool; }
+    std::vector<vk::DescriptorSet> getModelDescriptorSets() { return modelDescriptorSets; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
+    // Old descriptor sets:
     void initDescriptorSetLayout();
     void initDescriptorPool();
     void initDescriptorSets(
         vulkanDynamicUniformBuffer* uniformBuffer,
         vulkanTextureData* textureData,
         vulkanSceneData* sceneData
+    );
+    // New descriptor sets:
+    void initSceneDescriptorSetLayout();
+    void initSceneDescriptorPool();
+    void initSceneDescriptorSets(vulkanSceneData* sceneData);
+    void initModelDescriptorSetLayout();
+    void initModelDescriptorPool();
+    void initModelDescriptorSets(
+        vulkanDynamicUniformBuffer* uniformBuffer,
+        vulkanTextureData* textureData
     );
 
 private:

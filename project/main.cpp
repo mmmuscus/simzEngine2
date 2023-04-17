@@ -104,6 +104,8 @@ private:
         // Descriptor sets:
         obj.setDevice(instance.getDevice());
         obj.initDescriptorSetLayout();
+        /*obj.initSceneDescriptorSetLayout();
+        obj.initModelDescriptorSetLayout();*/
 
         // Pipeline:
         obj.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
@@ -159,6 +161,11 @@ private:
         // Descriptor Pool + Sets:
         obj.initDescriptorPool();
         obj.initDescriptorSets(&modelsBuffer, &roomTextureData, &sceneData);
+        /*obj.initSceneDescriptorPool();
+        obj.initSceneDescriptorSets(&sceneData);
+
+        obj.initModelDescriptorPool();
+        obj.initModelDescriptorSets(&modelsBuffer, &roomTextureData);*/
     }
 
     static void checkVkResult(VkResult err) {
@@ -351,7 +358,7 @@ private:
             );
 
             // record and submit ImGui commandBuffer
-            /*if (!surface.getShouldRecreateSwapChain())
+            if (!surface.getShouldRecreateSwapChain())
             {
                 ImGui_ImplVulkan_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
@@ -374,7 +381,7 @@ private:
                 ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
                 commandBuffer.endRenderPass();
                 instance.endSingleTimeCommands(commandBuffer);
-            }*/
+            }
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());
