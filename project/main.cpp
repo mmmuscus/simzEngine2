@@ -34,7 +34,7 @@ public:
         wndwManager.initWindow();
         wndwManager.initGlfwInputHandling();
         initVulkan();
-        initImGui();
+        // initImGui();
         initScene();
         mainLoop();
         cleanup();
@@ -53,12 +53,15 @@ private:
     vulkanRenderer renderer;
     vulkanDrawer drawer;
     vulkanModelData modelData;
+    vulkanModelData tankModelData;
+    vulkanDynamicUniformBuffer modelsBuffer;
     vulkanTextureData textureData;
     vulkanSceneData sceneData;
 
     // Scene variables:
     scene mainScene;
     object demoObj;
+    object demoObj1;
     camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     // ImGui variables PLS REMOVE
@@ -121,14 +124,21 @@ private:
 
         // Model:
         modelData.loadModel("models/viking_room.objj");
+        tankModelData.loadModel("models/tank.objj");
 
         // Vertex + Index Buffer:
         modelData.setDevice(instance.getDevice());
         modelData.initVertexBuffer(&instance);
         modelData.initIndexBuffer(&instance);
+        tankModelData.setDevice(instance.getDevice());
+        tankModelData.initVertexBuffer(&instance);
+        tankModelData.initIndexBuffer(&instance);
 
         // Uniform Buffer:
-        modelData.initUniformBuffers(&instance);
+        modelsBuffer.setDevice(instance.getDevice());
+        modelsBuffer.initUniformBuffers(&instance);
+        modelData.setDynamicUniformBuffer(&modelsBuffer);
+        tankModelData.setDynamicUniformBuffer(&modelsBuffer);
 
         // Scene Uniform Buffer:
         sceneData.setDevice(instance.getDevice());
@@ -136,7 +146,7 @@ private:
 
         // Descriptor Pool + Sets:
         obj.initDescriptorPool();
-        obj.initDescriptorSets(&modelData, &textureData, &sceneData);
+        obj.initDescriptorSets(&modelsBuffer, &textureData, &sceneData);
 
         // CommandBuffers:
         drawer.setDevice(instance.getDevice());
@@ -283,9 +293,15 @@ private:
         mainScene.setSceneData(&sceneData);
         mainScene.setCam(&cam);
 
-        // Add object
+        // Add objects
         demoObj = object(&obj, &modelData, &textureData);
         mainScene.addObject(&demoObj);
+        
+        demoObj1 = object(&obj, &tankModelData, &textureData);
+        mainScene.addObject(&demoObj1);
+        demoObj1.setPos(glm::vec3(0.0f, 0.0f, 0.5f));
+
+        mainScene.defragmentObjectNumbers();
     }
 
     void mainLoop() {
@@ -294,6 +310,7 @@ private:
 
         while (!glfwWindowShouldClose(wndwManager.getWindow())) {
             inputTimer.updateTime();
+            mainScene.defragmentObjectNumbers();
 
             // Process inputs and update camera
             glfwPollEvents();
@@ -317,8 +334,16 @@ private:
             // Update translation of scene (and its objects)
             mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
 
+            // Record and submit engine command buffer
+            drawer.drawFrame(
+                &surface,
+                &renderer,
+                &mainScene,
+                instance.getGraphicsQueue()
+            );
+
             // record and submit ImGui commandBuffer
-            if (!surface.getShouldRecreateSwapChain())
+            /*if (!surface.getShouldRecreateSwapChain())
             {
                 ImGui_ImplVulkan_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
@@ -341,29 +366,21 @@ private:
                 ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
                 commandBuffer.endRenderPass();
                 instance.endSingleTimeCommands(commandBuffer);
-            }
-
-            // Record and submit engine command buffer
-            drawer.drawFrame(
-                &surface,
-                &renderer,
-                &mainScene,
-                instance.getGraphicsQueue()
-            );
+            }*/
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());
 
-            ImGui::EndFrame();
+            // ImGui::EndFrame();
         }
 
         instance.getDevice().waitIdle();
     }
 
     void cleanup() {
-        ImGui_ImplVulkan_Shutdown();
+        /*ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        ImGui::DestroyContext();*/
     }
 };
 

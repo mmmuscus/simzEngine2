@@ -4,7 +4,7 @@
 #include "generalIncludes.h"
 #include "modelDataIncludes.h"
 
-#include "vulkanModelData.h"
+#include "vulkanDynamicUniformBuffer.h"
 #include "vulkanTextureData.h"
 #include "vulkanSceneData.h"
 
@@ -58,7 +58,7 @@ public:
     void initDescriptorSetLayout();
     void initDescriptorPool();
     void initDescriptorSets(
-        vulkanModelData* modelData,
+        vulkanDynamicUniformBuffer* uniformBuffer,
         vulkanTextureData* textureData,
         vulkanSceneData* sceneData
     );

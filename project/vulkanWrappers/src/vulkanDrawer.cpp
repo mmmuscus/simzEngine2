@@ -109,8 +109,6 @@ void vulkanDrawer::recordCommandBuffer(
     uint32_t imageIndex,
     scene* currScene
 ) {
-    object* gameObject = currScene->getObjects()[0];
-
     auto beginInfo = vk::CommandBufferBeginInfo();
 
     try {
@@ -145,13 +143,10 @@ void vulkanDrawer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
-    std::vector<vk::Buffer> vertexBuffers;
-    for (size_t i = 0; i < currScene->getObjects().size(); i++)
-        vertexBuffers.push_back(currScene->getObjects()[i]->getModelData()->getVertexBuffer());
-    vk::DeviceSize offsets[] = { 0 };
-    commandBuffer.bindVertexBuffers(0, 1, vertexBuffers.data(), offsets);
-
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
+        vk::Buffer vertexBuffers[] = { currScene->getObjects()[i]->getModelData()->getVertexBuffer() };
+        vk::DeviceSize offsets[] = { 0 };
+        commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
         commandBuffer.bindIndexBuffer(currScene->getObjects()[i]->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
         commandBuffer.bindDescriptorSets(
             vk::PipelineBindPoint::eGraphics,
