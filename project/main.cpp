@@ -34,7 +34,7 @@ public:
         wndwManager.initWindow();
         wndwManager.initGlfwInputHandling();
         initVulkan();
-        // initImGui();
+        initImGui();
         initScene();
         mainLoop();
         cleanup();
@@ -245,6 +245,7 @@ private:
             VkFramebufferCreateInfo framebufferInfo = {};
             framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
             framebufferInfo.renderPass = imGuiRenderPass;
+            framebufferInfo.attachmentCount = 1;
             framebufferInfo.pAttachments = attachment;
             framebufferInfo.width = surface.getExtent().width;
             framebufferInfo.height = surface.getExtent().height;
@@ -344,7 +345,9 @@ private:
                 &surface,
                 &renderer,
                 &mainScene,
-                instance.getGraphicsQueue()
+                instance.getGraphicsQueue(),
+                imGuiRenderPass,
+                imGuiFramebuffers[drawer.getImageIndex()]
             );
 
             // record and submit ImGui commandBuffer
@@ -362,7 +365,7 @@ private:
                 clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
                 auto renderPassInfo = vk::RenderPassBeginInfo(
-                    imGuiRenderPass, imGuiFramebuffers[drawer.getImageIdex()],
+                    imGuiRenderPass, imGuiFramebuffers[drawer.getImageIndex()],
                     vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent()),
                     static_cast<uint32_t>(clearValues.size()), clearValues.data()
                 );
@@ -375,17 +378,15 @@ private:
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());
-
-            // ImGui::EndFrame();
         }
 
         instance.getDevice().waitIdle();
     }
 
     void cleanup() {
-        /*ImGui_ImplVulkan_Shutdown();
+        ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();*/
+        ImGui::DestroyContext();
     }
 };
 

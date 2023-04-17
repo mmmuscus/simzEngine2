@@ -33,7 +33,7 @@ public:
 	std::vector<vk::Semaphore> getRenderFinishedSemaphores() { return renderFinishedSemaphores; }
 	std::vector<vk::Fence> getInFlightFences() { return inFlightFences; }
 	size_t getCurrentFrame() { return currentFrame; }
-	uint32_t getImageIdex() { return imageIndex; }
+	uint32_t getImageIndex() { return imageIndex; }
 
 	void resetImageIndex() { imageIndex = 0; }
 	void setDevice(vk::Device _device) { device = _device; }
@@ -49,7 +49,9 @@ public:
 		vulkanSurface* surface,
 		vulkanRenderer* renderer,
 		scene* currScene,
-		vk::Queue graphicsQueue
+		vk::Queue graphicsQueue,
+		vk::RenderPass imGuiRenderPass,
+		vk::Framebuffer imGuiFramebuffer
 	);
 
 	void recordCommandBuffer(

@@ -42,7 +42,7 @@ public:
 	{};
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
-	void setRotationAxis(glm::vec3 _rotation) { rotation = _rotation; }
+	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
