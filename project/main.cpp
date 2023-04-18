@@ -162,6 +162,36 @@ private:
             abort();
     }
 
+    void destroyImGuiFramebuffers() {
+        for (auto framebuffer : imGuiFramebuffers) {
+            instance.getDevice().destroyFramebuffer(framebuffer);
+        }
+    }
+
+    void initImGuiFramebuffers() {
+        imGuiFramebuffers.resize(surface.getImageViews().size());
+
+        for (size_t i = 0; i < surface.getImageViews().size(); i++) {
+            VkImageView attachment[1] = { surface.getImageViews()[i] };
+
+            VkFramebufferCreateInfo framebufferInfo = {};
+            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebufferInfo.renderPass = imGuiRenderPass;
+            framebufferInfo.attachmentCount = 1;
+            framebufferInfo.pAttachments = attachment;
+            framebufferInfo.width = surface.getExtent().width;
+            framebufferInfo.height = surface.getExtent().height;
+            framebufferInfo.layers = 1;
+
+            try {
+                imGuiFramebuffers[i] = instance.getDevice().createFramebuffer(framebufferInfo);
+            }
+            catch (vk::SystemError err) {
+                throw std::runtime_error("failed to create imgui framebuffer!");
+            }
+        }
+    }
+
     void initImGui() {
         // https://frguthmann.github.io/posts/vulkan_imgui/
         
@@ -230,27 +260,7 @@ private:
         }
 
         // FRAMEBUFFERS FOR IMGUI
-        imGuiFramebuffers.resize(surface.getImageViews().size());
-
-        for (size_t i = 0; i < surface.getImageViews().size(); i++) {
-            VkImageView attachment[1] = { surface.getImageViews()[i] };
-
-            VkFramebufferCreateInfo framebufferInfo = {};
-            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = imGuiRenderPass;
-            framebufferInfo.attachmentCount = 1;
-            framebufferInfo.pAttachments = attachment;
-            framebufferInfo.width = surface.getExtent().width;
-            framebufferInfo.height = surface.getExtent().height;
-            framebufferInfo.layers = 1;
-
-            try {
-                imGuiFramebuffers[i] = instance.getDevice().createFramebuffer(framebufferInfo);
-            }
-            catch (vk::SystemError err) {
-                throw std::runtime_error("failed to create imgui framebuffer!");
-            }
-        }
+        initImGuiFramebuffers();
 
         // imgui init
         IMGUI_CHECKVERSION();
@@ -323,6 +333,10 @@ private:
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
+                // ImGui framebuffers recreation:
+                destroyImGuiFramebuffers();
+                initImGuiFramebuffers();
+                // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();
             }
@@ -384,6 +398,10 @@ private:
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+
+        destroyImGuiFramebuffers();
+
+        instance.getDevice().destroyRenderPass(imGuiRenderPass);
     }
 };
 
