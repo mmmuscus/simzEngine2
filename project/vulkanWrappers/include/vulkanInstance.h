@@ -17,6 +17,7 @@ private:
 	vk::UniqueDevice device;
 	// Queues:
 	vk::Queue graphicsQueue;
+	uint32_t graphicsQueueFamily;
 	vk::Queue presentQueue;
 	// CommandPool:
 	vk::CommandPool commandPool;
@@ -37,6 +38,7 @@ public:
 	vk::PhysicalDevice getPhysicalDevice() { return physicalDevice; }
 	vk::Device getDevice() { return device.get(); }
 	vk::Queue getGraphicsQueue() { return graphicsQueue; }
+	uint32_t getGraphicsQueueFamily() { return graphicsQueueFamily; }
 	vk::Queue getPresentQueue() { return presentQueue; }
 	vk::CommandPool getCommandPool() { return commandPool; }
 

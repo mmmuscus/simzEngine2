@@ -22,7 +22,7 @@ void windowManager::initGlfwInputHandling() {
     glfwMakeContextCurrent(window);
     glfwSetCursorPosCallback(window, input.processMouseInput);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void windowManager::framebufferResizeCallback(GLFWwindow* wndw, int height, int width) {

@@ -60,6 +60,8 @@ void vulkanInstance::initDevice() {
     }
 
     graphicsQueue = device->getQueue(indices.graphicsFamily.value(), 0);
+    graphicsQueueFamily = indices.graphicsFamily.value();
+
     presentQueue = device->getQueue(indices.presentFamily.value(), 0);
 }
 

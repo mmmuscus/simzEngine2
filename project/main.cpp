@@ -267,7 +267,7 @@ private:
         info.Instance = instance.getInstance();
         info.PhysicalDevice = instance.getPhysicalDevice();
         info.Device = instance.getDevice();
-        // info.QueueFamily = 
+        info.QueueFamily = instance.getGraphicsQueueFamily();
         info.Queue = instance.getGraphicsQueue();
         info.PipelineCache = VK_NULL_HANDLE;
         info.DescriptorPool = imguiPool;
@@ -344,7 +344,7 @@ private:
             );
 
             // record and submit ImGui commandBuffer
-            /*if (!surface.getShouldRecreateSwapChain())
+            if (!surface.getShouldRecreateSwapChain())
             {
                 ImGui_ImplVulkan_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
@@ -367,7 +367,11 @@ private:
                 ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
                 commandBuffer.endRenderPass();
                 instance.endSingleTimeCommands(commandBuffer);
-            }*/
+
+                ImGui::EndFrame();
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault();
+            }
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());
