@@ -99,6 +99,12 @@
     <ClCompile Include="vulkanWrappers\src\vulkanDynamicUniformBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imGuiWrappers\include\imGuiInstance.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imGuiWrappers\source\imGuiInstanceInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vulkanSurface.h">

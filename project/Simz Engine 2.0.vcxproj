@@ -162,6 +162,8 @@
     <ClCompile Include="external\imGui\imgui_impl_vulkan.cpp" />
     <ClCompile Include="external\imGui\imgui_tables.cpp" />
     <ClCompile Include="external\imGui\imgui_widgets.cpp" />
+    <ClCompile Include="imGuiWrappers\include\imGuiInstance.h" />
+    <ClCompile Include="imGuiWrappers\source\imGuiInstanceInit.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="renderLogic\source\camera.cpp" />
     <ClCompile Include="renderLogic\source\object.cpp" />

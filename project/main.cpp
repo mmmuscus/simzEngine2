@@ -21,11 +21,11 @@
 #include "vulkanWrappers/include/vulkanTextureData.h"
 #include "vulkanWrappers/include/vulkanSceneData.h"
 
+#include "imGuiWrappers/include/imGuiInstance.h"
+
 #include "renderLogic/include/scene.h"
 #include "renderLogic/include/object.h"
 #include "renderLogic/include/camera.h"
-
-const int IMGUI_MIN_IMAGE_COUNT = 2;
 
 class Application {
 public:
@@ -34,7 +34,7 @@ public:
         wndwManager.initWindow();
         wndwManager.initGlfwInputHandling();
         initVulkan();
-        initImGui();
+        imGuiInst.init(wndwManager.getWindow(), &instance, &surface);
         initScene();
         mainLoop();
         cleanup();
@@ -66,6 +66,7 @@ private:
     camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     // ImGui variables PLS REMOVE
+    imGuiInstance imGuiInst;
     vk::RenderPass imGuiRenderPass;
     std::vector<vk::Framebuffer> imGuiFramebuffers;
 
@@ -154,149 +155,6 @@ private:
         obj.initModelDescriptorSets(&modelsBuffer, &roomTextureData);*/
     }
 
-    static void checkVkResult(VkResult err) {
-        if (err == 0)
-            return;
-
-        if (err < 0)
-            abort();
-    }
-
-    void destroyImGuiFramebuffers() {
-        for (auto framebuffer : imGuiFramebuffers) {
-            instance.getDevice().destroyFramebuffer(framebuffer);
-        }
-    }
-
-    void initImGuiFramebuffers() {
-        imGuiFramebuffers.resize(surface.getImageViews().size());
-
-        for (size_t i = 0; i < surface.getImageViews().size(); i++) {
-            VkImageView attachment[1] = { surface.getImageViews()[i] };
-
-            VkFramebufferCreateInfo framebufferInfo = {};
-            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = imGuiRenderPass;
-            framebufferInfo.attachmentCount = 1;
-            framebufferInfo.pAttachments = attachment;
-            framebufferInfo.width = surface.getExtent().width;
-            framebufferInfo.height = surface.getExtent().height;
-            framebufferInfo.layers = 1;
-
-            try {
-                imGuiFramebuffers[i] = instance.getDevice().createFramebuffer(framebufferInfo);
-            }
-            catch (vk::SystemError err) {
-                throw std::runtime_error("failed to create imgui framebuffer!");
-            }
-        }
-    }
-
-    void initImGui() {
-        // https://frguthmann.github.io/posts/vulkan_imgui/
-        
-        // DESCRIPTOR POOL FOR IMGUI:
-        VkDescriptorPoolSize poolSizes[] =
-        {
-            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_FRAMES_IN_FLIGHT }
-        };
-
-        VkDescriptorPoolCreateInfo poolInfo = {};
-        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.maxSets = MAX_FRAMES_IN_FLIGHT;
-        poolInfo.poolSizeCount = std::size(poolSizes);
-        poolInfo.pPoolSizes = poolSizes;
-
-        vk::DescriptorPool imguiPool;
-        try {
-            imguiPool = instance.getDevice().createDescriptorPool(poolInfo);
-        }
-        catch (vk::SystemError err)
-        {
-            throw std::runtime_error("failed to create ImGui descriptor pool!");
-        }
-    
-        // RENDER PASS FOR IMGUI:
-        vk::AttachmentDescription attachment = {};
-        attachment.format = surface.getFormat();
-        attachment.samples = vk::SampleCountFlagBits::e1;
-        attachment.loadOp = vk::AttachmentLoadOp::eLoad;
-        attachment.storeOp = vk::AttachmentStoreOp::eStore;
-        attachment.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
-        attachment.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
-        attachment.initialLayout = vk::ImageLayout::eColorAttachmentOptimal;
-        attachment.finalLayout = vk::ImageLayout::ePresentSrcKHR;
-
-        vk::AttachmentReference color_attachment = {};
-        color_attachment.attachment = 0;
-        color_attachment.layout = vk::ImageLayout::eColorAttachmentOptimal;
-
-        vk::SubpassDescription subpass = {};
-        subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
-        subpass.colorAttachmentCount = 1;
-        subpass.pColorAttachments = &color_attachment;
-
-        vk::SubpassDependency dependency = {};
-        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-        dependency.dstSubpass = 0;
-        dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-        dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-        dependency.srcAccessMask = {};
-        dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
-
-        vk::RenderPassCreateInfo renderPassInfo = {};
-        renderPassInfo.attachmentCount = 1;
-        renderPassInfo.pAttachments = &attachment;
-        renderPassInfo.subpassCount = 1;
-        renderPassInfo.pSubpasses = &subpass;
-        renderPassInfo.dependencyCount = 1;
-        renderPassInfo.pDependencies = &dependency;
-
-        try {
-            imGuiRenderPass = instance.getDevice().createRenderPass(renderPassInfo);
-        } 
-        catch (vk::SystemError err) {
-            throw std::runtime_error("failed to create render pass for imgui!");
-        }
-
-        // FRAMEBUFFERS FOR IMGUI
-        initImGuiFramebuffers();
-
-        // imgui init
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-
-        ImGui::StyleColorsDark();
-
-        ImGui_ImplGlfw_InitForVulkan(wndwManager.getWindow(), true);
-        ImGui_ImplVulkan_InitInfo info;
-        info.Instance = instance.getInstance();
-        info.PhysicalDevice = instance.getPhysicalDevice();
-        info.Device = instance.getDevice();
-        info.QueueFamily = instance.getGraphicsQueueFamily();
-        info.Queue = instance.getGraphicsQueue();
-        info.PipelineCache = VK_NULL_HANDLE;
-        info.DescriptorPool = imguiPool;
-        info.Subpass = 0;
-        info.MinImageCount = IMGUI_MIN_IMAGE_COUNT;
-        info.ImageCount = MAX_FRAMES_IN_FLIGHT;
-        info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; // find conversion between c and cpp impl
-        info.Allocator = nullptr;
-        info.CheckVkResultFn = checkVkResult;
-        ImGui_ImplVulkan_Init(&info, imGuiRenderPass);
-
-        vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
-        ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
-        instance.endSingleTimeCommands(commandBuffer);
-
-        instance.getDevice().waitIdle();
-        ImGui_ImplVulkan_DestroyFontUploadObjects();
-    }
-
     void initScene() {
         // Scene setup:
         mainScene.setSceneData(&sceneData);
@@ -334,8 +192,7 @@ private:
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
                 // ImGui framebuffers recreation:
-                destroyImGuiFramebuffers();
-                initImGuiFramebuffers();
+                imGuiInst.recreateFramebuffers(&surface);
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();
@@ -358,34 +215,7 @@ private:
             );
 
             // record and submit ImGui commandBuffer
-            if (!surface.getShouldRecreateSwapChain())
-            {
-                ImGui_ImplVulkan_NewFrame();
-                ImGui_ImplGlfw_NewFrame();
-                ImGui::NewFrame();
-                ImGui::ShowDemoWindow();
-                ImGui::Render();
-
-                vk::CommandBuffer commandBuffer = instance.beginSingleTimeCommands();
-
-                std::array<vk::ClearValue, 1> clearValues;
-                clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-                auto renderPassInfo = vk::RenderPassBeginInfo(
-                    imGuiRenderPass, imGuiFramebuffers[drawer.getImageIndex()],
-                    vk::Rect2D(vk::Offset2D(0, 0), surface.getExtent()),
-                    static_cast<uint32_t>(clearValues.size()), clearValues.data()
-                );
-
-                commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-                ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
-                commandBuffer.endRenderPass();
-                instance.endSingleTimeCommands(commandBuffer);
-
-                ImGui::EndFrame();
-                ImGui::UpdatePlatformWindows();
-                ImGui::RenderPlatformWindowsDefault();
-            }
+            imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());
@@ -395,13 +225,13 @@ private:
     }
 
     void cleanup() {
-        ImGui_ImplVulkan_Shutdown();
+        /*ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
 
         destroyImGuiFramebuffers();
 
-        instance.getDevice().destroyRenderPass(imGuiRenderPass);
+        instance.getDevice().destroyRenderPass(imGuiRenderPass);*/
     }
 };
 
