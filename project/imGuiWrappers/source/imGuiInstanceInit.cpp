@@ -26,16 +26,18 @@ void imGuiInstance::init(
 }
 
 vk::DescriptorPool imGuiInstance::initDescriptorPool() {
-    VkDescriptorPoolSize poolSizes[] =
-    {
-        { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_FRAMES_IN_FLIGHT }
+    std::array<vk::DescriptorPoolSize, 1> poolSizes = {
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eCombinedImageSampler,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        )
     };
 
-    VkDescriptorPoolCreateInfo poolInfo = {};
-    poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    poolInfo.maxSets = MAX_FRAMES_IN_FLIGHT;
-    poolInfo.poolSizeCount = std::size(poolSizes);
-    poolInfo.pPoolSizes = poolSizes;
+    auto poolInfo = vk::DescriptorPoolCreateInfo(
+        vk::DescriptorPoolCreateFlags(),
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),
+        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
+    );
 
     vk::DescriptorPool imGuiPool;
     try {
@@ -50,40 +52,42 @@ vk::DescriptorPool imGuiInstance::initDescriptorPool() {
 }
 
 void imGuiInstance::initRenderPass(vk::Format format) {
-    vk::AttachmentDescription attachment = {};
-    attachment.format = format;
-    attachment.samples = vk::SampleCountFlagBits::e1;
-    attachment.loadOp = vk::AttachmentLoadOp::eLoad;
-    attachment.storeOp = vk::AttachmentStoreOp::eStore;
-    attachment.stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
-    attachment.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
-    attachment.initialLayout = vk::ImageLayout::eColorAttachmentOptimal;
-    attachment.finalLayout = vk::ImageLayout::ePresentSrcKHR;
+    auto attachment = vk::AttachmentDescription(
+        vk::AttachmentDescriptionFlags(),
+        format,
+        vk::SampleCountFlagBits::e1,
+        vk::AttachmentLoadOp::eLoad,
+        vk::AttachmentStoreOp::eStore,
+        vk::AttachmentLoadOp::eDontCare,
+        vk::AttachmentStoreOp::eDontCare,
+        vk::ImageLayout::eColorAttachmentOptimal,
+        vk::ImageLayout::ePresentSrcKHR
+    );
 
-    vk::AttachmentReference color_attachment = {};
-    color_attachment.attachment = 0;
-    color_attachment.layout = vk::ImageLayout::eColorAttachmentOptimal;
+    auto colorAttachment = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
 
-    vk::SubpassDescription subpass = {};
-    subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
-    subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &color_attachment;
+    auto subpass = vk::SubpassDescription(
+        vk::SubpassDescriptionFlags(),
+        vk::PipelineBindPoint::eGraphics,
+        0, nullptr,
+        1, &colorAttachment
+    );
 
-    vk::SubpassDependency dependency = {};
-    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    dependency.dstSubpass = 0;
-    dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    dependency.srcAccessMask = {};
-    dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+    auto dependency = vk::SubpassDependency(
+        static_cast<uint32_t>(VK_SUBPASS_EXTERNAL),
+        static_cast<uint32_t>(0),
+        vk::PipelineStageFlagBits::eColorAttachmentOutput,
+        vk::PipelineStageFlagBits::eColorAttachmentOutput,
+        static_cast<vk::AccessFlagBits>(0),
+        vk::AccessFlagBits::eColorAttachmentWrite
+    );
 
-    vk::RenderPassCreateInfo renderPassInfo = {};
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = &attachment;
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpass;
-    renderPassInfo.dependencyCount = 1;
-    renderPassInfo.pDependencies = &dependency;
+    auto renderPassInfo = vk::RenderPassCreateInfo(
+        vk::RenderPassCreateFlags(),
+        1, &attachment,
+        1, &subpass,
+        1, &dependency
+    );
 
     try {
         renderPass = device.createRenderPass(renderPassInfo);
@@ -94,21 +98,18 @@ void imGuiInstance::initRenderPass(vk::Format format) {
 }
 
 void imGuiInstance::initFramebuffers(vulkanSurface* surface) {
-    size_t imageViewsSize = surface->getImageViews().size();
+    framebuffers.resize(surface->getImageViews().size());
 
-    framebuffers.resize(imageViewsSize);
+    for (size_t i = 0; i < surface->getImageViews().size(); i++) {
+        std::array<vk::ImageView, 1> attachment = { surface->getImageViews()[i] };
 
-    for (size_t i = 0; i < imageViewsSize; i++) {
-        VkImageView attachment[1] = { surface->getImageViews()[i] };
-
-        VkFramebufferCreateInfo framebufferInfo = {};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = 1;
-        framebufferInfo.pAttachments = attachment;
-        framebufferInfo.width = surface->getExtent().width;
-        framebufferInfo.height = surface->getExtent().height;
-        framebufferInfo.layers = 1;
+        auto framebufferInfo = vk::FramebufferCreateInfo(
+            vk::FramebufferCreateFlags(),
+            renderPass,
+            static_cast<uint32_t>(attachment.size()), attachment.data(),
+            surface->getExtent().width, surface->getExtent().height,
+            1
+        );
 
         try {
             framebuffers[i] = device.createFramebuffer(framebufferInfo);
