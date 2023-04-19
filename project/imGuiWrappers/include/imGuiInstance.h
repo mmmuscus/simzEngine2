@@ -1,14 +1,9 @@
 #ifndef IMGUI_INSTANCE_H_
 #define IMGUI_INSTANCE_H_
 
-#include "../../vulkanWrappers/include/generalIncludes.h"
+#include "imGuiWrappersGeneralIncludes.h"
+
 #include "../../vulkanWrappers/include/vulkanSurface.h"
-
-#include <imGui/imgui.h>
-#include <imGui/imgui_impl_glfw.h>
-#include <imGui/imgui_impl_vulkan.h>
-
-const int IMGUI_MIN_IMAGE_COUNT = 2;
 
 class imGuiInstance {
 private:
@@ -31,8 +26,6 @@ public:
 		vulkanSurface* surface
 	);
 
-	static void checkVkResult(VkResult err);
-
 	void recreateFramebuffers(vulkanSurface* surface);
 
 	void drawFrame(
@@ -46,6 +39,7 @@ private:
 	void initRenderPass(vk::Format format);
 	void initFramebuffers(vulkanSurface* surface);
 	void initImGui(GLFWwindow* window, vulkanInstance* instance);
+	static void checkVkResult(VkResult err);
 
 	void destroyFramebuffers();
 

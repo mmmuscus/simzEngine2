@@ -163,6 +163,8 @@
     <ClCompile Include="external\imGui\imgui_tables.cpp" />
     <ClCompile Include="external\imGui\imgui_widgets.cpp" />
     <ClCompile Include="imGuiWrappers\include\imGuiInstance.h" />
+    <ClCompile Include="imGuiWrappers\source\imGuiInstanceDrawer.cpp" />
+    <ClCompile Include="imGuiWrappers\source\imGuiInstanceGui.cpp" />
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceInit.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="renderLogic\source\camera.cpp" />
@@ -191,6 +193,7 @@
     <ClInclude Include="external\imGui\imstb_textedit.h" />
     <ClInclude Include="external\imGui\imstb_truetype.h" />
     <ClInclude Include="general\include\timer.h" />
+    <ClInclude Include="imGuiWrappers\include\imGuiWrappersGeneralIncludes.h" />
     <ClInclude Include="renderLogic\include\camera.h" />
     <ClInclude Include="renderLogic\include\object.h" />
     <ClInclude Include="renderLogic\include\scene.h" />

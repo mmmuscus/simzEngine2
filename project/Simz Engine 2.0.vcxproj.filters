@@ -105,6 +105,12 @@
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceInit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imGuiWrappers\source\imGuiInstanceDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imGuiWrappers\source\imGuiInstanceGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vulkanSurface.h">
@@ -171,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\vulkanDynamicUniformBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imGuiWrappers\include\imGuiWrappersGeneralIncludes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
