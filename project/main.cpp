@@ -141,13 +141,8 @@ private:
         roomMeshData.init("models/viking_room.objj", &instance, &modelsBuffer);
         tankMeshData.init("models/tank.objj", &instance, &modelsBuffer);
 
-        // Scene Uniform Buffer:
-        sceneData.setDevice(instance.getDevice());
-        sceneData.initUniformBuffers(&instance);
-
-        // Descriptor Pool + Sets:
-        sceneData.initDescriptorPool();
-        sceneData.initDescriptorSets(obj.getSceneDescriptorSetLayout());
+        // Scene init (uniform buffer + descriptor sets)
+        sceneData.init(&instance, obj.getSceneDescriptorSetLayout());
 
         // Model datas:
         roomModelData.setDevice(instance.getDevice());

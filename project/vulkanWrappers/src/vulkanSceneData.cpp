@@ -9,6 +9,13 @@ vulkanSceneData::~vulkanSceneData() {
     }
 }
 
+void vulkanSceneData::init(vulkanInstance* instance, vk::DescriptorSetLayout descriptorSetLayout) {
+    device = instance->getDevice();
+    initUniformBuffers(instance);
+    initDescriptorPool();
+    initDescriptorSets(descriptorSetLayout);
+}
+
 void vulkanSceneData::initUniformBuffers(vulkanInstance* instance) {
     vk::DeviceSize bufferSize = sizeof(sceneUniformBufferObject);
 

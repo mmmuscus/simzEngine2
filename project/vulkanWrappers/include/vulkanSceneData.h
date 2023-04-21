@@ -34,6 +34,7 @@ public:
 
 	std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
+	void init(vulkanInstance* instance, vk::DescriptorSetLayout descriptorSetLayout);
 	void initUniformBuffers(vulkanInstance* instance);
 	void initDescriptorPool();
 	void initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout);
