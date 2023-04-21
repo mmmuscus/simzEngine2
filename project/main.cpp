@@ -75,9 +75,8 @@ private:
     std::vector<vk::Framebuffer> imGuiFramebuffers;
 
     void initVulkan() {
+        // Instance:
         instance.listExtensions();
-
-         // Instance:
         instance.initInstance();
         instance.initCallback();
 
@@ -124,8 +123,7 @@ private:
         instance.initCommandPool();
 
         // Textures:
-        textureSampler.setDevice(instance.getDevice());
-        textureSampler.init(instance.getPhysicalDevice());
+        textureSampler.init(instance.getDevice(), instance.getPhysicalDevice());
         roomTextureData.setSampler(&textureSampler);
         roomTextureData.init("textures/viking_room.png", &instance);
         tankTextureData.setSampler(&textureSampler);

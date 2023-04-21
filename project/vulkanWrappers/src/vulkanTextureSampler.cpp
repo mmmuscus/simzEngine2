@@ -4,7 +4,12 @@ vulkanTextureSampler::~vulkanTextureSampler() {
 	device.destroySampler(sampler);
 }
 
-void vulkanTextureSampler::init(vk::PhysicalDevice physicalDevice) {
+void vulkanTextureSampler::init(vk::Device _device, vk::PhysicalDevice physicalDevice) {
+    device = _device;
+    initSampler(physicalDevice);
+}
+
+void vulkanTextureSampler::initSampler(vk::PhysicalDevice physicalDevice) {
     vk::PhysicalDeviceProperties properties = physicalDevice.getProperties();
 
     auto samplerInfo = vk::SamplerCreateInfo(

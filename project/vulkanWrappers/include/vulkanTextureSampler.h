@@ -17,9 +17,10 @@ public:
 
 	vk::Sampler get() { return sampler; }
 
-	void init(vk::PhysicalDevice physicalDevice);
+	void init(vk::Device _device, vk::PhysicalDevice physicalDevice);
 
 private:
+	void initSampler(vk::PhysicalDevice physicalDevice);
 
 };
 
