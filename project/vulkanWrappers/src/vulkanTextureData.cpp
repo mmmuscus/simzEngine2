@@ -1,17 +1,15 @@
 #include "../include/vulkanTextureData.h"
 
 vulkanTextureData::~vulkanTextureData() {
-    device.destroySampler(textureSampler);
-    device.destroyImageView(textureImageView);
-    device.destroyImage(textureImage);
-    device.freeMemory(textureImageMemory);
+    device.destroyImageView(imageView);
+    device.destroyImage(image);
+    device.freeMemory(imageMemory);
 }
 
 void vulkanTextureData::init(std::string texturePath, vulkanInstance* instance) {
     device = instance->getDevice();
     initTextureImage(texturePath, instance);
     initTextureImageView(instance);
-    initTextureSampler(instance->getPhysicalDevice());
 }
 
 void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance* instance) {
@@ -52,17 +50,17 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransferSrc | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal,
-        textureImage, textureImageMemory
+        image, imageMemory
     );
 
     transitionImageLayout(
-        textureImage, vk::Format::eR8G8B8A8Srgb,
+        image, vk::Format::eR8G8B8A8Srgb,
         vk::ImageLayout(), vk::ImageLayout::eTransferDstOptimal,
         mipLevels,
         instance
     );
     copyBufferToImage(
-        stagingBuffer, textureImage,
+        stagingBuffer, image,
         static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight),
         instance
     );
@@ -71,7 +69,7 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
     device.freeMemory(stagingBufferMemory);
 
     generateMipmaps(
-        textureImage, vk::Format::eR8G8B8A8Srgb,
+        image, vk::Format::eR8G8B8A8Srgb,
         texWidth, texHeight,
         mipLevels,
         instance
@@ -79,34 +77,7 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
 }
 
 void vulkanTextureData::initTextureImageView(vulkanInstance* instance) {
-    textureImageView = instance->initImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor, mipLevels);
-}
-
-void vulkanTextureData::initTextureSampler(vk::PhysicalDevice physicalDevice) {
-    vk::PhysicalDeviceProperties properties = physicalDevice.getProperties();
-
-    auto samplerInfo = vk::SamplerCreateInfo(
-        vk::SamplerCreateFlags(),
-        vk::Filter::eLinear, vk::Filter::eLinear,   // mag, min filter
-        vk::SamplerMipmapMode::eLinear,
-        vk::SamplerAddressMode::eRepeat,
-        vk::SamplerAddressMode::eRepeat,
-        vk::SamplerAddressMode::eRepeat,
-        0,
-        VK_TRUE,
-        properties.limits.maxSamplerAnisotropy,
-        VK_FALSE, vk::CompareOp::eAlways,           // compare op enable, compare op
-        0, static_cast<float>(mipLevels),           // min, max Lod
-        vk::BorderColor::eIntOpaqueBlack,
-        VK_FALSE
-    );
-
-    try {
-        textureSampler = device.createSampler(samplerInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create texture sampler!");
-    }
+    imageView = instance->initImageView(image, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor, mipLevels);
 }
 
 void vulkanTextureData::transitionImageLayout(

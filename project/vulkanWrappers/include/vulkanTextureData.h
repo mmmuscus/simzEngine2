@@ -12,10 +12,9 @@ class vulkanTextureData {
 private:
     // Textures:
     uint32_t mipLevels;
-    vk::Image textureImage;
-    vk::DeviceMemory textureImageMemory;
-    vk::ImageView textureImageView;
-    vk::Sampler textureSampler;
+    vk::Image image;
+    vk::DeviceMemory imageMemory;
+    vk::ImageView imageView;
 
     // Sampler
     vulkanTextureSampler* sampler;
@@ -29,7 +28,7 @@ public:
     void setDevice(vk::Device _device) { device = _device; }
     void setSampler(vulkanTextureSampler* _sampler) { sampler = _sampler; }
 
-    vk::ImageView getImageView() { return textureImageView; }
+    vk::ImageView getImageView() { return imageView; }
     vulkanTextureSampler* getSampler() { return sampler; }
 
     void init(std::string texturePath, vulkanInstance* instance);
@@ -37,7 +36,6 @@ public:
 private:
     void initTextureImage(std::string texturePath, vulkanInstance* instance);
     void initTextureImageView(vulkanInstance* instance);
-    void initTextureSampler(vk::PhysicalDevice physicalDevice);
 
     void transitionImageLayout(
         vk::Image image, vk::Format format,
