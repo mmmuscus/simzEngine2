@@ -31,7 +31,11 @@ public:
     vk::ImageView getImageView() { return imageView; }
     vulkanTextureSampler* getSampler() { return sampler; }
 
-    void init(std::string texturePath, vulkanInstance* instance);
+    void init(
+        std::string texturePath,
+        vulkanInstance* instance,
+        vulkanTextureSampler* _sampler
+    );
 
 private:
     void initTextureImage(std::string texturePath, vulkanInstance* instance);

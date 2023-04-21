@@ -124,10 +124,8 @@ private:
 
         // Textures:
         textureSampler.init(instance.getDevice(), instance.getPhysicalDevice());
-        roomTextureData.setSampler(&textureSampler);
-        roomTextureData.init("textures/viking_room.png", &instance);
-        tankTextureData.setSampler(&textureSampler);
-        tankTextureData.init("textures/demo_texture.jpg", &instance);
+        roomTextureData.init("textures/viking_room.png", &instance, &textureSampler);
+        tankTextureData.init("textures/demo_texture.jpg", &instance, &textureSampler);
 
         // Models:
         roomMeshData.init("models/viking_room.objj", &instance);

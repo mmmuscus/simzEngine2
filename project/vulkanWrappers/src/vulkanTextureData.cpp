@@ -6,8 +6,13 @@ vulkanTextureData::~vulkanTextureData() {
     device.freeMemory(imageMemory);
 }
 
-void vulkanTextureData::init(std::string texturePath, vulkanInstance* instance) {
+void vulkanTextureData::init(
+    std::string texturePath, 
+    vulkanInstance* instance, 
+    vulkanTextureSampler* _sampler
+) {
     device = instance->getDevice();
+    sampler = _sampler;
     initTextureImage(texturePath, instance);
     initTextureImageView(instance);
 }
