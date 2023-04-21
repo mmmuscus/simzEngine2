@@ -57,6 +57,7 @@ private:
     vulkanDynamicUniformBuffer modelsBuffer;
     vulkanTextureData roomTextureData;
     vulkanTextureData tankTextureData;
+    vulkanTextureSampler textureSampler;
     vulkanSceneData sceneData;
 
     // Scene variables:
@@ -120,7 +121,11 @@ private:
         instance.initCommandPool();
 
         // Textures:
+        textureSampler.setDevice(instance.getDevice());
+        textureSampler.init(instance.getPhysicalDevice());
+        roomTextureData.setSampler(&textureSampler);
         roomTextureData.init("textures/viking_room.png", &instance);
+        tankTextureData.setSampler(&textureSampler);
         tankTextureData.init("textures/demo_texture.jpg", &instance);
 
         // Models:

@@ -4,6 +4,7 @@
 #include "generalIncludes.h"
 
 #include "vulkanInstance.h"
+#include "vulkanTextureSampler.h"
 
 #include <stb/stb_image.h>
 
@@ -16,6 +17,9 @@ private:
     vk::ImageView textureImageView;
     vk::Sampler textureSampler;
 
+    // Sampler
+    vulkanTextureSampler* sampler;
+
     // Not maintained by the class:
     vk::Device device;
 
@@ -23,9 +27,10 @@ public:
     ~vulkanTextureData();
 
     void setDevice(vk::Device _device) { device = _device; }
+    void setSampler(vulkanTextureSampler* _sampler) { sampler = _sampler; }
 
     vk::ImageView getImageView() { return textureImageView; }
-    vk::Sampler getSampler() { return textureSampler; }
+    vulkanTextureSampler* getSampler() { return sampler; }
 
     void init(std::string texturePath, vulkanInstance* instance);
 

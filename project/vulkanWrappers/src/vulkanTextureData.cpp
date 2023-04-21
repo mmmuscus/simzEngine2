@@ -24,6 +24,7 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         STBI_rgb_alpha);
     vk::DeviceSize imageSize = texWidth * texHeight * 4;
     mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
+    //mipLevels = 4;
 
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");

@@ -111,6 +111,9 @@
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vulkanWrappers\src\vulkanTextureSampler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vulkanWrappers\include\vulkanSurface.h">
@@ -180,6 +183,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imGuiWrappers\include\imGuiWrappersGeneralIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vulkanWrappers\include\vulkanTextureSampler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

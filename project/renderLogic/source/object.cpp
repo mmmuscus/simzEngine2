@@ -61,7 +61,7 @@ void object::initDescriptorSets() {
         );
 
         auto imageInfo = vk::DescriptorImageInfo(
-            textureData->getSampler(),
+            textureData->getSampler()->get(),
             textureData->getImageView(),
             vk::ImageLayout::eShaderReadOnlyOptimal
         );
