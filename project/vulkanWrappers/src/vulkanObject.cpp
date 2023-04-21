@@ -4,7 +4,6 @@ vulkanObject::~vulkanObject() {
     // Descriptor sets:
     device.destroyDescriptorPool(sceneDescriptorPool);
     device.destroyDescriptorSetLayout(sceneDescriptorSetLayout);
-    device.destroyDescriptorPool(modelDescriptorPool);
     device.destroyDescriptorSetLayout(modelDescriptorSetLayout);
 
     device.destroyPipeline(graphicsPipeline);
@@ -261,83 +260,6 @@ void vulkanObject::initModelDescriptorSetLayout() {
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor set layout!");
-    }
-}
-
-void vulkanObject::initModelDescriptorPool() {
-    std::array<vk::DescriptorPoolSize, 2> poolSizes = {
-        vk::DescriptorPoolSize(
-            vk::DescriptorType::eUniformBufferDynamic,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
-        ),
-        vk::DescriptorPoolSize(
-            vk::DescriptorType::eCombinedImageSampler,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
-        )
-    };
-
-    auto poolInfo = vk::DescriptorPoolCreateInfo(
-        vk::DescriptorPoolCreateFlags(),
-        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
-        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
-    );
-
-    try {
-        modelDescriptorPool = device.createDescriptorPool(poolInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create descriptor pool!");
-    }
-}
-
-void vulkanObject::initModelDescriptorSets(
-    vulkanDynamicUniformBuffer* uniformBuffer,
-    vulkanTextureData* textureData
-) {
-    std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, modelDescriptorSetLayout);
-
-    auto allocInfo = vk::DescriptorSetAllocateInfo(
-        modelDescriptorPool,
-        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // descriptor set count
-        layouts.data()                                  // descriptor set layouts
-    );
-
-    modelDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-
-    try {
-        modelDescriptorSets = device.allocateDescriptorSets(allocInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create descriptor sets!");
-    }
-
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        auto modelInfo = vk::DescriptorBufferInfo(
-            uniformBuffer->getUniformBuffers()[i],
-            0, sizeof(modelUniformBufferObject)                 // offset, range
-        );
-
-        auto imageInfo = vk::DescriptorImageInfo(
-            textureData->getSampler(),
-            textureData->getImageView(),
-            vk::ImageLayout::eShaderReadOnlyOptimal
-        );
-
-        std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {
-            vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 0, 0,                   // dest set, binding, array element
-                1, vk::DescriptorType::eUniformBufferDynamic,   // descriptor count, type
-                nullptr,                                        // image info
-                &modelInfo
-            ),
-            vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 1, 0,                   // dest set, binding, array element
-                1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
-                &imageInfo
-            )
-        };
-
-        device.updateDescriptorSets(descriptorWrites, 0);
     }
 }
 

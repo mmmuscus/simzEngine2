@@ -147,8 +147,6 @@ private:
         // Descriptor Pool + Sets:
         obj.initSceneDescriptorPool();
         obj.initSceneDescriptorSets(&sceneData);
-        obj.initModelDescriptorPool();
-        obj.initModelDescriptorSets(&modelsBuffer, &roomTextureData);
     }
 
     void initScene() {

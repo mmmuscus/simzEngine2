@@ -38,8 +38,6 @@ private:
     vk::DescriptorPool sceneDescriptorPool;
     std::vector<vk::DescriptorSet> sceneDescriptorSets;
     vk::DescriptorSetLayout modelDescriptorSetLayout;
-    vk::DescriptorPool modelDescriptorPool;
-    std::vector<vk::DescriptorSet> modelDescriptorSets;
     // Pipeline
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
@@ -56,8 +54,6 @@ public:
     vk::DescriptorPool getSceneDescriptorPool() { return sceneDescriptorPool; }
     std::vector<vk::DescriptorSet> getSceneDescriptorSets() { return sceneDescriptorSets; }
     vk::DescriptorSetLayout getModelDescriptorSetLayout() { return modelDescriptorSetLayout; }
-    vk::DescriptorPool getModelDescriptorPool() { return modelDescriptorPool; }
-    std::vector<vk::DescriptorSet> getModelDescriptorSets() { return modelDescriptorSets; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vk::Device getDevice() { return device; }
