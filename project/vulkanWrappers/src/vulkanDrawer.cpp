@@ -155,7 +155,7 @@ void vulkanDrawer::recordCommandBuffer(
 
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
         object* currObject = currScene->getObjects()[i];
-        vulkanMeshData* currMesh = currObject->getMeshData();
+        vulkanMeshData* currMesh = currObject->getModelData()->getMeshData();
         vk::Buffer vertexBuffers[] = { currMesh->getVertexBuffer() };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
@@ -164,7 +164,7 @@ void vulkanDrawer::recordCommandBuffer(
             vk::PipelineBindPoint::eGraphics,
             obj->getPipelineLayout(),
             1,
-            currObject->getDescriptorSets()[currentFrame],
+            currObject->getModelData()->getDescriptorSets()[currentFrame],
             currObject->getObjectNumber() * static_cast<uint32_t>(currMesh->getUniformBuffer()->getDynamicAlignment())
         );
         commandBuffer.drawIndexed(

@@ -175,10 +175,10 @@ private:
         mainScene.setCam(&cam);
 
         // Add objects
-        roomObj = object(&obj, &roomMeshData, &roomTextureData);
+        roomObj = object(&obj, &roomModelData);
         mainScene.addObject(&roomObj);
         
-        tankObj = object(&obj, &tankMeshData, &tankTextureData);
+        tankObj = object(&obj, &tankModelData);
         mainScene.addObject(&tankObj);
         tankObj.setPos(glm::vec3(0.0f, 0.0f, 0.5f));
 

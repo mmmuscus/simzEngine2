@@ -6,6 +6,7 @@
 #include "../../vulkanWrappers/include/vulkanObject.h"
 #include "../../vulkanWrappers/include/vulkanMeshData.h"
 #include "../../vulkanWrappers/include/vulkanTextureData.h"
+#include "../../vulkanWrappers/include/vulkanModelData.h"
 
 class object {
 private:
@@ -21,31 +22,20 @@ private:
 	// timer
 	timer* sceneTimer;
 
-	// Descriptor set:
-	vk::DescriptorPool descriptorPool;
-	std::vector<vk::DescriptorSet> descriptorSets;
-	// Helper for descturctors
-	vk::Device device;
-
 	// vulkan buffers, pipeline
 	vulkanObject* vkObject;
-	vulkanMeshData* meshData;
-	vulkanTextureData* textureData;
+	vulkanModelData* modelData;
 
 public:
-	~object();
-
-	object() : sceneTimer(nullptr), vkObject(nullptr), meshData(nullptr), textureData(nullptr) {}
+	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr) {}
 	object(
 		vulkanObject* _vkObject,
-		vulkanMeshData* _meshData,
-		vulkanTextureData* _textureData
+		vulkanModelData* _modelData
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject),
-		meshData(_meshData),
-		textureData(_textureData)
-	{ initDescriptors(); };
+		modelData(_modelData)
+	{};
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
@@ -53,23 +43,16 @@ public:
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
-	void setMeshData(vulkanMeshData* _meshData) { meshData = _meshData; }
-	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
+	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 
 	uint32_t getObjectNumber() { return objectNumber; }
-	std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
 	vulkanObject* getVulkanObject() { return vkObject; }
-	vulkanMeshData* getMeshData() { return meshData; }
-	vulkanTextureData* getTextureData() { return textureData; }
-
-	void initDescriptors();
+	vulkanModelData* getModelData() { return modelData; }
 
 	void updateTranslationVectors();
 	void updateModelTranslation(uint32_t currentFrame);
 
 private:
-	void initDescriptorPool();
-	void initDescriptorSets();
 
 };
 
