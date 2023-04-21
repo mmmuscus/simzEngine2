@@ -1,6 +1,8 @@
 #include "../include/vulkanSceneData.h"
 
 vulkanSceneData::~vulkanSceneData() {
+    device.destroyDescriptorPool(descriptorPool);
+
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroyBuffer(uniformBuffers[i]);
         device.freeMemory(uniformBuffersMemory[i]);

@@ -1,8 +1,7 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
-    // Descriptor sets:
-    device.destroyDescriptorPool(sceneDescriptorPool);
+    // Descriptor set Layouts:
     device.destroyDescriptorSetLayout(sceneDescriptorSetLayout);
     device.destroyDescriptorSetLayout(modelDescriptorSetLayout);
 
@@ -168,65 +167,6 @@ void vulkanObject::initSceneDescriptorSetLayout() {
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor set layout!");
-    }
-}
-
-void vulkanObject::initSceneDescriptorPool() {
-    std::array<vk::DescriptorPoolSize, 1> poolSizes = {
-        vk::DescriptorPoolSize(
-            vk::DescriptorType::eUniformBuffer,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
-        )
-    };
-
-    auto poolInfo = vk::DescriptorPoolCreateInfo(
-        vk::DescriptorPoolCreateFlags(),
-        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
-        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
-    );
-
-    try {
-        sceneDescriptorPool = device.createDescriptorPool(poolInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create descriptor pool!");
-    }
-}
-
-void vulkanObject::initSceneDescriptorSets(vulkanSceneData* sceneData) {
-    std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, sceneDescriptorSetLayout);
-
-    auto allocInfo = vk::DescriptorSetAllocateInfo(
-        sceneDescriptorPool,
-        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // descriptor set count
-        layouts.data()                                  // descriptor set layouts
-    );
-
-    sceneDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-
-    try {
-        sceneDescriptorSets = device.allocateDescriptorSets(allocInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create descriptor sets!");
-    }
-
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        auto sceneInfo = vk::DescriptorBufferInfo(
-            sceneData->getUniformBuffers()[i],
-            0, sizeof(sceneUniformBufferObject)                 // offset, range
-        );
-
-        std::array<vk::WriteDescriptorSet, 1> descriptorWrites = {
-            vk::WriteDescriptorSet(
-                sceneDescriptorSets[i], 0, 0,                   // dest set, binding, array element
-                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
-                nullptr,
-                &sceneInfo
-            )
-        };
-
-        device.updateDescriptorSets(descriptorWrites, 0);
     }
 }
 

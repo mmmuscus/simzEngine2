@@ -35,8 +35,6 @@ class vulkanObject {
 private:
     // Descriptor set layouts:
     vk::DescriptorSetLayout sceneDescriptorSetLayout;
-    vk::DescriptorPool sceneDescriptorPool;
-    std::vector<vk::DescriptorSet> sceneDescriptorSets;
     vk::DescriptorSetLayout modelDescriptorSetLayout;
     // Pipeline
     vk::PipelineLayout pipelineLayout;
@@ -51,7 +49,6 @@ public:
     void setDevice(vk::Device _device) { device = _device; }
 
     // Descriptor set layouts:
-    std::vector<vk::DescriptorSet> getSceneDescriptorSets() { return sceneDescriptorSets; }
     vk::DescriptorSetLayout getSceneDescriptorSetLayout() { return sceneDescriptorSetLayout; }
     vk::DescriptorSetLayout getModelDescriptorSetLayout() { return modelDescriptorSetLayout; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
@@ -61,8 +58,6 @@ public:
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
     // Descriptor set layouts:
     void initSceneDescriptorSetLayout();
-    void initSceneDescriptorPool();
-    void initSceneDescriptorSets(vulkanSceneData* sceneData);
     void initModelDescriptorSetLayout();
 
 private:

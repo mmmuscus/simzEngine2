@@ -145,8 +145,6 @@ private:
         drawer.initSyncObjects();
 
         // Descriptor Pool + Sets:
-        obj.initSceneDescriptorPool();
-        obj.initSceneDescriptorSets(&sceneData);
         sceneData.initDescriptorPool();
         sceneData.initDescriptorSets(obj.getSceneDescriptorSetLayout());
     }
