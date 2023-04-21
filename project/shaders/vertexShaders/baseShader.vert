@@ -2,12 +2,12 @@
 
 #extension GL_KHR_vulkan_glsl : enable
 
-layout(binding = 0) uniform sceneBufferObject {
+layout(set = 0, binding = 0) uniform sceneBufferObject {
     mat4 view;
     mat4 proj;
 } sbo;
 
-layout(binding = 1) uniform UniformBufferObject {
+layout(set = 1, binding = 0) uniform UniformBufferObject {
     mat4 model;
 } ubo;
 

@@ -110,11 +110,11 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, 
         dynamicStates.data()
     );
 
-    // vk::DescriptorSetLayout descriptorSetLayouts[] = { modelDescriptorSetLayout, sceneDescriptorSetLayout };
+    vk::DescriptorSetLayout descriptorSetLayouts[] = { sceneDescriptorSetLayout, modelDescriptorSetLayout };
     auto pipelineLayoutInfo = vk::PipelineLayoutCreateInfo(
         vk::PipelineLayoutCreateFlags(),
-        1, &descriptorSetLayout,        // set layouts
-        //2, descriptorSetLayouts,        // set layouts
+        //1, &descriptorSetLayout,        // set layouts
+        2, descriptorSetLayouts,        // set layouts
         0, nullptr                      // push constant range
     );
 
@@ -236,14 +236,14 @@ void vulkanObject::initSceneDescriptorSets(vulkanSceneData* sceneData) {
 
 void vulkanObject::initModelDescriptorSetLayout() {
     auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
-        1,                                              // binding
+        0,                                              // binding
         vk::DescriptorType::eUniformBufferDynamic, 1,   // descriptor type, count
         vk::ShaderStageFlagBits::eVertex,
         nullptr
     );
 
     auto samplerLayoutBinding = vk::DescriptorSetLayoutBinding(
-        2,                                              // bining
+        1,                                              // binding
         vk::DescriptorType::eCombinedImageSampler, 1,   // decriptor type, count
         vk::ShaderStageFlagBits::eFragment,
         nullptr
@@ -328,13 +328,13 @@ void vulkanObject::initModelDescriptorSets(
 
         std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {
             vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 1, 0,                   // dest set, binding, array element
+                modelDescriptorSets[i], 0, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eUniformBufferDynamic,   // descriptor count, type
                 nullptr,                                        // image info
                 &modelInfo
             ),
             vk::WriteDescriptorSet(
-                modelDescriptorSets[i], 2, 0,                   // dest set, binding, array element
+                modelDescriptorSets[i], 1, 0,                   // dest set, binding, array element
                 1, vk::DescriptorType::eCombinedImageSampler,   // descriptor count, type
                 &imageInfo
             )

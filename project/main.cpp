@@ -105,6 +105,7 @@ private:
         // Descriptor sets:
         obj.setDevice(instance.getDevice());
         obj.initDescriptorSetLayout();
+
         obj.initSceneDescriptorSetLayout();
         obj.initModelDescriptorSetLayout();
 

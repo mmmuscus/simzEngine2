@@ -150,13 +150,27 @@ void vulkanDrawer::recordCommandBuffer(
         vk::DeviceSize offsets[] = { 0 };
         commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
         commandBuffer.bindIndexBuffer(currScene->getObjects()[i]->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
-        // vk::DescriptorSet descriptorSets[] = { obj->getModelDescriptorSets()[currentFrame], obj->getSceneDescriptorSets()[currentFrame] };
-        vk::DescriptorSet descriptorSets[] = { obj->getDescriptorSets()[currentFrame] };
+        // ONE DESCRIPTOR SET SOLUTION
+        /*commandBuffer.bindDescriptorSets(
+            vk::PipelineBindPoint::eGraphics,
+            obj->getPipelineLayout(),
+            0,
+            obj->getDescriptorSets()[currentFrame],
+            currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
+        );*/
+        // TWO DESCRIPTOR SET SOLUTIONS
         commandBuffer.bindDescriptorSets(
             vk::PipelineBindPoint::eGraphics,
             obj->getPipelineLayout(),
             0,
-            descriptorSets,
+            obj->getSceneDescriptorSets()[currentFrame],
+            currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
+        );
+        commandBuffer.bindDescriptorSets(
+            vk::PipelineBindPoint::eGraphics,
+            obj->getPipelineLayout(),
+            1,
+            obj->getModelDescriptorSets()[currentFrame],
             currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
         );
         commandBuffer.drawIndexed(
