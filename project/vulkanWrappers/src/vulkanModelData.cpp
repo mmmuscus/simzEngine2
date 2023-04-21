@@ -4,6 +4,19 @@ vulkanModelData::~vulkanModelData() {
 	device.destroyDescriptorPool(descriptorPool);
 }
 
+void vulkanModelData::init(
+    vk::Device _device,
+    vulkanMeshData* _meshData,
+    vulkanTextureData* _textureData,
+    vk::DescriptorSetLayout descriptorSetLayout
+) {
+    device = _device;
+    meshData = _meshData;
+    textureData = _textureData;
+    initDescriptorPool();
+    initDescriptorSets(descriptorSetLayout);
+}
+
 void vulkanModelData::initDescriptorPool() {
     std::array<vk::DescriptorPoolSize, 2> poolSizes = {
         vk::DescriptorPoolSize(

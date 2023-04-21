@@ -129,32 +129,36 @@ private:
         // SyncObjects:
         drawer.initSyncObjects();
 
-        // Textures:
+        // HELPERS FOR MESHES, TEXTURES:
+        // Texture Sampler:
         textureSampler.init(instance.getDevice(), instance.getPhysicalDevice());
+
+        // Dynamic Uniform Buffer:
+        modelsBuffer.init(&instance);
+
+        // SETTING UP MESHES, TEXTURES, MODELS, SCENE:
+        // Scene init (uniform buffer + descriptor sets)
+        sceneData.init(&instance, obj.getSceneDescriptorSetLayout());
+
+        // Textures:
         roomTextureData.init("textures/viking_room.png", &instance, &textureSampler);
         tankTextureData.init("textures/demo_texture.jpg", &instance, &textureSampler);
-
-        // Uniform buffer:
-        modelsBuffer.init(&instance);
 
         // Models:
         roomMeshData.init("models/viking_room.objj", &instance, &modelsBuffer);
         tankMeshData.init("models/tank.objj", &instance, &modelsBuffer);
 
-        // Scene init (uniform buffer + descriptor sets)
-        sceneData.init(&instance, obj.getSceneDescriptorSetLayout());
-
         // Model datas:
-        roomModelData.setDevice(instance.getDevice());
-        roomModelData.setMeshData(&roomMeshData);
-        roomModelData.setTextureData(&roomTextureData);
-        roomModelData.initDescriptorPool();
-        roomModelData.initDescriptorSets(obj.getModelDescriptorSetLayout());
-        tankModelData.setDevice(instance.getDevice());
-        tankModelData.setMeshData(&tankMeshData);
-        tankModelData.setTextureData(&tankTextureData);
-        tankModelData.initDescriptorPool();
-        tankModelData.initDescriptorSets(obj.getModelDescriptorSetLayout());
+        roomModelData.init(
+            instance.getDevice(),
+            &roomMeshData, &roomTextureData,
+            obj.getModelDescriptorSetLayout()
+        );
+        tankModelData.init(
+            instance.getDevice(),
+            &tankMeshData, &tankTextureData,
+            obj.getModelDescriptorSetLayout()
+        );
     }
 
     void initScene() {

@@ -29,6 +29,12 @@ public:
 	vulkanMeshData* getMeshData() { return meshData; }
 	vulkanTextureData* getTextureData() { return textureData; }
 
+	void init(
+		vk::Device _device,
+		vulkanMeshData* _meshData,
+		vulkanTextureData* _textureData,
+		vk::DescriptorSetLayout descriptorSetLayout
+	);
 	void initDescriptorPool();
 	void initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout);
 
