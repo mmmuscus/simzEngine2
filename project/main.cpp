@@ -105,8 +105,8 @@ private:
         // Descriptor sets:
         obj.setDevice(instance.getDevice());
         obj.initDescriptorSetLayout();
-        /*obj.initSceneDescriptorSetLayout();
-        obj.initModelDescriptorSetLayout();*/
+        obj.initSceneDescriptorSetLayout();
+        obj.initModelDescriptorSetLayout();
 
         // Pipeline:
         obj.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
@@ -148,11 +148,11 @@ private:
         // Descriptor Pool + Sets:
         obj.initDescriptorPool();
         obj.initDescriptorSets(&modelsBuffer, &roomTextureData, &sceneData);
-        /*obj.initSceneDescriptorPool();
-        obj.initSceneDescriptorSets(&sceneData);
 
+        obj.initSceneDescriptorPool();
+        obj.initSceneDescriptorSets(&sceneData);
         obj.initModelDescriptorPool();
-        obj.initModelDescriptorSets(&modelsBuffer, &roomTextureData);*/
+        obj.initModelDescriptorSets(&modelsBuffer, &roomTextureData);
     }
 
     void initScene() {
@@ -225,13 +225,7 @@ private:
     }
 
     void cleanup() {
-        /*ImGui_ImplVulkan_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
 
-        destroyImGuiFramebuffers();
-
-        instance.getDevice().destroyRenderPass(imGuiRenderPass);*/
     }
 };
 

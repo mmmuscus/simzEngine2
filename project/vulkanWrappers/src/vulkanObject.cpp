@@ -5,10 +5,10 @@ vulkanObject::~vulkanObject() {
     device.destroyDescriptorPool(descriptorPool);
     device.destroyDescriptorSetLayout(descriptorSetLayout);
     // New descriptor sets:
-    /*device.destroyDescriptorPool(sceneDescriptorPool);
+    device.destroyDescriptorPool(sceneDescriptorPool);
     device.destroyDescriptorSetLayout(sceneDescriptorSetLayout);
     device.destroyDescriptorPool(modelDescriptorPool);
-    device.destroyDescriptorSetLayout(modelDescriptorSetLayout);*/
+    device.destroyDescriptorSetLayout(modelDescriptorSetLayout);
 
     device.destroyPipeline(graphicsPipeline);
     device.destroyPipelineLayout(pipelineLayout);

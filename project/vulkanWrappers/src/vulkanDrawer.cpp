@@ -85,34 +85,6 @@ void vulkanDrawer::drawFrame(
         currScene
     );
 
-    // --- IMGUI START ---
-    /*ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
-    ImGui::Render();
-
-    commandBuffers[currentFrame].begin(vk::CommandBufferBeginInfo());
-
-    std::array<vk::ClearValue, 1> clearValues;
-    clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-    auto renderPassInfo = vk::RenderPassBeginInfo(
-        imGuiRenderPass, imGuiFramebuffer,
-        vk::Rect2D(vk::Offset2D(0, 0), surface->getExtent()),
-        static_cast<uint32_t>(clearValues.size()), clearValues.data()
-    );
-    commandBuffers[currentFrame].beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffers[currentFrame]);
-    commandBuffers[currentFrame].endRenderPass();
-    try {
-        commandBuffers[currentFrame].end();
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to record command buffer!");
-    }*/
-    // --- IMGUI END ---
-
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
     vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
