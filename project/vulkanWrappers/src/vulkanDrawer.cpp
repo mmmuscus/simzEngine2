@@ -162,7 +162,8 @@ void vulkanDrawer::recordCommandBuffer(
             vk::PipelineBindPoint::eGraphics,
             obj->getPipelineLayout(),
             1,
-            obj->getModelDescriptorSets()[currentFrame],
+            //obj->getModelDescriptorSets()[currentFrame],
+            currScene->getObjects()[i]->getDescriptorSets()[currentFrame],
             currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
         );
         commandBuffer.drawIndexed(

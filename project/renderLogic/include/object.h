@@ -11,8 +11,6 @@ class object {
 private:
 	// model matrix:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	// ONLY ROTATES WITH (0, 0, 1) AXIS FOR NOW !!!! 
-	// ITS STORED IN THE X AXIS
 	// TODO: IMPLEMENT QUATERNIONS
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -23,12 +21,20 @@ private:
 	// timer
 	timer* sceneTimer;
 
+	// Descriptor set:
+	vk::DescriptorPool descriptorPool;
+	std::vector<vk::DescriptorSet> descriptorSets;
+	// Helper for descturctors
+	vk::Device device;
+
 	// vulkan buffers, pipeline
 	vulkanObject* vkObject;
 	vulkanModelData* modelData;
 	vulkanTextureData* textureData;
 
 public:
+	~object();
+
 	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), textureData(nullptr) {}
 	object(
 		vulkanObject* _vkObject,
@@ -39,7 +45,7 @@ public:
 		vkObject(_vkObject),
 		modelData(_modelData),
 		textureData(_textureData)
-	{};
+	{ initDescriptors(); };
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
@@ -51,14 +57,20 @@ public:
 	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
 
 	uint32_t getObjectNumber() { return objectNumber; }
+	std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }
 	vulkanTextureData* getTextureData() { return textureData; }
+
+	void initDescriptors();
 
 	void updateTranslationVectors();
 	void updateModelTranslation(uint32_t currentFrame);
 
 private:
+
+	void initDescriptorPool();
+	void initDescriptorSets();
 
 };
 
