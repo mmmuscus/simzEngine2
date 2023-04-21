@@ -19,6 +19,7 @@
 #include "vulkanWrappers/include/vulkanDrawer.h"
 #include "vulkanWrappers/include/vulkanMeshData.h"
 #include "vulkanWrappers/include/vulkanTextureData.h"
+#include "vulkanWrappers/include/vulkanModelData.h"
 #include "vulkanWrappers/include/vulkanSceneData.h"
 
 #include "imGuiWrappers/include/imGuiInstance.h"
@@ -52,12 +53,14 @@ private:
     vulkanObject obj;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
-    vulkanMeshData roomModelData;
-    vulkanMeshData tankModelData;
+    vulkanMeshData roomMeshData;
+    vulkanMeshData tankMeshData;
     vulkanDynamicUniformBuffer modelsBuffer;
     vulkanTextureData roomTextureData;
     vulkanTextureData tankTextureData;
     vulkanTextureSampler textureSampler;
+    vulkanModelData roomModelData;
+    vulkanModelData tankModelData;
     vulkanSceneData sceneData;
 
     // Scene variables:
@@ -129,14 +132,14 @@ private:
         tankTextureData.init("textures/demo_texture.jpg", &instance);
 
         // Models:
-        roomModelData.init("models/viking_room.objj", &instance);
-        tankModelData.init("models/tank.objj", &instance);
+        roomMeshData.init("models/viking_room.objj", &instance);
+        tankMeshData.init("models/tank.objj", &instance);
 
         // Uniform Buffer:
         modelsBuffer.setDevice(instance.getDevice());
         modelsBuffer.initUniformBuffers(&instance);
-        roomModelData.setDynamicUniformBuffer(&modelsBuffer);
-        tankModelData.setDynamicUniformBuffer(&modelsBuffer);
+        roomMeshData.setDynamicUniformBuffer(&modelsBuffer);
+        tankMeshData.setDynamicUniformBuffer(&modelsBuffer);
 
         // Scene Uniform Buffer:
         sceneData.setDevice(instance.getDevice());
@@ -152,6 +155,18 @@ private:
         // Descriptor Pool + Sets:
         sceneData.initDescriptorPool();
         sceneData.initDescriptorSets(obj.getSceneDescriptorSetLayout());
+
+        // Model datas:
+        roomModelData.setDevice(instance.getDevice());
+        roomModelData.setMeshData(&roomMeshData);
+        roomModelData.setTextureData(&roomTextureData);
+        roomModelData.initDescriptorPool();
+        roomModelData.initDescriptorSets(obj.getModelDescriptorSetLayout());
+        tankModelData.setDevice(instance.getDevice());
+        tankModelData.setMeshData(&tankMeshData);
+        tankModelData.setTextureData(&tankTextureData);
+        tankModelData.initDescriptorPool();
+        tankModelData.initDescriptorSets(obj.getModelDescriptorSetLayout());
     }
 
     void initScene() {
@@ -160,10 +175,10 @@ private:
         mainScene.setCam(&cam);
 
         // Add objects
-        roomObj = object(&obj, &roomModelData, &roomTextureData);
+        roomObj = object(&obj, &roomMeshData, &roomTextureData);
         mainScene.addObject(&roomObj);
         
-        tankObj = object(&obj, &tankModelData, &tankTextureData);
+        tankObj = object(&obj, &tankMeshData, &tankTextureData);
         mainScene.addObject(&tankObj);
         tankObj.setPos(glm::vec3(0.0f, 0.0f, 0.5f));
 

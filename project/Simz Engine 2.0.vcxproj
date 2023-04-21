@@ -179,6 +179,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceInstance.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceMisc.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanMeshData.cpp" />
+    <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanObject.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanDrawer.cpp" />
     <ClCompile Include="vulkanWrappers\src\vulkanRenderer.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanDynamicUniformBuffer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanMeshData.h" />
+    <ClInclude Include="vulkanWrappers\include\vulkanModelData.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanObject.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanDrawer.h" />
     <ClInclude Include="vulkanWrappers\include\vulkanRenderer.h" />

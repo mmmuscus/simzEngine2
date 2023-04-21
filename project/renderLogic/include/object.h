@@ -68,7 +68,6 @@ public:
 	void updateModelTranslation(uint32_t currentFrame);
 
 private:
-
 	void initDescriptorPool();
 	void initDescriptorSets();
 
