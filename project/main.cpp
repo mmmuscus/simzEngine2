@@ -17,7 +17,7 @@
 #include "vulkanWrappers/include/vulkanObject.h"
 #include "vulkanWrappers/include/vulkanRenderer.h"
 #include "vulkanWrappers/include/vulkanDrawer.h"
-#include "vulkanWrappers/include/vulkanModelData.h"
+#include "vulkanWrappers/include/vulkanMeshData.h"
 #include "vulkanWrappers/include/vulkanTextureData.h"
 #include "vulkanWrappers/include/vulkanSceneData.h"
 
@@ -52,8 +52,8 @@ private:
     vulkanObject obj;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
-    vulkanModelData roomModelData;
-    vulkanModelData tankModelData;
+    vulkanMeshData roomModelData;
+    vulkanMeshData tankModelData;
     vulkanDynamicUniformBuffer modelsBuffer;
     vulkanTextureData roomTextureData;
     vulkanTextureData tankTextureData;

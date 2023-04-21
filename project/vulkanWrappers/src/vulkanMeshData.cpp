@@ -1,6 +1,6 @@
-#include "../include/vulkanModelData.h"
+#include "../include/vulkanMeshData.h"
 
-vulkanModelData::~vulkanModelData() {
+vulkanMeshData::~vulkanMeshData() {
     device.destroyBuffer(indexBuffer);
     device.freeMemory(indexBufferMemory);
 
@@ -8,20 +8,20 @@ vulkanModelData::~vulkanModelData() {
     device.freeMemory(vertexBufferMemory);
 }
 
-void vulkanModelData::init(std::string modelPath, vulkanInstance* instance) {
+void vulkanMeshData::init(std::string meshPath, vulkanInstance* instance) {
     device = instance->getDevice();
-    loadModel(modelPath);
+    loadMesh(meshPath);
     initVertexBuffer(instance);
     initIndexBuffer(instance);
 }
 
-void vulkanModelData::loadModel(std::string modelPath) {
+void vulkanMeshData::loadMesh(std::string meshPath) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelPath.c_str())) {
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, meshPath.c_str())) {
         throw std::runtime_error(warn + err);
     }
 
@@ -54,7 +54,7 @@ void vulkanModelData::loadModel(std::string modelPath) {
     }
 }
 
-void vulkanModelData::initVertexBuffer(vulkanInstance* instance) {
+void vulkanMeshData::initVertexBuffer(vulkanInstance* instance) {
     vk::PhysicalDevice physicalDevice = instance->getPhysicalDevice();
     vk::Queue graphicsQueue = instance->getGraphicsQueue();
 
@@ -89,7 +89,7 @@ void vulkanModelData::initVertexBuffer(vulkanInstance* instance) {
     device.freeMemory(stagingBufferMemory);
 }
 
-void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
+void vulkanMeshData::initIndexBuffer(vulkanInstance* instance) {
     vk::PhysicalDevice physicalDevice = instance->getPhysicalDevice();
     vk::Queue graphicsQueue = instance->getGraphicsQueue();
 
@@ -124,7 +124,7 @@ void vulkanModelData::initIndexBuffer(vulkanInstance* instance) {
     device.freeMemory(stagingBufferMemory);
 }
 
-void vulkanModelData::copyBuffer(
+void vulkanMeshData::copyBuffer(
     vk::Buffer src, vk::Buffer dst, vk::DeviceSize size,
     vulkanInstance* instance
 ) {

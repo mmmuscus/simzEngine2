@@ -45,7 +45,7 @@
     <ClCompile Include="vulkanWrappers\src\vulkanDrawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vulkanWrappers\src\vulkanModelData.cpp">
+    <ClCompile Include="vulkanWrappers\src\vulkanMeshData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vulkanWrappers\src\vulkanInstanceCommandPool.cpp">
@@ -131,7 +131,7 @@
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vulkanWrappers\include\vulkanModelData.h">
+    <ClInclude Include="vulkanWrappers\include\vulkanMeshData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h">

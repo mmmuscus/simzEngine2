@@ -56,7 +56,7 @@ void object::initDescriptorSets() {
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         auto modelInfo = vk::DescriptorBufferInfo(
-            modelData->getUniformBuffer()->getUniformBuffers()[i],
+            meshData->getUniformBuffer()->getUniformBuffers()[i],
             0, sizeof(modelUniformBufferObject)                 // offset, range
         );
 
@@ -98,5 +98,5 @@ void object::updateModelTranslation(uint32_t currentFrame) {
 	trans = glm::rotate(trans, rotation.x, glm::vec3(0.0f, 0.0f, 1.0f));
 	trans = glm::scale(trans, scale);
 
-	modelData->getUniformBuffer()->updateModelUniformBuffer(trans, currentFrame, objectNumber);
+	meshData->getUniformBuffer()->updateModelUniformBuffer(trans, currentFrame, objectNumber);
 }

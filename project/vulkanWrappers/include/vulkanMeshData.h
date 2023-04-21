@@ -1,5 +1,5 @@
-#ifndef VULKAN_MODEL_DATA_H_
-#define VULKAN_MODEL_DATA_H_
+#ifndef VULKAN_MESH_DATA_H_
+#define VULKAN_MESH_DATA_H_
 
 #include <chrono>
 #include <unordered_map>
@@ -10,7 +10,7 @@
 #include "vulkanInstance.h"
 #include "vulkanDynamicUniformBuffer.h"
 
-class vulkanModelData {
+class vulkanMeshData {
 private:
     // Buffers:
     vk::Buffer vertexBuffer;
@@ -28,7 +28,7 @@ private:
     vk::Device device;
 
 public:
-    ~vulkanModelData();
+    ~vulkanMeshData();
 
     void setDevice(vk::Device _device) { device = _device; }
     void setDynamicUniformBuffer(vulkanDynamicUniformBuffer* _uniformBuffer) { uniformBuffer = _uniformBuffer; }
@@ -42,7 +42,7 @@ public:
     void init(std::string modelPath, vulkanInstance* instance);
 
 private:
-    void loadModel(std::string modelPath);
+    void loadMesh(std::string modelPath);
     void initVertexBuffer(vulkanInstance* instance);
     void initIndexBuffer(vulkanInstance* instance);
 
@@ -52,4 +52,4 @@ private:
     );
 };
 
-#endif // VULKAN_MODEL_DATA_H_
+#endif // VULKAN_MESH_DATA_H_

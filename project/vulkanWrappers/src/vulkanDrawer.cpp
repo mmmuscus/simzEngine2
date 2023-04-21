@@ -155,19 +155,19 @@ void vulkanDrawer::recordCommandBuffer(
 
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
         object* currObject = currScene->getObjects()[i];
-        vk::Buffer vertexBuffers[] = { currObject->getModelData()->getVertexBuffer() };
+        vk::Buffer vertexBuffers[] = { currObject->getMeshData()->getVertexBuffer() };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-        commandBuffer.bindIndexBuffer(currObject->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
+        commandBuffer.bindIndexBuffer(currObject->getMeshData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
         commandBuffer.bindDescriptorSets(
             vk::PipelineBindPoint::eGraphics,
             obj->getPipelineLayout(),
             1,
             currObject->getDescriptorSets()[currentFrame],
-            currObject->getObjectNumber() * static_cast<uint32_t>(currObject->getModelData()->getUniformBuffer()->getDynamicAlignment())
+            currObject->getObjectNumber() * static_cast<uint32_t>(currObject->getMeshData()->getUniformBuffer()->getDynamicAlignment())
         );
         commandBuffer.drawIndexed(
-            static_cast<uint32_t>(currObject->getModelData()->getIndices().size()),
+            static_cast<uint32_t>(currObject->getMeshData()->getIndices().size()),
             1, 0, 0, 0
         );
     }

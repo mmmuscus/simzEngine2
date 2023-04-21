@@ -4,7 +4,7 @@
 #include "../../general/include/timer.h"
 
 #include "../../vulkanWrappers/include/vulkanObject.h"
-#include "../../vulkanWrappers/include/vulkanModelData.h"
+#include "../../vulkanWrappers/include/vulkanMeshData.h"
 #include "../../vulkanWrappers/include/vulkanTextureData.h"
 
 class object {
@@ -29,21 +29,21 @@ private:
 
 	// vulkan buffers, pipeline
 	vulkanObject* vkObject;
-	vulkanModelData* modelData;
+	vulkanMeshData* meshData;
 	vulkanTextureData* textureData;
 
 public:
 	~object();
 
-	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), textureData(nullptr) {}
+	object() : sceneTimer(nullptr), vkObject(nullptr), meshData(nullptr), textureData(nullptr) {}
 	object(
 		vulkanObject* _vkObject,
-		vulkanModelData* _modelData,
+		vulkanMeshData* _meshData,
 		vulkanTextureData* _textureData
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject),
-		modelData(_modelData),
+		meshData(_meshData),
 		textureData(_textureData)
 	{ initDescriptors(); };
 
@@ -53,13 +53,13 @@ public:
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
-	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
+	void setMeshData(vulkanMeshData* _meshData) { meshData = _meshData; }
 	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
 
 	uint32_t getObjectNumber() { return objectNumber; }
 	std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
 	vulkanObject* getVulkanObject() { return vkObject; }
-	vulkanModelData* getModelData() { return modelData; }
+	vulkanMeshData* getMeshData() { return meshData; }
 	vulkanTextureData* getTextureData() { return textureData; }
 
 	void initDescriptors();
