@@ -149,7 +149,7 @@ void vulkanDrawer::recordCommandBuffer(
         vk::PipelineBindPoint::eGraphics,
         obj->getPipelineLayout(),
         0,
-        obj->getSceneDescriptorSets()[currentFrame],
+        currScene->getSceneData()->getDescriptorSets()[currentFrame],
         nullptr
     );
 
@@ -162,7 +162,6 @@ void vulkanDrawer::recordCommandBuffer(
             vk::PipelineBindPoint::eGraphics,
             obj->getPipelineLayout(),
             1,
-            //obj->getModelDescriptorSets()[currentFrame],
             currScene->getObjects()[i]->getDescriptorSets()[currentFrame],
             currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
         );

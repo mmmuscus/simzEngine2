@@ -18,6 +18,10 @@ private:
 	std::vector<vk::DeviceMemory> uniformBuffersMemory;
 	std::vector<void*> uniformBuffersMapped;
 
+	// Descriptor Sets
+	vk::DescriptorPool descriptorPool;
+	std::vector<vk::DescriptorSet> descriptorSets;
+
 	// Not maintained by the class:
 	vk::Device device;
 
@@ -26,9 +30,13 @@ public:
 
 	void setDevice(vk::Device _device) { device = _device; }
 
+	std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
+
 	std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
 	void initUniformBuffers(vulkanInstance* instance);
+	void initDescriptorPool();
+	void initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout);
 
 	void updateSceneUniformBuffer(uint32_t currentImage, vk::Extent2D extent, glm::mat4 viewMat);
 

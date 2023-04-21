@@ -34,3 +34,62 @@ void vulkanSceneData::updateSceneUniformBuffer(uint32_t currentFrame, vk::Extent
 
     memcpy(uniformBuffersMapped[currentFrame], &sbo, sizeof(sbo));
 }
+
+void vulkanSceneData::initDescriptorPool() {
+    std::array<vk::DescriptorPoolSize, 1> poolSizes = {
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBuffer,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        )
+    };
+
+    auto poolInfo = vk::DescriptorPoolCreateInfo(
+        vk::DescriptorPoolCreateFlags(),
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
+        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
+    );
+
+    try {
+        descriptorPool = device.createDescriptorPool(poolInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor pool!");
+    }
+}
+
+void vulkanSceneData::initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout) {
+    std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+
+    auto allocInfo = vk::DescriptorSetAllocateInfo(
+        descriptorPool,
+        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // descriptor set count
+        layouts.data()                                  // descriptor set layouts
+    );
+
+    descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+
+    try {
+        descriptorSets = device.allocateDescriptorSets(allocInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor sets!");
+    }
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        auto sceneInfo = vk::DescriptorBufferInfo(
+            uniformBuffers[i],
+            0, sizeof(sceneUniformBufferObject)                 // offset, range
+        );
+
+        std::array<vk::WriteDescriptorSet, 1> descriptorWrites = {
+            vk::WriteDescriptorSet(
+                descriptorSets[i], 0, 0,                   // dest set, binding, array element
+                1, vk::DescriptorType::eUniformBuffer,          // descriptor count, type
+                nullptr,
+                &sceneInfo
+            )
+        };
+
+        device.updateDescriptorSets(descriptorWrites, 0);
+    }
+}

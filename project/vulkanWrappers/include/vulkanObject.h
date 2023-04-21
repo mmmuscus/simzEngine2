@@ -33,7 +33,7 @@ static std::vector<char> readFile(const std::string& filename) {
 
 class vulkanObject {
 private:
-    // Descriptor sets:
+    // Descriptor set layouts:
     vk::DescriptorSetLayout sceneDescriptorSetLayout;
     vk::DescriptorPool sceneDescriptorPool;
     std::vector<vk::DescriptorSet> sceneDescriptorSets;
@@ -50,25 +50,20 @@ public:
     
     void setDevice(vk::Device _device) { device = _device; }
 
-    // Descriptor sets:
-    vk::DescriptorPool getSceneDescriptorPool() { return sceneDescriptorPool; }
+    // Descriptor set layouts:
     std::vector<vk::DescriptorSet> getSceneDescriptorSets() { return sceneDescriptorSets; }
+    vk::DescriptorSetLayout getSceneDescriptorSetLayout() { return sceneDescriptorSetLayout; }
     vk::DescriptorSetLayout getModelDescriptorSetLayout() { return modelDescriptorSetLayout; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vk::Device getDevice() { return device; }
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
-    // Descriptor sets:
+    // Descriptor set layouts:
     void initSceneDescriptorSetLayout();
     void initSceneDescriptorPool();
     void initSceneDescriptorSets(vulkanSceneData* sceneData);
     void initModelDescriptorSetLayout();
-    void initModelDescriptorPool();
-    void initModelDescriptorSets(
-        vulkanDynamicUniformBuffer* uniformBuffer,
-        vulkanTextureData* textureData
-    );
 
 private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);
