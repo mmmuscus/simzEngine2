@@ -122,31 +122,28 @@ private:
         // CommandPool:
         instance.initCommandPool();
 
-        // Textures:
-        textureSampler.init(instance.getDevice(), instance.getPhysicalDevice());
-        roomTextureData.init("textures/viking_room.png", &instance, &textureSampler);
-        tankTextureData.init("textures/demo_texture.jpg", &instance, &textureSampler);
-
-        // Models:
-        roomMeshData.init("models/viking_room.objj", &instance);
-        tankMeshData.init("models/tank.objj", &instance);
-
-        // Uniform Buffer:
-        modelsBuffer.setDevice(instance.getDevice());
-        modelsBuffer.initUniformBuffers(&instance);
-        roomMeshData.setDynamicUniformBuffer(&modelsBuffer);
-        tankMeshData.setDynamicUniformBuffer(&modelsBuffer);
-
-        // Scene Uniform Buffer:
-        sceneData.setDevice(instance.getDevice());
-        sceneData.initUniformBuffers(&instance);
-
         // CommandBuffers:
         drawer.setDevice(instance.getDevice());
         drawer.initCommandBuffers(instance.getCommandPool());
 
         // SyncObjects:
         drawer.initSyncObjects();
+
+        // Textures:
+        textureSampler.init(instance.getDevice(), instance.getPhysicalDevice());
+        roomTextureData.init("textures/viking_room.png", &instance, &textureSampler);
+        tankTextureData.init("textures/demo_texture.jpg", &instance, &textureSampler);
+
+        // Uniform buffer:
+        modelsBuffer.init(&instance);
+
+        // Models:
+        roomMeshData.init("models/viking_room.objj", &instance, &modelsBuffer);
+        tankMeshData.init("models/tank.objj", &instance, &modelsBuffer);
+
+        // Scene Uniform Buffer:
+        sceneData.setDevice(instance.getDevice());
+        sceneData.initUniformBuffers(&instance);
 
         // Descriptor Pool + Sets:
         sceneData.initDescriptorPool();

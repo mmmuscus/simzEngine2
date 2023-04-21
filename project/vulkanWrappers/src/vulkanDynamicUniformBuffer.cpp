@@ -7,6 +7,11 @@ vulkanDynamicUniformBuffer::~vulkanDynamicUniformBuffer() {
     }
 }
 
+void vulkanDynamicUniformBuffer::init(vulkanInstance* instance) {
+    device = instance->getDevice();
+    initUniformBuffers(instance);
+}
+
 void vulkanDynamicUniformBuffer::initUniformBuffers(vulkanInstance* instance) {
     // Get the alignment for the dynamic uniform buffer
     // https://github.com/SaschaWillems/Vulkan/tree/master/examples/dynamicuniformbuffer

@@ -23,6 +23,7 @@ public:
 
     void setDevice(vk::Device _device) { device = _device; }
 
+    void init(vulkanInstance* instance);
     void initUniformBuffers(vulkanInstance* instance);
 
     void updateModelUniformBuffer(glm::mat4 modelMat, uint32_t currentFrame, size_t objectNumber);

@@ -8,8 +8,13 @@ vulkanMeshData::~vulkanMeshData() {
     device.freeMemory(vertexBufferMemory);
 }
 
-void vulkanMeshData::init(std::string meshPath, vulkanInstance* instance) {
+void vulkanMeshData::init(
+    std::string meshPath, 
+    vulkanInstance* instance, 
+    vulkanDynamicUniformBuffer* _uniformBuffer
+) {
     device = instance->getDevice();
+    uniformBuffer = _uniformBuffer;
     loadMesh(meshPath);
     initVertexBuffer(instance);
     initIndexBuffer(instance);

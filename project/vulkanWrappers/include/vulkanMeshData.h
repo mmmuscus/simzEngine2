@@ -39,7 +39,11 @@ public:
     std::vector<Vertex> getVertices() { return vertices; }
     std::vector<uint32_t> getIndices() { return indices; }
 
-    void init(std::string modelPath, vulkanInstance* instance);
+    void init(
+        std::string meshPath,
+        vulkanInstance* instance,
+        vulkanDynamicUniformBuffer* _uniformBuffer
+    );
 
 private:
     void loadMesh(std::string modelPath);
