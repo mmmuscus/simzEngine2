@@ -145,27 +145,19 @@ void vulkanDrawer::recordCommandBuffer(
     commandBuffer.setViewport(0, 1, &viewport);
     commandBuffer.setScissor(0, 1, &scissor);
 
+    commandBuffer.bindDescriptorSets(
+        vk::PipelineBindPoint::eGraphics,
+        obj->getPipelineLayout(),
+        0,
+        obj->getSceneDescriptorSets()[currentFrame],
+        nullptr
+    );
+
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
         vk::Buffer vertexBuffers[] = { currScene->getObjects()[i]->getModelData()->getVertexBuffer() };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
         commandBuffer.bindIndexBuffer(currScene->getObjects()[i]->getModelData()->getIndexBuffer(), 0, vk::IndexType::eUint32);
-        // ONE DESCRIPTOR SET SOLUTION
-        /*commandBuffer.bindDescriptorSets(
-            vk::PipelineBindPoint::eGraphics,
-            obj->getPipelineLayout(),
-            0,
-            obj->getDescriptorSets()[currentFrame],
-            currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
-        );*/
-        // TWO DESCRIPTOR SET SOLUTIONS
-        commandBuffer.bindDescriptorSets(
-            vk::PipelineBindPoint::eGraphics,
-            obj->getPipelineLayout(),
-            0,
-            obj->getSceneDescriptorSets()[currentFrame],
-            currScene->getObjects()[i]->getObjectNumber() * static_cast<uint32_t>(currScene->getObjects()[i]->getModelData()->getUniformBuffer()->getDynamicAlignment())
-        );
         commandBuffer.bindDescriptorSets(
             vk::PipelineBindPoint::eGraphics,
             obj->getPipelineLayout(),

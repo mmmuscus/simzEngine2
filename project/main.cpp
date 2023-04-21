@@ -104,8 +104,6 @@ private:
 
         // Descriptor sets:
         obj.setDevice(instance.getDevice());
-        obj.initDescriptorSetLayout();
-
         obj.initSceneDescriptorSetLayout();
         obj.initModelDescriptorSetLayout();
 
@@ -147,9 +145,6 @@ private:
         drawer.initSyncObjects();
 
         // Descriptor Pool + Sets:
-        obj.initDescriptorPool();
-        obj.initDescriptorSets(&modelsBuffer, &roomTextureData, &sceneData);
-
         obj.initSceneDescriptorPool();
         obj.initSceneDescriptorSets(&sceneData);
         obj.initModelDescriptorPool();
