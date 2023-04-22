@@ -68,6 +68,9 @@ public:
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
 	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 
+	glm::vec3 getPos() { return pos; }
+	glm::vec3 getRotation() { return rotation; }
+	glm::vec3 getScale() { return scale; }
 	uint32_t getObjectNumber() { return objectNumber; }
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }

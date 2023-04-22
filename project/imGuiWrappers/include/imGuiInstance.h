@@ -5,6 +5,8 @@
 
 #include "../../vulkanWrappers/include/vulkanSurface.h"
 
+#include "../../renderLogic/include/scene.h"
+
 class imGuiInstance {
 private:
 	// Helper flag
@@ -33,6 +35,8 @@ public:
 
 	void recreateFramebuffers(vulkanSurface* surface);
 
+	void presentGui(bool shouldRecreateSwapChain, scene* currScene);
+
 	void drawFrame(
 		vulkanSurface* surface,
 		vulkanInstance* instance,
@@ -48,7 +52,8 @@ private:
 
 	void destroyFramebuffers();
 
-	void showGui();
+	void showGui(scene* currScene);
+	void showObjectGui(object* obj);
 
 };
 

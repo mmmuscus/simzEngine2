@@ -186,8 +186,10 @@ private:
             );
 
             // record and submit ImGui commandBuffer
-            if (imGuiInst.getIsEnabled())
+            if (imGuiInst.getIsEnabled()) {
+                imGuiInst.presentGui(surface.getShouldRecreateSwapChain(), &mainScene);
                 imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());
+            }
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());

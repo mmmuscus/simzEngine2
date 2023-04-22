@@ -11,6 +11,17 @@ void imGuiInstance::recreateFramebuffers(vulkanSurface* surface) {
     initFramebuffers(surface);
 }
 
+void imGuiInstance::presentGui(bool shouldRecreateSwapChain, scene* currScene) {
+    if (shouldRecreateSwapChain)
+        return;
+
+    ImGui_ImplVulkan_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    showGui(currScene);
+    ImGui::Render();
+}
+
 void imGuiInstance::drawFrame(
     vulkanSurface* surface,
     vulkanInstance* instance,
@@ -18,12 +29,6 @@ void imGuiInstance::drawFrame(
 ) {
     if (surface->getShouldRecreateSwapChain())
         return;
-
-    ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    showGui();
-    ImGui::Render();
 
     vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
 
