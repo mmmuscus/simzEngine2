@@ -22,7 +22,7 @@ void imGuiInstance::drawFrame(
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    showGui();
     ImGui::Render();
 
     vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
@@ -37,7 +37,7 @@ void imGuiInstance::drawFrame(
     );
 
     commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-    drawGui(commandBuffer);
+    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
     commandBuffer.endRenderPass();
     instance->endSingleTimeCommands(commandBuffer);
 

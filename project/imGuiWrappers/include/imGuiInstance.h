@@ -48,7 +48,7 @@ private:
 
 	void destroyFramebuffers();
 
-	void drawGui(vk::CommandBuffer commandBuffer);
+	void showGui();
 
 };
 
