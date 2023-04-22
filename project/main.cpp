@@ -53,20 +53,12 @@ private:
     vulkanObject obj;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
-    vulkanMeshData roomMeshData;
-    vulkanMeshData tankMeshData;
     vulkanDynamicUniformBuffer modelsBuffer;
-    vulkanTextureData roomTextureData;
-    vulkanTextureData tankTextureData;
     vulkanTextureSampler textureSampler;
-    vulkanModelData roomModelData;
-    vulkanModelData tankModelData;
     vulkanSceneData sceneData;
 
     // Scene variables:
     scene mainScene;
-    object roomObj;
-    object tankObj;
     camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     // ImGui variables PLS REMOVE
@@ -135,35 +127,8 @@ private:
         // Dynamic Uniform Buffer:
         modelsBuffer.init(&instance);
 
-        // SETTING UP MESHES, TEXTURES, MODELS, SCENE:
         // Scene init (uniform buffer + descriptor sets)
         sceneData.init(&instance, obj.getSceneDescriptorSetLayout());
-
-        // Textures:
-        roomTextureData.init("textures/viking_room.png", &instance, &textureSampler);
-        tankTextureData.init("textures/demo_texture.jpg", &instance, &textureSampler);
-
-        // Models:
-        roomMeshData.init("models/viking_room.objj", &instance, &modelsBuffer);
-        tankMeshData.init("models/tank.objj", &instance, &modelsBuffer);
-
-        // Model datas:
-        /*roomModelData.init(
-            instance.getDevice(),
-            &roomMeshData, &roomTextureData,
-            obj.getModelDescriptorSetLayout()
-        );*/
-        roomModelData.init(
-            &instance,
-            "models/viking_room.objj", &modelsBuffer,
-            "textures/viking_room.png", &textureSampler,
-            obj.getModelDescriptorSetLayout()
-        );
-        tankModelData.init(
-            instance.getDevice(),
-            &tankMeshData, &tankTextureData,
-            obj.getModelDescriptorSetLayout()
-        );
     }
 
     void initScene() {
@@ -172,12 +137,17 @@ private:
         mainScene.setCam(&cam);
 
         // Add objects
-        roomObj = object(&obj, &roomModelData);
-        mainScene.addObject(&roomObj);
-        
-        tankObj = object(&obj, &tankModelData);
-        mainScene.addObject(&tankObj);
-        tankObj.setPos(glm::vec3(0.0f, 0.0f, 0.5f));
+        mainScene.addObject(new object(
+            &instance, &obj,
+            "models/viking_room.objj", &modelsBuffer,
+            "textures/viking_room.png", &textureSampler
+        ));
+        mainScene.addObject(new object(
+            &instance, &obj,
+            "models/tank.objj", &modelsBuffer,
+            "textures/demo_texture.jpg", &textureSampler,
+            glm::vec3(0.0f, 0.0f, 0.5f)
+        ));
 
         mainScene.defragmentObjectNumbers();
     }

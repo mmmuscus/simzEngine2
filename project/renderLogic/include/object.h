@@ -30,12 +30,35 @@ public:
 	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr) {}
 	object(
 		vulkanObject* _vkObject,
-		vulkanModelData* _modelData
+		vulkanModelData* _modelData,
+		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
 		sceneTimer(nullptr),
-		vkObject(_vkObject),
-		modelData(_modelData)
+		vkObject(_vkObject), modelData(_modelData),
+		pos(_pos), rotation(_rotation), scale(_scale)
 	{};
+	object(
+		vulkanInstance* instance, 
+		vulkanObject* obj,
+		std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
+		std::string texturePath, vulkanTextureSampler* textureSampler,
+		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
+	) :
+		sceneTimer(nullptr),
+		vkObject(obj), modelData(new vulkanModelData()),
+		pos(_pos), rotation(_rotation), scale(_scale)
+	{
+		modelData->init(
+			instance,
+			meshPath, uniformBuffer,
+			texturePath, textureSampler,
+			vkObject->getModelDescriptorSetLayout()
+		);
+	}
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
