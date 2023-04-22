@@ -1,6 +1,8 @@
 #ifndef IMGUI_INSTANCE_H_
 #define IMGUI_INSTANCE_H_
 
+#include <filesystem>
+
 #include "imGuiWrappersGeneralIncludes.h"
 
 #include "../../vulkanWrappers/include/vulkanSurface.h"
@@ -12,6 +14,11 @@ private:
 	// Helper flag
 	bool isInstance = false;
 	bool isEnabled = false;
+
+	// TODO: move to someplace better
+	// Object adding paths
+	char meshPath[50] = "../../models/tank.objj";
+	char texturePath[50] = "../../textures/viking_room.png";
 
 	// Vulkan variables
 	vk::RenderPass renderPass;
@@ -35,7 +42,11 @@ public:
 
 	void recreateFramebuffers(vulkanSurface* surface);
 
-	void presentGui(bool shouldRecreateSwapChain, scene* currScene);
+	void presentGui(
+		bool shouldRecreateSwapChain, scene* currScene,
+		vulkanInstance* instance, vulkanObject* obj,
+		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+	);
 
 	void drawFrame(
 		vulkanSurface* surface,
@@ -52,7 +63,11 @@ private:
 
 	void destroyFramebuffers();
 
-	void showGui(scene* currScene);
+	void showGui(
+		scene* currScene,
+		vulkanInstance* instance, vulkanObject* obj,
+		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+	);
 	void showObjectGui(object* obj);
 
 };

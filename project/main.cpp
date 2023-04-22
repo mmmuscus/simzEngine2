@@ -187,7 +187,11 @@ private:
 
             // record and submit ImGui commandBuffer
             if (imGuiInst.getIsEnabled()) {
-                imGuiInst.presentGui(surface.getShouldRecreateSwapChain(), &mainScene);
+                imGuiInst.presentGui(
+                    surface.getShouldRecreateSwapChain(), &mainScene,
+                    &instance, &obj,
+                    &modelsBuffer, &textureSampler
+                );
                 imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());
             }
 

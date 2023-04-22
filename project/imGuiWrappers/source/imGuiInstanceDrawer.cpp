@@ -11,14 +11,22 @@ void imGuiInstance::recreateFramebuffers(vulkanSurface* surface) {
     initFramebuffers(surface);
 }
 
-void imGuiInstance::presentGui(bool shouldRecreateSwapChain, scene* currScene) {
+void imGuiInstance::presentGui(
+    bool shouldRecreateSwapChain, scene* currScene,
+    vulkanInstance* instance, vulkanObject* obj,
+    vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+) {
     if (shouldRecreateSwapChain)
         return;
 
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    showGui(currScene);
+    showGui(
+        currScene,
+        instance, obj, 
+        buffer, sampler
+    );
     ImGui::Render();
 }
 

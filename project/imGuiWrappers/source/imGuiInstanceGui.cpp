@@ -1,7 +1,38 @@
 #include "../include/imGuiInstance.h"
 
-void imGuiInstance::showGui(scene* currScene) {
+void imGuiInstance::showGui(
+    scene* currScene,
+    vulkanInstance* instance, vulkanObject* obj,
+    vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+) {
     // ImGui::ShowDemoWindow();
+
+    // Adding new objects by path:
+    ImGui::Text("Add with files:");
+    ImGui::InputText("Mesh Path", meshPath, IM_ARRAYSIZE(meshPath));
+    ImGui::InputText("Texture Path", texturePath, IM_ARRAYSIZE(texturePath));
+    if (ImGui::Button("Add Object!")) {
+        std::string currentMeshPath(meshPath);
+        std::string currentTexturePath(texturePath);
+        if (!std::filesystem::exists(currentMeshPath.c_str())) {
+            printf("%s: Invalid mesh path!\n", currentMeshPath.c_str());
+        }
+        else if (!std::filesystem::exists(currentTexturePath.c_str())) {
+            printf("%s: Invalid texure path!\n", currentTexturePath.c_str());
+        }
+        else {
+            printf("Adding object: %s, %s\n", currentMeshPath.c_str(), currentTexturePath.c_str());
+            currScene->addObject(new object(
+                instance, obj,
+                currentMeshPath, buffer,
+                currentTexturePath, sampler
+            ));
+        }
+    }
+
+    // Adding new objects with resources:
+    ImGui::Text("Add with resources:");
+
     ImGui::Text("Object settings:");
     ImGui::BeginChild("Scrolling");
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
