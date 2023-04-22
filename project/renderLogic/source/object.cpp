@@ -4,7 +4,7 @@ void object::updateTranslationVectors() {
 	sceneTimer->updateTime();
 
 	pos = pos;
-	rotation.z = sceneTimer->getTime() * glm::radians(90.0f);
+	//rotation.z = sceneTimer->getTime() * glm::radians(90.0f);
 	scale = scale;
 }
 
