@@ -23,6 +23,7 @@ void imGuiInstance::init(
     initRenderPass(surface->getFormat());
     initFramebuffers(surface);
     initImGui(window, instance);
+    isEnabled = true;
 }
 
 vk::DescriptorPool imGuiInstance::initDescriptorPool() {

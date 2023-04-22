@@ -186,7 +186,8 @@ private:
             );
 
             // record and submit ImGui commandBuffer
-            imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());
+            if (imGuiInst.getIsEnabled())
+                imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());

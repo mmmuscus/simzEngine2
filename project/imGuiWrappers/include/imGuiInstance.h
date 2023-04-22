@@ -9,6 +9,7 @@ class imGuiInstance {
 private:
 	// Helper flag
 	bool isInstance = false;
+	bool isEnabled = false;
 
 	// Vulkan variables
 	vk::RenderPass renderPass;
@@ -19,6 +20,10 @@ private:
 
 public:
 	~imGuiInstance();
+
+	bool getIsEnabled() { return isEnabled; }
+
+	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
 
 	void init(
 		GLFWwindow* window,
