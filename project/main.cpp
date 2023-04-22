@@ -107,8 +107,7 @@ private:
 
         // Descriptor sets:
         obj.setDevice(instance.getDevice());
-        obj.initSceneDescriptorSetLayout();
-        obj.initModelDescriptorSetLayout();
+        obj.initDescriptorSetLayouts();
 
         // Pipeline:
         obj.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
@@ -149,9 +148,15 @@ private:
         tankMeshData.init("models/tank.objj", &instance, &modelsBuffer);
 
         // Model datas:
-        roomModelData.init(
+        /*roomModelData.init(
             instance.getDevice(),
             &roomMeshData, &roomTextureData,
+            obj.getModelDescriptorSetLayout()
+        );*/
+        roomModelData.init(
+            &instance,
+            "models/viking_room.objj", &modelsBuffer,
+            "textures/viking_room.png", &textureSampler,
             obj.getModelDescriptorSetLayout()
         );
         tankModelData.init(

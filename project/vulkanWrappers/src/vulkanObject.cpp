@@ -147,6 +147,11 @@ void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, 
     }
 }
 
+void vulkanObject::initDescriptorSetLayouts() {
+    initSceneDescriptorSetLayout();
+    initModelDescriptorSetLayout();
+}
+
 void vulkanObject::initSceneDescriptorSetLayout() {
     auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
         0,                                              // binding

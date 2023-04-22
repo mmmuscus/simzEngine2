@@ -30,11 +30,18 @@ public:
 	vulkanTextureData* getTextureData() { return textureData; }
 
 	void init(
+		vulkanInstance* instance,
+		std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
+		std::string texturePath, vulkanTextureSampler* textureSampler,
+		vk::DescriptorSetLayout descriptorSetLayout
+	);
+	void init(
 		vk::Device _device,
 		vulkanMeshData* _meshData,
 		vulkanTextureData* _textureData,
 		vk::DescriptorSetLayout descriptorSetLayout
 	);
+	void initDescriptors(vk::DescriptorSetLayout descriptorSetLayout);
 	void initDescriptorPool();
 	void initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout);
 

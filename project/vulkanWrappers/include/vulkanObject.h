@@ -57,10 +57,12 @@ public:
 
     void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
     // Descriptor set layouts:
+    void initDescriptorSetLayouts();
+
+private:
     void initSceneDescriptorSetLayout();
     void initModelDescriptorSetLayout();
 
-private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);
 };
 
