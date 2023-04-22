@@ -49,9 +49,7 @@ public:
 		vulkanSurface* surface,
 		vulkanRenderer* renderer,
 		scene* currScene,
-		vk::Queue graphicsQueue,
-		vk::RenderPass imGuiRenderPass,
-		vk::Framebuffer imGuiFramebuffer
+		vk::Queue graphicsQueue
 	);
 
 	void recordCommandBuffer(

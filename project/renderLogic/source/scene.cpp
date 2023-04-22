@@ -1,5 +1,15 @@
 #include "../include/scene.h"
 
+void scene::init(
+	vulkanInstance* instance,
+	vk::DescriptorSetLayout descriptorsetLayout,
+	glm::vec3 cameraPos, glm::vec3 cameraWorldUp
+) {
+	sceneData = new vulkanSceneData();
+	sceneData->init(instance, descriptorsetLayout);
+	cam = new camera(cameraPos, cameraWorldUp);
+}
+
 void scene::resetSceneTimer() {
 	sceneTimer = new timer();
 

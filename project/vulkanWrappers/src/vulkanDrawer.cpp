@@ -66,9 +66,7 @@ void vulkanDrawer::drawFrame(
     vulkanSurface* surface,
     vulkanRenderer* renderer,
     scene* currScene,
-    vk::Queue graphicsQueue,
-    vk::RenderPass imGuiRenderPass,
-    vk::Framebuffer imGuiFramebuffer
+    vk::Queue graphicsQueue
 ) {
     if (surface->getShouldRecreateSwapChain())
         return;

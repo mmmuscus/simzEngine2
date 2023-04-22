@@ -55,16 +55,12 @@ private:
     vulkanDrawer drawer;
     vulkanDynamicUniformBuffer modelsBuffer;
     vulkanTextureSampler textureSampler;
-    vulkanSceneData sceneData;
 
     // Scene variables:
     scene mainScene;
-    camera cam = camera(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-    // ImGui variables PLS REMOVE
+    // ImGui variables:
     imGuiInstance imGuiInst;
-    vk::RenderPass imGuiRenderPass;
-    std::vector<vk::Framebuffer> imGuiFramebuffers;
 
     void initVulkan() {
         // Instance:
@@ -126,15 +122,11 @@ private:
 
         // Dynamic Uniform Buffer:
         modelsBuffer.init(&instance);
-
-        // Scene init (uniform buffer + descriptor sets)
-        sceneData.init(&instance, obj.getSceneDescriptorSetLayout());
     }
 
     void initScene() {
         // Scene setup:
-        mainScene.setSceneData(&sceneData);
-        mainScene.setCam(&cam);
+        mainScene.init(&instance, obj.getSceneDescriptorSetLayout());
 
         // Add objects
         mainScene.addObject(new object(
@@ -190,9 +182,7 @@ private:
                 &surface,
                 &renderer,
                 &mainScene,
-                instance.getGraphicsQueue(),
-                imGuiRenderPass,
-                imGuiFramebuffers[drawer.getImageIndex()]
+                instance.getGraphicsQueue()
             );
 
             // record and submit ImGui commandBuffer
