@@ -26,6 +26,10 @@ void vulkanMeshData::loadMesh(std::string meshPath) {
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
 
+    if (!std::filesystem::exists(meshPath.c_str())) {
+        printf("%s: Invalid mesh path!\n", meshPath.c_str());
+    }
+
     if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, meshPath.c_str())) {
         throw std::runtime_error(warn + err);
     }

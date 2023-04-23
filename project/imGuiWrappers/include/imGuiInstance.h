@@ -17,8 +17,8 @@ private:
 
 	// TODO: move to someplace better
 	// Object adding paths
-	char meshPath[50] = "../../models/tank.objj";
-	char texturePath[50] = "../../textures/viking_room.png";
+	char meshPath[50] = "models/tank.objj";
+	char texturePath[50] = "textures/viking_room.png";
 
 	// Vulkan variables
 	vk::RenderPass renderPass;

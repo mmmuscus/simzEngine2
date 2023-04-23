@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <unordered_map>
+#include <filesystem>
 
 #include "generalIncludes.h"
 #include "modelDataIncludes.h"

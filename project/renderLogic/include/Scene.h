@@ -24,7 +24,7 @@ public:
 	void setSceneData(vulkanSceneData* _sceneData) { sceneData = _sceneData; }
 	void setCam(camera* _cam) { cam = _cam; }
 
-	void addObject(object* _object) { objects.push_back(_object); }
+	void addObject(object* _object);
 
 	vulkanSceneData* getSceneData() { return sceneData; }
 	camera* getCam() { return cam; }

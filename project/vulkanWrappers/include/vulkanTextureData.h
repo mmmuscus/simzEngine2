@@ -1,6 +1,8 @@
 #ifndef VULKAN_TEXTURE_DATA_H_
 #define VULKAN_TEXTURE_DATA_H_
 
+#include <filesystem>
+
 #include "generalIncludes.h"
 
 #include "vulkanInstance.h"

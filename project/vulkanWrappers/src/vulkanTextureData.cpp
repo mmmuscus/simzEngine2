@@ -18,6 +18,10 @@ void vulkanTextureData::init(
 }
 
 void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance* instance) {
+    if (!std::filesystem::exists(texturePath.c_str())) {
+        printf("%s: Invalid texture path!\n", texturePath.c_str());
+    }
+    
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load(
         texturePath.c_str(),

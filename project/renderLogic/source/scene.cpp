@@ -1,5 +1,10 @@
 #include "../include/scene.h"
 
+void scene::addObject(object* _object) {
+	_object->setSceneTimer(sceneTimer);
+	objects.push_back(_object);
+}
+
 void scene::init(
 	vulkanInstance* instance,
 	vk::DescriptorSetLayout descriptorsetLayout,

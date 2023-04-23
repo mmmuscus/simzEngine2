@@ -14,20 +14,12 @@ void imGuiInstance::showGui(
     if (ImGui::Button("Add Object!")) {
         std::string currentMeshPath(meshPath);
         std::string currentTexturePath(texturePath);
-        if (!std::filesystem::exists(currentMeshPath.c_str())) {
-            printf("%s: Invalid mesh path!\n", currentMeshPath.c_str());
-        }
-        else if (!std::filesystem::exists(currentTexturePath.c_str())) {
-            printf("%s: Invalid texure path!\n", currentTexturePath.c_str());
-        }
-        else {
-            printf("Adding object: %s, %s\n", currentMeshPath.c_str(), currentTexturePath.c_str());
-            currScene->addObject(new object(
-                instance, obj,
-                currentMeshPath, buffer,
-                currentTexturePath, sampler
-            ));
-        }
+        printf("Adding object: %s, %s\n", currentMeshPath.c_str(), currentTexturePath.c_str());
+        currScene->addObject(new object(
+            instance, obj,
+            currentMeshPath, buffer,
+            currentTexturePath, sampler
+        ));
     }
 
     // Adding new objects with resources:
