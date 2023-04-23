@@ -3,7 +3,7 @@
 int currentMeshItem = 0;
 int currentTextureItem = 0;
 
-bool stdStringItemGetter(void* data, int index, const char** out) {
+bool stdStringVectorItemGetter(void* data, int index, const char** out) {
     
     std::string* names = (std::string*)data;
     std::string& currentName = names[index];
@@ -46,17 +46,22 @@ void imGuiInstance::showGui(
         meshNames.push_back(meshManager->getMeshDatas()[i]->getName());
     ImGui::Combo(
         "Meshes", &currentMeshItem, 
-        stdStringItemGetter, meshNames.data(), meshNames.size()
+        stdStringVectorItemGetter, meshNames.data(), meshNames.size()
     );
     std::vector<std::string> textureNames;
     for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++)
         textureNames.push_back(textureManager->getTextureDatas()[i]->getName());
     ImGui::Combo(
         "Textures", &currentTextureItem,
-        stdStringItemGetter, textureNames.data(), textureNames.size()
+        stdStringVectorItemGetter, textureNames.data(), textureNames.size()
     );
     if (ImGui::Button("Add Object!")) {
-        printf("Adding object: %d, %d\n", currentMeshItem, currentTextureItem);
+        printf("Adding object: %s, %s\n", meshNames[currentMeshItem].c_str(), textureNames[currentTextureItem].c_str());
+        currScene->addObject(new object(
+            instance->getDevice(), obj,
+            meshManager, currentMeshItem,
+            textureManager, currentTextureItem
+        ));
     }
     ImGui::PopID();
 

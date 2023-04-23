@@ -22,6 +22,9 @@ private:
 	// Object adding paths
 	char meshPath[50] = "models/tank.objj";
 	char texturePath[50] = "textures/viking_room.png";
+	// Manager selectors
+	/*int currentMeshItem = 0;
+	int currentTextureItem = 0;*/
 
 	// Vulkan variables
 	vk::RenderPass renderPass;
