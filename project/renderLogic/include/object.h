@@ -9,6 +9,7 @@
 #include "../../vulkanWrappers/include/vulkanModelData.h"
 
 #include "../../resourceManager/include/meshDataManager.h"
+#include "../../resourceManager/include/textureDataManager.h"
 
 class object {
 private:
@@ -42,22 +43,40 @@ public:
 		pos(_pos), rotation(_rotation), scale(_scale)
 	{};
 	object(
-		vulkanInstance* instance, 
-		vulkanObject* obj,
-		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
-		std::string texturePath, vulkanTextureSampler* textureSampler,
+		vk::Device device, vulkanObject* _vkObject,
+		meshDataManager* meshManager, size_t meshIndex,
+		textureDataManager* textureManager, size_t textureIndex,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
 		sceneTimer(nullptr),
-		vkObject(obj), modelData(new vulkanModelData()),
+		vkObject(_vkObject), modelData(new vulkanModelData()),
+		pos(_pos), rotation(_rotation), scale(_scale)
+	{
+		modelData->init(
+			device,
+			meshManager->getMeshDatas()[meshIndex],
+			textureManager->getTextureDatas()[textureIndex],
+			vkObject->getModelDescriptorSetLayout()
+		);
+	}
+	object(
+		vulkanInstance* instance, vulkanObject* _vkObject,
+		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
+		textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
+		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
+	) :
+		sceneTimer(nullptr),
+		vkObject(_vkObject), modelData(new vulkanModelData()),
 		pos(_pos), rotation(_rotation), scale(_scale)
 	{
 		modelData->init(
 			instance,
 			meshManager, meshPath, uniformBuffer,
-			texturePath, textureSampler,
+			textureManager, texturePath, textureSampler,
 			vkObject->getModelDescriptorSetLayout()
 		);
 	}

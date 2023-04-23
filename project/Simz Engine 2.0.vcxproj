@@ -202,6 +202,7 @@
     <ClInclude Include="resourceManager\include\meshDataManager.h" />
     <ClInclude Include="resourceManager\include\resourceManagerGeneralIncludes.h" />
     <ClInclude Include="resourceManager\include\inputManager.h" />
+    <ClInclude Include="resourceManager\include\textureDataManager.h" />
     <ClInclude Include="resourceManager\include\windowManager.h" />
     <ClInclude Include="vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="vulkanWrappers\include\modelDataIncludes.h" />

@@ -12,6 +12,7 @@
 #include "resourceManager/include/windowManager.h"
 #include "resourceManager/include/inputManager.h"
 #include "resourceManager/include/meshDataManager.h"
+#include "resourceManager/include/textureDataManager.h"
 
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
@@ -48,6 +49,7 @@ private:
     inputManager input;
     timer inputTimer;
     meshDataManager meshMngr;
+    textureDataManager textureMngr;
 
     // Vulkan variables:
     vulkanInstance instance;
@@ -134,18 +136,19 @@ private:
         mainScene.addObject(new object(
             &instance, &obj,
             &meshMngr, "models/viking_room.objj", &modelsBuffer,
-            "textures/viking_room.png", &textureSampler
+            &textureMngr, "textures/viking_room.png", &textureSampler
         ));
         mainScene.addObject(new object(
             &instance, &obj,
             &meshMngr, "models/tank.objj", &modelsBuffer,
-            "textures/demo_texture.jpg", &textureSampler,
+            &textureMngr, "textures/demo_texture.jpg", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.5f)
         ));
-
-        for (size_t i = 0; i < meshMngr.getMeshDatas().size(); i++) {
-            printf("%s\n", meshMngr.getMeshDatas()[i]->getName().c_str());
-        }
+        mainScene.addObject(new object(
+            instance.getDevice(), &obj,
+            &meshMngr, 1,
+            &textureMngr, 0
+        ));
 
         mainScene.defragmentObjectNumbers();
     }
@@ -196,7 +199,7 @@ private:
                 imGuiInst.presentGui(
                     surface.getShouldRecreateSwapChain(), &mainScene,
                     &instance, &obj,
-                    &meshMngr,
+                    &meshMngr, &textureMngr,
                     &modelsBuffer, &textureSampler
                 );
                 imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());

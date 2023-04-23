@@ -10,6 +10,7 @@
 #include "../../renderLogic/include/scene.h"
 
 #include "../../resourceManager/include/meshDataManager.h"
+#include "../../resourceManager/include/textureDataManager.h"
 
 class imGuiInstance {
 private:
@@ -47,7 +48,7 @@ public:
 	void presentGui(
 		bool shouldRecreateSwapChain, scene* currScene,
 		vulkanInstance* instance, vulkanObject* obj,
-		meshDataManager* meshManager,
+		meshDataManager* meshManager, textureDataManager* textureManager, 
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
 
@@ -69,7 +70,7 @@ private:
 	void showGui(
 		scene* currScene,
 		vulkanInstance* instance, vulkanObject* obj,
-		meshDataManager* meshManager,
+		meshDataManager* meshManager, textureDataManager* textureManager,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
 	void showObjectGui(object* obj);

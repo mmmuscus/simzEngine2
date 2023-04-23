@@ -3,7 +3,7 @@
 void imGuiInstance::showGui(
     scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
-    meshDataManager* meshManager,
+    meshDataManager* meshManager, textureDataManager* textureManager,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
     ImGui::ShowDemoWindow();
@@ -19,7 +19,7 @@ void imGuiInstance::showGui(
         currScene->addObject(new object(
             instance, obj,
             meshManager, currentMeshPath, buffer,
-            currentTexturePath, sampler
+            textureManager, currentTexturePath, sampler
         ));
     }
 

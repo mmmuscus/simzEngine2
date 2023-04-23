@@ -7,15 +7,12 @@ vulkanModelData::~vulkanModelData() {
 void vulkanModelData::init(
     vulkanInstance* instance,
     meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
-    std::string texturePath, vulkanTextureSampler* textureSampler,
+    textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
     vk::DescriptorSetLayout descriptorSetLayout
 ) {
     device = instance->getDevice();
     meshData = meshManager->addMeshData(meshPath, instance, uniformBuffer);
-    /*meshData = new vulkanMeshData();
-    meshData->init(meshPath, instance, uniformBuffer);*/
-    textureData = new vulkanTextureData();
-    textureData->init(texturePath, instance, textureSampler);
+    textureData = textureManager->addTextureData(texturePath, instance, textureSampler);
     initDescriptors(descriptorSetLayout);
 }
 
