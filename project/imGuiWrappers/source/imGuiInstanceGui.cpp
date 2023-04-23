@@ -1,5 +1,18 @@
 #include "../include/imGuiInstance.h"
 
+int currentMeshItem = 0;
+int currentTextureItem = 0;
+
+bool stdStringItemGetter(void* data, int index, const char** out) {
+    
+    std::string* names = (std::string*)data;
+    std::string& currentName = names[index];
+
+    *out = names[index].c_str();
+
+    return true;
+}
+
 void imGuiInstance::showGui(
     scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
@@ -9,6 +22,7 @@ void imGuiInstance::showGui(
     ImGui::ShowDemoWindow();
 
     // Adding new objects by path:
+    ImGui::PushID("Files");
     ImGui::Text("Add with files:");
     ImGui::InputText("Mesh Path", meshPath, IM_ARRAYSIZE(meshPath));
     ImGui::InputText("Texture Path", texturePath, IM_ARRAYSIZE(texturePath));
@@ -22,10 +36,31 @@ void imGuiInstance::showGui(
             textureManager, currentTexturePath, sampler
         ));
     }
+    ImGui::PopID();
 
     // Adding new objects with resources:
+    ImGui::PushID("Resources");
     ImGui::Text("Add with resources:");
+    std::vector<std::string> meshNames;
+    for (size_t i = 0; i < meshManager->getMeshDatas().size(); i++) 
+        meshNames.push_back(meshManager->getMeshDatas()[i]->getName());
+    ImGui::Combo(
+        "Meshes", &currentMeshItem, 
+        stdStringItemGetter, meshNames.data(), meshNames.size()
+    );
+    std::vector<std::string> textureNames;
+    for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++)
+        textureNames.push_back(textureManager->getTextureDatas()[i]->getName());
+    ImGui::Combo(
+        "Textures", &currentTextureItem,
+        stdStringItemGetter, textureNames.data(), textureNames.size()
+    );
+    if (ImGui::Button("Add Object!")) {
+        printf("Adding object: %d, %d\n", currentMeshItem, currentTextureItem);
+    }
+    ImGui::PopID();
 
+    // Object settings
     ImGui::Text("Object settings:");
     ImGui::BeginChild("Scrolling");
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {

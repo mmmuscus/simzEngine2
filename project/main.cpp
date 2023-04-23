@@ -144,11 +144,6 @@ private:
             &textureMngr, "textures/demo_texture.jpg", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.5f)
         ));
-        mainScene.addObject(new object(
-            instance.getDevice(), &obj,
-            &meshMngr, 1,
-            &textureMngr, 0
-        ));
 
         mainScene.defragmentObjectNumbers();
     }

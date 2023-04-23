@@ -15,6 +15,7 @@ public:
 		vulkanInstance* instance,
 		vulkanTextureSampler* textureSampler
 	) {
+		// TODO: Fix
 		/*std::string dummyName = texturePath.substr(texturePath.find_last_of("/\\") + 1);
 		std::string::size_type lastDot(dummyName.find_last_of('.'));
 		dummyName = dummyName.substr(0, lastDot);
