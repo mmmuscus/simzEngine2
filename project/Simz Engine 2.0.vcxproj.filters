@@ -202,10 +202,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\vertexShaders\baseShader.vert" />
-    <None Include="shaders\fragmentShaders\baseShader.frag" />
     <None Include="shaders\compile.bat">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="shaders\fragmentShaders\diffuseShader.frag" />
+    <None Include="shaders\vertexShaders\diffuseShader.vert" />
+    <None Include="shaders\fragmentShaders\diffuseFrag.spv" />
+    <None Include="shaders\vertexShaders\diffuseVert.spv" />
+    <None Include="shaders\fragmentShaders\negativeShader.frag" />
+    <None Include="shaders\fragmentShaders\negativeFrag.spv" />
   </ItemGroup>
 </Project>

@@ -54,7 +54,8 @@ private:
     // Vulkan variables:
     vulkanInstance instance;
     vulkanSurface surface;
-    vulkanObject obj;
+    vulkanObject diffuseObject;
+    vulkanObject negativeObject;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
     vulkanDynamicUniformBuffer modelsBuffer;
@@ -97,12 +98,27 @@ private:
         renderer.setDevice(instance.getDevice());
         renderer.initRenderPass(surface.getFormat());
 
+        // DIFFUSE OBJECT:
         // Descriptor sets:
-        obj.setDevice(instance.getDevice());
-        obj.initDescriptorSetLayouts();
+        diffuseObject.setDevice(instance.getDevice());
+        diffuseObject.initDescriptorSetLayouts();
 
         // Pipeline:
-        obj.initPipeline(surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples());
+        diffuseObject.initPipeline(
+            surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
+            "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/diffuseFrag.spv"
+        );
+
+        // NEGATIVE OBJECT:
+        // Descriptor sets:
+        negativeObject.setDevice(instance.getDevice());
+        negativeObject.initDescriptorSetLayouts();
+        
+        // Pipeline
+        negativeObject.initPipeline(
+            surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
+            "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/negativeFrag.spv"
+        );
 
         // Color resources:
         renderer.initColorResources(&instance, surface.getFormat(), surface.getExtent());
@@ -130,16 +146,16 @@ private:
 
     void initScene() {
         // Scene setup:
-        mainScene.init(&instance, obj.getSceneDescriptorSetLayout());
+        mainScene.init(&instance, diffuseObject.getSceneDescriptorSetLayout());
 
         // Add objects
         mainScene.addObject(new object(
-            &instance, &obj,
+            &instance, &diffuseObject,
             &meshMngr, "models/viking_room.objj", &modelsBuffer,
             &textureMngr, "textures/viking_room.png", &textureSampler
         ));
         mainScene.addObject(new object(
-            &instance, &obj,
+            &instance, &diffuseObject,
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/demo_texture.jpg", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.5f)
@@ -193,7 +209,7 @@ private:
             if (imGuiInst.getIsEnabled()) {
                 imGuiInst.presentGui(
                     surface.getShouldRecreateSwapChain(), &mainScene,
-                    &instance, &obj,
+                    &instance, &diffuseObject,
                     &meshMngr, &textureMngr,
                     &modelsBuffer, &textureSampler
                 );

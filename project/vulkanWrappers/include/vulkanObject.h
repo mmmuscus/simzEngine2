@@ -55,7 +55,10 @@ public:
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vk::Device getDevice() { return device; }
 
-    void initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples);
+    void initPipeline(
+        vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
+        std::string vertexShaderPath, std::string fragmentShaderPath
+    );
     // Descriptor set layouts:
     void initDescriptorSetLayouts();
 

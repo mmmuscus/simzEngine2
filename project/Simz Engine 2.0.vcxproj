@@ -219,8 +219,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\compile.bat" />
-    <None Include="shaders\fragmentShaders\baseShader.frag" />
-    <None Include="shaders\vertexShaders\baseShader.vert" />
+    <None Include="shaders\fragmentShaders\diffuseFrag.spv" />
+    <None Include="shaders\fragmentShaders\diffuseShader.frag" />
+    <None Include="shaders\fragmentShaders\negativeFrag.spv" />
+    <None Include="shaders\fragmentShaders\negativeShader.frag" />
+    <None Include="shaders\vertexShaders\diffuseShader.vert" />
+    <None Include="shaders\vertexShaders\diffuseVert.spv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

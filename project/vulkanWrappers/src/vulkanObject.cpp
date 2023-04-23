@@ -9,9 +9,12 @@ vulkanObject::~vulkanObject() {
     device.destroyPipelineLayout(pipelineLayout);
 }
 
-void vulkanObject::initPipeline(vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples) {
-    auto vertShaderCode = readFile("shaders/vertexShaders/vert.spv");
-    auto fragShaderCode = readFile("shaders/fragmentShaders/frag.spv");
+void vulkanObject::initPipeline(
+    vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
+    std::string vertexShaderPath, std::string fragmentShaderPath
+) {
+    auto vertShaderCode = readFile(vertexShaderPath);
+    auto fragShaderCode = readFile(fragmentShaderPath);
 
     auto vertShaderModule = createShaderModule(vertShaderCode);
     auto fragShaderModule = createShaderModule(fragShaderCode);
