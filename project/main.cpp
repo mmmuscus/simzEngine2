@@ -11,6 +11,7 @@
 
 #include "resourceManager/include/windowManager.h"
 #include "resourceManager/include/inputManager.h"
+#include "resourceManager/include/meshDataManager.h"
 
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
@@ -31,11 +32,11 @@
 class Application {
 public:
     void run() {
-        wndwManager.setSurface(&surface);
-        wndwManager.initWindow();
-        wndwManager.initGlfwInputHandling();
+        windowMngr.setSurface(&surface);
+        windowMngr.initWindow();
+        windowMngr.initGlfwInputHandling();
         initVulkan();
-        imGuiInst.init(wndwManager.getWindow(), &instance, &surface);
+        imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
         initScene();
         mainLoop();
         cleanup();
@@ -43,9 +44,10 @@ public:
 
 private:
     // Input + window managing
-    windowManager wndwManager;
+    windowManager windowMngr;
     inputManager input;
     timer inputTimer;
+    meshDataManager meshMngr;
 
     // Vulkan variables:
     vulkanInstance instance;
@@ -69,7 +71,7 @@ private:
         instance.initCallback();
 
         // Surface:
-        surface.setWindow(wndwManager.getWindow());
+        surface.setWindow(windowMngr.getWindow());
         surface.setInstance(instance.getInstance());
         surface.initSurface();
 
@@ -131,15 +133,19 @@ private:
         // Add objects
         mainScene.addObject(new object(
             &instance, &obj,
-            "models/viking_room.objj", &modelsBuffer,
+            &meshMngr, "models/viking_room.objj", &modelsBuffer,
             "textures/viking_room.png", &textureSampler
         ));
         mainScene.addObject(new object(
             &instance, &obj,
-            "models/tank.objj", &modelsBuffer,
+            &meshMngr, "models/tank.objj", &modelsBuffer,
             "textures/demo_texture.jpg", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.5f)
         ));
+
+        for (size_t i = 0; i < meshMngr.getMeshDatas().size(); i++) {
+            printf("%s\n", meshMngr.getMeshDatas()[i]->getName().c_str());
+        }
 
         mainScene.defragmentObjectNumbers();
     }
@@ -148,14 +154,14 @@ private:
         inputTimer = timer();
         mainScene.resetSceneTimer();
 
-        while (!glfwWindowShouldClose(wndwManager.getWindow())) {
+        while (!glfwWindowShouldClose(windowMngr.getWindow())) {
             inputTimer.updateTime();
             mainScene.defragmentObjectNumbers();
 
             // Process inputs and update camera
             glfwPollEvents();
-            input.processKeyboardInput(wndwManager.getWindow());
-            wndwManager.checkIfWindowShouldClose();
+            input.processKeyboardInput(windowMngr.getWindow());
+            windowMngr.checkIfWindowShouldClose();
             mainScene.getCam()->processKeyboard(inputTimer.getDeltaTime());
             mainScene.getCam()->processMouseMovement();
             input.resetOffset();
@@ -190,6 +196,7 @@ private:
                 imGuiInst.presentGui(
                     surface.getShouldRecreateSwapChain(), &mainScene,
                     &instance, &obj,
+                    &meshMngr,
                     &modelsBuffer, &textureSampler
                 );
                 imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());

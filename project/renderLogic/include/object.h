@@ -8,6 +8,8 @@
 #include "../../vulkanWrappers/include/vulkanTextureData.h"
 #include "../../vulkanWrappers/include/vulkanModelData.h"
 
+#include "../../resourceManager/include/meshDataManager.h"
+
 class object {
 private:
 	// model matrix:
@@ -42,7 +44,7 @@ public:
 	object(
 		vulkanInstance* instance, 
 		vulkanObject* obj,
-		std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
+		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
 		std::string texturePath, vulkanTextureSampler* textureSampler,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -54,7 +56,7 @@ public:
 	{
 		modelData->init(
 			instance,
-			meshPath, uniformBuffer,
+			meshManager, meshPath, uniformBuffer,
 			texturePath, textureSampler,
 			vkObject->getModelDescriptorSetLayout()
 		);

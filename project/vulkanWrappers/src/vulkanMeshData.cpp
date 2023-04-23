@@ -37,7 +37,6 @@ void vulkanMeshData::loadMesh(std::string meshPath) {
     name = meshPath.substr(meshPath.find_last_of("/\\") + 1);
     std::string::size_type lastDot(name.find_last_of('.'));
     name = name.substr(0, lastDot);
-    printf("%s\n", name.c_str());
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 

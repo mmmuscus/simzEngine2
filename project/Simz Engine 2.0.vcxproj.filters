@@ -194,6 +194,9 @@
     <ClInclude Include="vulkanWrappers\include\vulkanModelData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resourceManager\include\meshDataManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\vertexShaders\baseShader.vert" />

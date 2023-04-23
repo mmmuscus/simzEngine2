@@ -3,6 +3,7 @@
 void imGuiInstance::showGui(
     scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
+    meshDataManager* meshManager,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
     ImGui::ShowDemoWindow();
@@ -17,7 +18,7 @@ void imGuiInstance::showGui(
         printf("Adding object: %s, %s\n", currentMeshPath.c_str(), currentTexturePath.c_str());
         currScene->addObject(new object(
             instance, obj,
-            currentMeshPath, buffer,
+            meshManager, currentMeshPath, buffer,
             currentTexturePath, sampler
         ));
     }

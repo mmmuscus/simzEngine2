@@ -14,6 +14,7 @@ void imGuiInstance::recreateFramebuffers(vulkanSurface* surface) {
 void imGuiInstance::presentGui(
     bool shouldRecreateSwapChain, scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
+    meshDataManager* meshManager,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
     if (shouldRecreateSwapChain)
@@ -25,6 +26,7 @@ void imGuiInstance::presentGui(
     showGui(
         currScene,
         instance, obj, 
+        meshManager,
         buffer, sampler
     );
     ImGui::Render();

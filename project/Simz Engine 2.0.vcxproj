@@ -199,6 +199,7 @@
     <ClInclude Include="renderLogic\include\camera.h" />
     <ClInclude Include="renderLogic\include\object.h" />
     <ClInclude Include="renderLogic\include\scene.h" />
+    <ClInclude Include="resourceManager\include\meshDataManager.h" />
     <ClInclude Include="resourceManager\include\resourceManagerGeneralIncludes.h" />
     <ClInclude Include="resourceManager\include\inputManager.h" />
     <ClInclude Include="resourceManager\include\windowManager.h" />

@@ -3,6 +3,8 @@
 
 #include "generalIncludes.h"
 
+#include "../../resourceManager/include/meshDataManager.h"
+
 #include "vulkanMeshData.h"
 #include "vulkanTextureData.h"
 
@@ -31,7 +33,7 @@ public:
 
 	void init(
 		vulkanInstance* instance,
-		std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
+		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
 		std::string texturePath, vulkanTextureSampler* textureSampler,
 		vk::DescriptorSetLayout descriptorSetLayout
 	);
