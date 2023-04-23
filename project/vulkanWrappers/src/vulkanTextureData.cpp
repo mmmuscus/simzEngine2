@@ -31,11 +31,14 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         STBI_rgb_alpha);
     vk::DeviceSize imageSize = texWidth * texHeight * 4;
     mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
-    //mipLevels = 4;
-
+    
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");
     }
+
+    name = texturePath.substr(texturePath.find_last_of("/\\") + 1);
+    std::string::size_type lastDot(name.find_last_of('.'));
+    name = name.substr(0, lastDot);
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;

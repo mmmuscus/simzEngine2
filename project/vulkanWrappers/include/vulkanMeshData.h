@@ -13,6 +13,9 @@
 
 class vulkanMeshData {
 private:
+    // Name:
+    std::string name;
+
     // Buffers:
     vk::Buffer vertexBuffer;
     vk::DeviceMemory vertexBufferMemory;
@@ -34,6 +37,7 @@ public:
     void setDevice(vk::Device _device) { device = _device; }
     void setDynamicUniformBuffer(vulkanDynamicUniformBuffer* _uniformBuffer) { uniformBuffer = _uniformBuffer; }
 
+    std::string getName() { return name; }
     vk::Buffer getVertexBuffer() { return vertexBuffer; }
     vk::Buffer getIndexBuffer() { return indexBuffer; }
     vulkanDynamicUniformBuffer* getUniformBuffer() { return uniformBuffer; }

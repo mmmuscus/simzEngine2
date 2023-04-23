@@ -5,7 +5,7 @@ void imGuiInstance::showGui(
     vulkanInstance* instance, vulkanObject* obj,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
-    // ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();
 
     // Adding new objects by path:
     ImGui::Text("Add with files:");

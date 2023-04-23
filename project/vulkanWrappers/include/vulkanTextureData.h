@@ -12,6 +12,9 @@
 
 class vulkanTextureData {
 private:
+    // Name:
+    std::string name;
+
     // Textures:
     uint32_t mipLevels;
     vk::Image image;
@@ -30,6 +33,7 @@ public:
     void setDevice(vk::Device _device) { device = _device; }
     void setSampler(vulkanTextureSampler* _sampler) { sampler = _sampler; }
 
+    std::string getName() { return name; }
     vk::ImageView getImageView() { return imageView; }
     vulkanTextureSampler* getSampler() { return sampler; }
 
