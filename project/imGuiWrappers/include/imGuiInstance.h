@@ -21,7 +21,7 @@ private:
 	// TODO: move to someplace better
 	// Object adding paths
 	char meshPath[50] = "models/tank.objj";
-	char texturePath[50] = "textures/viking_room.png";
+	char texturePath[50] = "textures/damn_texture.jpeg";
 	// Manager selectors
 	/*int currentMeshItem = 0;
 	int currentTextureItem = 0;*/

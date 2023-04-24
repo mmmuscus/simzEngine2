@@ -54,7 +54,6 @@ public:
 
 	void recordCommandBuffer(
 		vk::CommandBuffer commandBuffer,
-		vulkanObject* obj,
 		vulkanRenderer* renderer,
 		vk::Extent2D extent,
 		uint32_t imageIndex,

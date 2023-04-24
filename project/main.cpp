@@ -155,10 +155,11 @@ private:
             &textureMngr, "textures/viking_room.png", &textureSampler
         ));
         mainScene.addObject(new object(
-            &instance, &diffuseObject,
+            &instance, &negativeObject,
             &meshMngr, "models/tank.objj", &modelsBuffer,
-            &textureMngr, "textures/demo_texture.jpg", &textureSampler,
-            glm::vec3(0.0f, 0.0f, 0.5f)
+            &textureMngr, "textures/camouflage.jpg", &textureSampler,
+            glm::vec3(0.0f, -1.75f, -0.75f),
+            glm::vec3(0.0f, 0.0f, 3.14f)
         ));
 
         mainScene.defragmentObjectNumbers();

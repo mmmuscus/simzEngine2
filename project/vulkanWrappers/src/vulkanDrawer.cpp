@@ -76,7 +76,6 @@ void vulkanDrawer::drawFrame(
     commandBuffers[currentFrame].reset();
     recordCommandBuffer(
         commandBuffers[currentFrame],
-        currScene->getObjects()[0]->getVulkanObject(),
         renderer,
         surface->getExtent(),
         imageIndex,
@@ -103,7 +102,6 @@ void vulkanDrawer::drawFrame(
 
 void vulkanDrawer::recordCommandBuffer(
     vk::CommandBuffer commandBuffer,
-    vulkanObject* obj,
     vulkanRenderer* renderer,
     vk::Extent2D extent,
     uint32_t imageIndex,
@@ -130,8 +128,8 @@ void vulkanDrawer::recordCommandBuffer(
         static_cast<uint32_t>(clearValues.size()), clearValues.data()
     );
 
+
     commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-    commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, obj->getPipeline());
 
     auto viewport = vk::Viewport(
         0.0f, 0.0f,                 // x, y
@@ -145,7 +143,8 @@ void vulkanDrawer::recordCommandBuffer(
 
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,
-        obj->getPipelineLayout(),
+        // TODO: do sth nicer w this
+        currScene->getObjects()[0]->getVulkanObject()->getPipelineLayout(),
         0,
         currScene->getSceneData()->getDescriptorSets()[currentFrame],
         nullptr
@@ -154,13 +153,16 @@ void vulkanDrawer::recordCommandBuffer(
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
         object* currObject = currScene->getObjects()[i];
         vulkanMeshData* currMesh = currObject->getModelData()->getMeshData();
+
+        commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, currObject->getVulkanObject()->getPipeline());
+
         vk::Buffer vertexBuffers[] = { currMesh->getVertexBuffer() };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
         commandBuffer.bindIndexBuffer(currMesh->getIndexBuffer(), 0, vk::IndexType::eUint32);
         commandBuffer.bindDescriptorSets(
             vk::PipelineBindPoint::eGraphics,
-            obj->getPipelineLayout(),
+            currObject->getVulkanObject()->getPipelineLayout(),
             1,
             currObject->getModelData()->getDescriptorSets()[currentFrame],
             currObject->getObjectNumber() * static_cast<uint32_t>(currMesh->getUniformBuffer()->getDynamicAlignment())
