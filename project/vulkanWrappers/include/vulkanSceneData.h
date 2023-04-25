@@ -19,7 +19,6 @@ private:
 	std::vector<void*> uniformBuffersMapped;
 
 	// Descriptor Sets
-	vk::DescriptorPool descriptorPool;
 	std::vector<vk::DescriptorSet> descriptorSets;
 
 	// Not maintained by the class:
@@ -34,10 +33,16 @@ public:
 
 	std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
 
-	void init(vulkanInstance* instance, vk::DescriptorSetLayout descriptorSetLayout);
+	void init(
+		vulkanInstance* instance,
+		vk::DescriptorSetLayout descriptorSetLayout,
+		vk::DescriptorPool descriptorPool
+	);
 	void initUniformBuffers(vulkanInstance* instance);
-	void initDescriptorPool();
-	void initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout);
+	void initDescriptorSets(
+		vk::DescriptorSetLayout descriptorSetLayout,
+		vk::DescriptorPool commandPool
+	);
 
 	void updateSceneUniformBuffer(uint32_t currentImage, vk::Extent2D extent, glm::mat4 viewMat);
 

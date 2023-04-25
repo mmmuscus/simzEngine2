@@ -7,11 +7,11 @@ void scene::addObject(object* _object) {
 
 void scene::init(
 	vulkanInstance* instance,
-	vk::DescriptorSetLayout descriptorsetLayout,
+	vk::DescriptorSetLayout descriptorsetLayout, vk::DescriptorPool descriptorPool,
 	glm::vec3 cameraPos, glm::vec3 cameraWorldUp
 ) {
 	sceneData = new vulkanSceneData();
-	sceneData->init(instance, descriptorsetLayout);
+	sceneData->init(instance, descriptorsetLayout, descriptorPool);
 	cam = new camera(cameraPos, cameraWorldUp);
 }
 

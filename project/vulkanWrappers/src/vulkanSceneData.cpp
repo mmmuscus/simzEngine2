@@ -1,19 +1,20 @@
 #include "../include/vulkanSceneData.h"
 
 vulkanSceneData::~vulkanSceneData() {
-    device.destroyDescriptorPool(descriptorPool);
-
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroyBuffer(uniformBuffers[i]);
         device.freeMemory(uniformBuffersMemory[i]);
     }
 }
 
-void vulkanSceneData::init(vulkanInstance* instance, vk::DescriptorSetLayout descriptorSetLayout) {
+void vulkanSceneData::init(
+    vulkanInstance* instance, 
+    vk::DescriptorSetLayout descriptorSetLayout,
+    vk::DescriptorPool descriptorPool
+) {
     device = instance->getDevice();
     initUniformBuffers(instance);
-    initDescriptorPool();
-    initDescriptorSets(descriptorSetLayout);
+    initDescriptorSets(descriptorSetLayout, descriptorPool);
 }
 
 void vulkanSceneData::initUniformBuffers(vulkanInstance* instance) {
@@ -44,29 +45,10 @@ void vulkanSceneData::updateSceneUniformBuffer(uint32_t currentFrame, vk::Extent
     memcpy(uniformBuffersMapped[currentFrame], &sbo, sizeof(sbo));
 }
 
-void vulkanSceneData::initDescriptorPool() {
-    std::array<vk::DescriptorPoolSize, 1> poolSizes = {
-        vk::DescriptorPoolSize(
-            vk::DescriptorType::eUniformBuffer,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
-        )
-    };
-
-    auto poolInfo = vk::DescriptorPoolCreateInfo(
-        vk::DescriptorPoolCreateFlags(),
-        static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),    // maxsets
-        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
-    );
-
-    try {
-        descriptorPool = device.createDescriptorPool(poolInfo);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to create descriptor pool!");
-    }
-}
-
-void vulkanSceneData::initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout) {
+void vulkanSceneData::initDescriptorSets(
+    vk::DescriptorSetLayout descriptorSetLayout,
+    vk::DescriptorPool descriptorPool
+) {
     std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
 
     auto allocInfo = vk::DescriptorSetAllocateInfo(

@@ -146,7 +146,11 @@ private:
 
     void initScene() {
         // Scene setup:
-        mainScene.init(&instance, diffuseObject.getSceneDescriptorSetLayout());
+        mainScene.init(
+            &instance, 
+            diffuseObject.getSceneDescriptorSetLayout(),
+            diffuseObject.getModelDescriptorPool()
+        );
 
         // Add objects
         mainScene.addObject(new object(
