@@ -35,6 +35,7 @@ class vulkanObject {
 private:
     // Descriptor set layouts:
     vk::DescriptorSetLayout sceneDescriptorSetLayout;
+    vk::DescriptorPool modelDescriptorPool;
     vk::DescriptorSetLayout modelDescriptorSetLayout;
     // Pipeline
     vk::PipelineLayout pipelineLayout;
@@ -50,6 +51,7 @@ public:
 
     // Descriptor set layouts:
     vk::DescriptorSetLayout getSceneDescriptorSetLayout() { return sceneDescriptorSetLayout; }
+    vk::DescriptorPool getModelDescriptorPool() { return modelDescriptorPool; }
     vk::DescriptorSetLayout getModelDescriptorSetLayout() { return modelDescriptorSetLayout; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
@@ -60,11 +62,12 @@ public:
         std::string vertexShaderPath, std::string fragmentShaderPath
     );
     // Descriptor set layouts:
-    void initDescriptorSetLayouts();
+    void initDescriptors();
 
 private:
     void initSceneDescriptorSetLayout();
     void initModelDescriptorSetLayout();
+    void initModelDescriptorPool();
 
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);
 };

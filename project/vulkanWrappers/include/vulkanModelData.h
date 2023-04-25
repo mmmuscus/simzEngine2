@@ -15,15 +15,12 @@ private:
 	vulkanMeshData* meshData;
 	vulkanTextureData* textureData;
 	// Descriptorsets:
-	vk::DescriptorPool descriptorPool;
 	std::vector<vk::DescriptorSet> descriptorSets;
 
 	// Not maintained by class
 	vk::Device device;
 
 public:
-	~vulkanModelData();
-
 	void setDevice(vk::Device _device) { device = _device; }
 	void setMeshData(vulkanMeshData* _meshData) { meshData = _meshData; }
 	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
@@ -36,17 +33,19 @@ public:
 		vulkanInstance* instance,
 		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
 		textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
-		vk::DescriptorSetLayout descriptorSetLayout
+		vk::DescriptorSetLayout descriptorSetLayout, vk::DescriptorPool descriptorPool
 	);
 	void init(
 		vk::Device _device,
 		vulkanMeshData* _meshData,
 		vulkanTextureData* _textureData,
-		vk::DescriptorSetLayout descriptorSetLayout
+		vk::DescriptorSetLayout descriptorSetLayout,
+		vk::DescriptorPool descriptorPool
 	);
-	void initDescriptors(vk::DescriptorSetLayout descriptorSetLayout);
-	void initDescriptorPool();
-	void initDescriptorSets(vk::DescriptorSetLayout descriptorSetLayout);
+	void initDescriptorSets(
+		vk::DescriptorSetLayout descriptorSetLayout,
+		vk::DescriptorPool descriptorPool
+	);
 
 private:
 

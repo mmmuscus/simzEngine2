@@ -58,7 +58,7 @@ public:
 			device,
 			meshManager->getMeshDatas()[meshIndex],
 			textureManager->getTextureDatas()[textureIndex],
-			vkObject->getModelDescriptorSetLayout()
+			vkObject->getModelDescriptorSetLayout(), vkObject->getModelDescriptorPool()
 		);
 	}
 	object(
@@ -77,7 +77,7 @@ public:
 			instance,
 			meshManager, meshPath, uniformBuffer,
 			textureManager, texturePath, textureSampler,
-			vkObject->getModelDescriptorSetLayout()
+			vkObject->getModelDescriptorSetLayout(), vkObject->getModelDescriptorPool()
 		);
 	}
 

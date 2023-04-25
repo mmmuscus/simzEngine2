@@ -101,7 +101,7 @@ private:
         // DIFFUSE OBJECT:
         // Descriptor sets:
         diffuseObject.setDevice(instance.getDevice());
-        diffuseObject.initDescriptorSetLayouts();
+        diffuseObject.initDescriptors();
 
         // Pipeline:
         diffuseObject.initPipeline(
@@ -112,7 +112,7 @@ private:
         // NEGATIVE OBJECT:
         // Descriptor sets:
         negativeObject.setDevice(instance.getDevice());
-        negativeObject.initDescriptorSetLayouts();
+        negativeObject.initDescriptors();
         
         // Pipeline
         negativeObject.initPipeline(
