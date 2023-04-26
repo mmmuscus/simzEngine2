@@ -13,10 +13,11 @@ vulkanObject::~vulkanObject() {
 }
 
 void vulkanObject::init(
-    vk::Device _device,
+    std::string _name, vk::Device _device,
     vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
     std::string vertexShaderPath, std::string fragmentShaderPath
 ) {
+    name = _name;
     device = _device;
     initDescriptors();
     initPipeline(

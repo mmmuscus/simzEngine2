@@ -13,6 +13,7 @@
 #include "resourceManager/include/inputManager.h"
 #include "resourceManager/include/meshDataManager.h"
 #include "resourceManager/include/textureDataManager.h"
+#include "resourceManager/include/vulkanObjectManager.h"
 
 #include "vulkanWrappers/include/vulkanInstance.h"
 #include "vulkanWrappers/include/vulkanSurface.h"
@@ -48,14 +49,16 @@ private:
     windowManager windowMngr;
     inputManager input;
     timer inputTimer;
+
     meshDataManager meshMngr;
     textureDataManager textureMngr;
+    vulkanObjectManager vulkanObjectMngr;
 
     // Vulkan variables:
     vulkanInstance instance;
     vulkanSurface surface;
-    vulkanObject diffuseObject;
-    vulkanObject negativeObject;
+    vulkanObject* diffuseObject;
+    vulkanObject* negativeObject;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
     vulkanDynamicUniformBuffer modelsBuffer;
@@ -99,15 +102,15 @@ private:
         renderer.initRenderPass(surface.getFormat());
 
         // DIFFUSE OBJECT:
-        diffuseObject.init(
-            instance.getDevice(),
+        diffuseObject = vulkanObjectMngr.addVulkanObject(
+            "Diffuse", instance.getDevice(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
-        negativeObject.init(
-            instance.getDevice(),
+        negativeObject = vulkanObjectMngr.addVulkanObject(
+            "Negative", instance.getDevice(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/negativeFrag.spv"
         );
@@ -140,18 +143,18 @@ private:
         // Scene setup:
         mainScene.init(
             &instance, 
-            diffuseObject.getSceneDescriptorSetLayout(),
-            diffuseObject.getSceneDescriptorPool()
+            diffuseObject->getSceneDescriptorSetLayout(),
+            diffuseObject->getSceneDescriptorPool()
         );
 
         // Add objects
         mainScene.addObject(new object(
-            &instance, &diffuseObject,
+            &instance, diffuseObject,
             &meshMngr, "models/viking_room.objj", &modelsBuffer,
             &textureMngr, "textures/viking_room.png", &textureSampler
         ));
         mainScene.addObject(new object(
-            &instance, &negativeObject,
+            &instance, negativeObject,
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -1.75f, -0.75f),
@@ -206,7 +209,7 @@ private:
             if (imGuiInst.getIsEnabled()) {
                 imGuiInst.presentGui(
                     surface.getShouldRecreateSwapChain(), &mainScene,
-                    &instance, &diffuseObject,
+                    &instance, diffuseObject,
                     &meshMngr, &textureMngr,
                     &modelsBuffer, &textureSampler
                 );

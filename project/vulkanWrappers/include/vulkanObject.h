@@ -33,6 +33,8 @@ static std::vector<char> readFile(const std::string& filename) {
 
 class vulkanObject {
 private:
+    // Name:
+    std::string name;
     // Descriptor set layouts:
     vk::DescriptorSetLayout sceneDescriptorSetLayout;
     vk::DescriptorPool modelDescriptorPool;
@@ -50,17 +52,20 @@ public:
     
     void setDevice(vk::Device _device) { device = _device; }
 
+    // Name
+    std::string getName() { return name; }
     // Descriptor set layouts:
     vk::DescriptorSetLayout getSceneDescriptorSetLayout() { return sceneDescriptorSetLayout; }
     vk::DescriptorPool getSceneDescriptorPool() { return sceneDescriptorPool; }
     vk::DescriptorSetLayout getModelDescriptorSetLayout() { return modelDescriptorSetLayout; }
     vk::DescriptorPool getModelDescriptorPool() { return modelDescriptorPool; }
+    // Pipeline
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vk::Device getDevice() { return device; }
 
     void init(
-        vk::Device _device,
+        std::string _name, vk::Device _device,
         vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
         std::string vertexShaderPath, std::string fragmentShaderPath
     );
