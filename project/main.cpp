@@ -38,7 +38,10 @@ public:
         windowMngr.initWindow();
         windowMngr.initGlfwInputHandling();
         initVulkan();
-        imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
+        imGuiInst.init(
+            windowMngr.getWindow(), &instance, &surface,
+            &vulkanObjectMngr, &meshMngr, &textureMngr
+        );
         initScene();
         mainLoop();
         cleanup();
@@ -208,8 +211,7 @@ private:
             if (imGuiInst.getIsEnabled()) {
                 imGuiInst.presentGui(
                     surface.getShouldRecreateSwapChain(), &mainScene,
-                    &instance, diffuseObject, &vulkanObjectMngr,
-                    &meshMngr, &textureMngr,
+                    &instance, diffuseObject,
                     &modelsBuffer, &textureSampler
                 );
                 // TODO: fix command Buffer things

@@ -27,6 +27,10 @@ private:
 	int currentMeshItem = 0;
 	int currentTextureItem = 0;
 	int currentVulkanObjectItem = 0;
+	// Managers:
+	vulkanObjectManager* vkObjectManager;
+	meshDataManager* meshManager;
+	textureDataManager* textureManager;
 
 	// Vulkan variables
 	vk::RenderPass renderPass;
@@ -43,17 +47,15 @@ public:
 	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
 
 	void init(
-		GLFWwindow* window,
-		vulkanInstance* instance,
-		vulkanSurface* surface
+		GLFWwindow* window, vulkanInstance* instance, vulkanSurface* surface,
+		vulkanObjectManager* _vkObjectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
 	);
 
 	void recreateFramebuffers(vulkanSurface* surface);
 
 	void presentGui(
 		bool shouldRecreateSwapChain, scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj, vulkanObjectManager* objManager,
-		meshDataManager* meshManager, textureDataManager* textureManager, 
+		vulkanInstance* instance, vulkanObject* obj,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
 
@@ -75,8 +77,7 @@ private:
 
 	void showGui(
 		scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj, vulkanObjectManager* objManager,
-		meshDataManager* meshManager, textureDataManager* textureManager,
+		vulkanInstance* instance, vulkanObject* obj,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
 	void showObjectGui(object* obj);

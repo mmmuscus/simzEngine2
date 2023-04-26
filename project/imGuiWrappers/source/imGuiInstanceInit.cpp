@@ -14,9 +14,8 @@ imGuiInstance::~imGuiInstance() {
 }
 
 void imGuiInstance::init(
-    GLFWwindow* window,
-    vulkanInstance* instance,
-    vulkanSurface* surface
+    GLFWwindow* window, vulkanInstance* instance, vulkanSurface* surface,
+    vulkanObjectManager* _vkObjectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
 ) {
     // https://frguthmann.github.io/posts/vulkan_imgui/
     device = instance->getDevice();
@@ -24,6 +23,10 @@ void imGuiInstance::init(
     initFramebuffers(surface);
     initImGui(window, instance);
     isEnabled = true;
+    // Managers:
+    vkObjectManager = _vkObjectManager;
+    meshManager = _meshManager;
+    textureManager = _textureManager;
 }
 
 vk::DescriptorPool imGuiInstance::initDescriptorPool() {
