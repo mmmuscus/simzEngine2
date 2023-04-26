@@ -1,18 +1,5 @@
 #include "../include/imGuiInstance.h"
 
-int currentMeshItem = 0;
-int currentTextureItem = 0;
-
-bool stdStringVectorItemGetter(void* data, int index, const char** out) {
-    
-    std::string* names = (std::string*)data;
-    std::string& currentName = names[index];
-
-    *out = names[index].c_str();
-
-    return true;
-}
-
 void imGuiInstance::showGui(
     scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
@@ -41,22 +28,32 @@ void imGuiInstance::showGui(
     // Adding new objects with resources:
     ImGui::PushID("Resources");
     ImGui::Text("Add with resources:");
-    std::vector<std::string> meshNames;
-    for (size_t i = 0; i < meshManager->getMeshDatas().size(); i++) 
-        meshNames.push_back(meshManager->getMeshDatas()[i]->getName());
-    ImGui::Combo(
-        "Meshes", &currentMeshItem, 
-        stdStringVectorItemGetter, meshNames.data(), meshNames.size()
-    );
-    std::vector<std::string> textureNames;
-    for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++)
-        textureNames.push_back(textureManager->getTextureDatas()[i]->getName());
-    ImGui::Combo(
-        "Textures", &currentTextureItem,
-        stdStringVectorItemGetter, textureNames.data(), textureNames.size()
-    );
+    if (ImGui::BeginCombo("Meshes", meshManager->getMeshDatas()[currentMeshItem]->getName().c_str())) {
+        for (size_t i = 0; i < meshManager->getMeshDatas().size(); i++) {
+            bool isSelected = i == currentMeshItem;
+            if (ImGui::Selectable(meshManager->getMeshDatas()[i]->getName().c_str(), isSelected))
+                currentMeshItem = i;
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+    if (ImGui::BeginCombo("Textures", textureManager->getTextureDatas()[currentTextureItem]->getName().c_str())) {
+        for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++) {
+            bool isSelected = i == currentTextureItem;
+            if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str(), isSelected))
+                currentTextureItem = i;
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
     if (ImGui::Button("Add Object!")) {
-        printf("Adding object: %s, %s\n", meshNames[currentMeshItem].c_str(), textureNames[currentTextureItem].c_str());
+        printf(
+            "Adding object: %s, %s\n",
+            meshManager->getMeshDatas()[currentMeshItem]->getName().c_str(),
+            textureManager->getTextureDatas()[currentTextureItem]->getName().c_str()
+        );
         currScene->addObject(new object(
             instance->getDevice(), obj,
             meshManager, currentMeshItem,

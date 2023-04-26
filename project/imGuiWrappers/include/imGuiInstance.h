@@ -23,8 +23,8 @@ private:
 	char meshPath[50] = "models/tank.objj";
 	char texturePath[50] = "textures/damn_texture.jpeg";
 	// Manager selectors
-	/*int currentMeshItem = 0;
-	int currentTextureItem = 0;*/
+	int currentMeshItem = 0;
+	int currentTextureItem = 0;
 
 	// Vulkan variables
 	vk::RenderPass renderPass;
