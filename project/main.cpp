@@ -99,23 +99,15 @@ private:
         renderer.initRenderPass(surface.getFormat());
 
         // DIFFUSE OBJECT:
-        // Descriptor sets:
-        diffuseObject.setDevice(instance.getDevice());
-        diffuseObject.initDescriptors();
-
-        // Pipeline:
-        diffuseObject.initPipeline(
+        diffuseObject.init(
+            instance.getDevice(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
-        // Descriptor sets:
-        negativeObject.setDevice(instance.getDevice());
-        negativeObject.initDescriptors();
-        
-        // Pipeline
-        negativeObject.initPipeline(
+        negativeObject.init(
+            instance.getDevice(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/negativeFrag.spv"
         );

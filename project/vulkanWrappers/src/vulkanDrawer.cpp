@@ -143,7 +143,6 @@ void vulkanDrawer::recordCommandBuffer(
 
     commandBuffer.bindDescriptorSets(
         vk::PipelineBindPoint::eGraphics,
-        // TODO: do sth nicer w this
         currScene->getObjects()[0]->getVulkanObject()->getPipelineLayout(),
         0,
         currScene->getSceneData()->getDescriptorSets()[currentFrame],

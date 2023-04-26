@@ -14,6 +14,19 @@ vulkanObject::~vulkanObject() {
     device.destroyPipelineLayout(pipelineLayout);
 }
 
+void vulkanObject::init(
+    vk::Device _device,
+    vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
+    std::string vertexShaderPath, std::string fragmentShaderPath
+) {
+    device = _device;
+    initDescriptors();
+    initPipeline(
+        extent, renderPass, msaaSamples,
+        vertexShaderPath, fragmentShaderPath
+    );
+}
+
 void vulkanObject::initPipeline(
     vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
     std::string vertexShaderPath, std::string fragmentShaderPath

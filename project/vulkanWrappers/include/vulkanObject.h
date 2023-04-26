@@ -57,14 +57,18 @@ public:
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vk::Device getDevice() { return device; }
 
+    void init(
+        vk::Device _device,
+        vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
+        std::string vertexShaderPath, std::string fragmentShaderPath
+    );
+
+private:
     void initPipeline(
         vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
         std::string vertexShaderPath, std::string fragmentShaderPath
     );
-    // Descriptor set layouts:
     void initDescriptors();
-
-private:
     void initSceneDescriptorSetLayout();
     void initModelDescriptorSetLayout();
     void initModelDescriptorPool();
