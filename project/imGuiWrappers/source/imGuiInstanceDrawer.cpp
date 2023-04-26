@@ -33,6 +33,7 @@ void imGuiInstance::presentGui(
 }
 
 void imGuiInstance::drawFrame(
+    vk::CommandBuffer _commandBuffer,
     vulkanSurface* surface,
     vulkanInstance* instance,
     uint32_t imageIndex

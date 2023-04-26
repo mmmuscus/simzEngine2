@@ -65,8 +65,7 @@ void vulkanDrawer::getNextImage(vulkanSurface* surface) {
 void vulkanDrawer::drawFrame(
     vulkanSurface* surface,
     vulkanRenderer* renderer,
-    scene* currScene,
-    vk::Queue graphicsQueue
+    scene* currScene
 ) {
     if (surface->getShouldRecreateSwapChain())
         return;
@@ -81,7 +80,12 @@ void vulkanDrawer::drawFrame(
         imageIndex,
         currScene
     );
+}
 
+void vulkanDrawer::submitCommandBuffer(bool shouldRecreateSwapChain, vk::Queue graphicsQueue) {
+    if (shouldRecreateSwapChain)
+        return;
+    
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
     vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };

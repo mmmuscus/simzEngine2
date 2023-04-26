@@ -201,8 +201,7 @@ private:
             drawer.drawFrame(
                 &surface,
                 &renderer,
-                &mainScene,
-                instance.getGraphicsQueue()
+                &mainScene
             );
 
             // record and submit ImGui commandBuffer
@@ -213,8 +212,11 @@ private:
                     &meshMngr, &textureMngr,
                     &modelsBuffer, &textureSampler
                 );
-                imGuiInst.drawFrame(&surface, &instance, drawer.getImageIndex());
+                // TODO: fix command Buffer things
+                imGuiInst.drawFrame(drawer.getCurrentCommandBuffer(), &surface, &instance, drawer.getImageIndex());
             }
+
+            drawer.submitCommandBuffer(surface.getShouldRecreateSwapChain(), instance.getGraphicsQueue());
 
             // Present the frame
             drawer.presentFrame(&surface, instance.getPresentQueue());

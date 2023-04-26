@@ -35,10 +35,12 @@ public:
 	size_t getCurrentFrame() { return currentFrame; }
 	uint32_t getImageIndex() { return imageIndex; }
 
-	void resetImageIndex() { imageIndex = 0; }
 	void setDevice(vk::Device _device) { device = _device; }
 
-	// void initCommandPool(vulkanInstance* instance);
+	void resetImageIndex() { imageIndex = 0; }
+
+	vk::CommandBuffer getCurrentCommandBuffer() { return commandBuffers[currentFrame]; }
+
 	void initCommandBuffers(vk::CommandPool commandPool);
 	void initSyncObjects();
 
@@ -48,8 +50,7 @@ public:
 	void drawFrame(
 		vulkanSurface* surface,
 		vulkanRenderer* renderer,
-		scene* currScene,
-		vk::Queue graphicsQueue
+		scene* currScene
 	);
 
 	void recordCommandBuffer(
@@ -59,6 +60,8 @@ public:
 		uint32_t imageIndex,
 		scene* currScene
 	);
+
+	void submitCommandBuffer(bool shouldRecreateSwapChain, vk::Queue graphicsQueue);
 
 	void presentFrame(vulkanSurface* surface, vk::Queue presentQueue);
 

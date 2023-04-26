@@ -79,7 +79,7 @@ void imGuiInstance::initRenderPass(vk::Format format) {
         static_cast<uint32_t>(0),
         vk::PipelineStageFlagBits::eColorAttachmentOutput,
         vk::PipelineStageFlagBits::eColorAttachmentOutput,
-        static_cast<vk::AccessFlagBits>(0),
+        vk::AccessFlagBits::eColorAttachmentWrite,
         vk::AccessFlagBits::eColorAttachmentWrite
     );
 
