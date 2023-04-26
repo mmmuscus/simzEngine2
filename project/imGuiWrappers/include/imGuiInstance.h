@@ -11,6 +11,7 @@
 
 #include "../../resourceManager/include/meshDataManager.h"
 #include "../../resourceManager/include/textureDataManager.h"
+#include "../../resourceManager/include/vulkanObjectManager.h"
 
 class imGuiInstance {
 private:
@@ -25,6 +26,7 @@ private:
 	// Manager selectors
 	int currentMeshItem = 0;
 	int currentTextureItem = 0;
+	int currentVulkanObjectItem = 0;
 
 	// Vulkan variables
 	vk::RenderPass renderPass;
@@ -50,7 +52,7 @@ public:
 
 	void presentGui(
 		bool shouldRecreateSwapChain, scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
+		vulkanInstance* instance, vulkanObject* obj, vulkanObjectManager* objManager,
 		meshDataManager* meshManager, textureDataManager* textureManager, 
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
@@ -72,7 +74,7 @@ private:
 
 	void showGui(
 		scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
+		vulkanInstance* instance, vulkanObject* obj, vulkanObjectManager* objManager,
 		meshDataManager* meshManager, textureDataManager* textureManager,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);

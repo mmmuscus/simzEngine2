@@ -2,7 +2,7 @@
 
 void imGuiInstance::showGui(
     scene* currScene,
-    vulkanInstance* instance, vulkanObject* obj,
+    vulkanInstance* instance, vulkanObject* obj, vulkanObjectManager* objManager,
     meshDataManager* meshManager, textureDataManager* textureManager,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
@@ -48,14 +48,25 @@ void imGuiInstance::showGui(
         }
         ImGui::EndCombo();
     }
+    if (ImGui::BeginCombo("Pipelines", objManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str())) {
+        for (size_t i = 0; i < objManager->getVulkanObjects().size(); i++) {
+            bool isSelected = i == currentVulkanObjectItem;
+            if (ImGui::Selectable(objManager->getVulkanObjects()[i]->getName().c_str()))
+                currentVulkanObjectItem = i;
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
     if (ImGui::Button("Add Object!")) {
         printf(
-            "Adding object: %s, %s\n",
+            "Adding object: %s, %s, %s\n",
             meshManager->getMeshDatas()[currentMeshItem]->getName().c_str(),
-            textureManager->getTextureDatas()[currentTextureItem]->getName().c_str()
+            textureManager->getTextureDatas()[currentTextureItem]->getName().c_str(),
+            objManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str()
         );
         currScene->addObject(new object(
-            instance->getDevice(), obj,
+            instance->getDevice(), objManager->getVulkanObjects()[currentVulkanObjectItem],
             meshManager, currentMeshItem,
             textureManager, currentTextureItem
         ));

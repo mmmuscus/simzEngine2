@@ -13,7 +13,7 @@ void imGuiInstance::recreateFramebuffers(vulkanSurface* surface) {
 
 void imGuiInstance::presentGui(
     bool shouldRecreateSwapChain, scene* currScene,
-    vulkanInstance* instance, vulkanObject* obj,
+    vulkanInstance* instance, vulkanObject* obj, vulkanObjectManager* objManager,
     meshDataManager* meshManager, textureDataManager* textureManager,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
@@ -25,7 +25,7 @@ void imGuiInstance::presentGui(
     ImGui::NewFrame();
     showGui(
         currScene,
-        instance, obj, 
+        instance, obj, objManager,
         meshManager, textureManager,
         buffer, sampler
     );

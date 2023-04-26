@@ -209,7 +209,7 @@ private:
             if (imGuiInst.getIsEnabled()) {
                 imGuiInst.presentGui(
                     surface.getShouldRecreateSwapChain(), &mainScene,
-                    &instance, diffuseObject,
+                    &instance, diffuseObject, &vulkanObjectMngr,
                     &meshMngr, &textureMngr,
                     &modelsBuffer, &textureSampler
                 );
