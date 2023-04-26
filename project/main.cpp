@@ -141,7 +141,7 @@ private:
         mainScene.init(
             &instance, 
             diffuseObject.getSceneDescriptorSetLayout(),
-            diffuseObject.getModelDescriptorPool()
+            diffuseObject.getSceneDescriptorPool()
         );
 
         // Add objects

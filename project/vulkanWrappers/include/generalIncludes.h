@@ -42,4 +42,6 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 
 const int MAX_OBJECT_COUNT = 100;
 
+const uint32_t MAX_DESCRIPTORPOOL_SETS = 10000;
+
 #endif // GENERAL_INCLUDES_H_

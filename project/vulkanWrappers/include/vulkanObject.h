@@ -37,6 +37,7 @@ private:
     vk::DescriptorSetLayout sceneDescriptorSetLayout;
     vk::DescriptorPool modelDescriptorPool;
     vk::DescriptorSetLayout modelDescriptorSetLayout;
+    vk::DescriptorPool sceneDescriptorPool;
     // Pipeline
     vk::PipelineLayout pipelineLayout;
     vk::Pipeline graphicsPipeline;
@@ -51,8 +52,9 @@ public:
 
     // Descriptor set layouts:
     vk::DescriptorSetLayout getSceneDescriptorSetLayout() { return sceneDescriptorSetLayout; }
-    vk::DescriptorPool getModelDescriptorPool() { return modelDescriptorPool; }
+    vk::DescriptorPool getSceneDescriptorPool() { return sceneDescriptorPool; }
     vk::DescriptorSetLayout getModelDescriptorSetLayout() { return modelDescriptorSetLayout; }
+    vk::DescriptorPool getModelDescriptorPool() { return modelDescriptorPool; }
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
     vk::Device getDevice() { return device; }
@@ -70,6 +72,7 @@ private:
     );
     void initDescriptors();
     void initSceneDescriptorSetLayout();
+    void initSceneDescriptorPool();
     void initModelDescriptorSetLayout();
     void initModelDescriptorPool();
 

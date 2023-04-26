@@ -1,7 +1,5 @@
 #include "../include/vulkanObject.h"
 
-const uint32_t MAXSETS = 10000;
-
 vulkanObject::~vulkanObject() {
     // Descriptor Pools:
     device.destroyDescriptorPool(modelDescriptorPool);
@@ -170,6 +168,7 @@ void vulkanObject::initPipeline(
 
 void vulkanObject::initDescriptors() {
     initSceneDescriptorSetLayout();
+    initSceneDescriptorPool();
     initModelDescriptorSetLayout();
     initModelDescriptorPool();
 }
@@ -194,6 +193,27 @@ void vulkanObject::initSceneDescriptorSetLayout() {
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor set layout!");
+    }
+}
+
+void vulkanObject::initSceneDescriptorPool() {
+    std::array<vk::DescriptorPoolSize, 1> poolSizes = {
+        vk::DescriptorPoolSize(
+            vk::DescriptorType::eUniformBuffer,
+            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+        )
+    };
+
+    auto poolInfo = vk::DescriptorPoolCreateInfo(
+        vk::DescriptorPoolCreateFlags(), MAX_DESCRIPTORPOOL_SETS,
+        static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
+    );
+
+    try {
+        sceneDescriptorPool = device.createDescriptorPool(poolInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to create descriptor pool!");
     }
 }
 
@@ -243,7 +263,7 @@ void vulkanObject::initModelDescriptorPool() {
     };
 
     auto poolInfo = vk::DescriptorPoolCreateInfo(
-        vk::DescriptorPoolCreateFlags(), MAXSETS,
+        vk::DescriptorPoolCreateFlags(), MAX_DESCRIPTORPOOL_SETS,
         static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
     );
 
