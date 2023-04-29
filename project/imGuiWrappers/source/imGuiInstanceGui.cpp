@@ -76,12 +76,12 @@ void imGuiInstance::showGui(
     ImGui::Text("Object settings:");
     ImGui::BeginChild("Scrolling");
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
-        showObjectGui(currScene->getObjects()[i]);
+        showObjectEditGui(currScene->getObjects()[i]);
     }
     ImGui::EndChild();
 }
 
-void imGuiInstance::showObjectGui(object* obj) {
+void imGuiInstance::showObjectEditGui(object* obj) {
     ImGui::PushID(obj);
 
     ImGui::Text("Object %d:", obj->getObjectNumber());
@@ -108,8 +108,13 @@ void imGuiInstance::showObjectGui(object* obj) {
     // Texture
     if (ImGui::BeginCombo("Texture", obj->getModelData()->getTextureData()->getName().c_str())) {
         for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++) {
-            if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str()))
+            if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str())) {
                 obj->getModelData()->setTextureData(textureManager->getTextureDatas()[i]);
+                obj->getModelData()->initDescriptorSets(
+                    obj->getVulkanObject()->getModelDescriptorSetLayout(),
+                    obj->getVulkanObject()->getModelDescriptorPool()
+                );
+            }
         }
 
         ImGui::EndCombo();

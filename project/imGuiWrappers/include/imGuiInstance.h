@@ -80,7 +80,7 @@ private:
 		vulkanInstance* instance, vulkanObject* obj,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
-	void showObjectGui(object* obj);
+	void showObjectEditGui(object* obj);
 
 };
 
