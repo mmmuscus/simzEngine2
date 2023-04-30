@@ -11,8 +11,12 @@
 
 class Collider {
 private:
-	glm::vec3 center;
+	// Collision variables:
+	glm::vec3* pos;
 	float extent;
+
+	// Model matrix:
+	glm::mat4* modelMatrix;
 
 public:
 	virtual void recalculateExtent() = 0;

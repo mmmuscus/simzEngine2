@@ -13,11 +13,13 @@
 
 class object {
 private:
-	// model matrix:
+	// Transform vectors:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	// TODO: IMPLEMENT QUATERNIONS
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	// Model matrix:
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 	// Helper for uploading the dynamic uniformBuffer
 	uint32_t objectNumber;
@@ -60,6 +62,7 @@ public:
 			textureManager->getTextureDatas()[textureIndex],
 			vkObject->getModelDescriptorSetLayout(), vkObject->getModelDescriptorPool()
 		);
+		calculateModelMatrix();
 	}
 	object(
 		vulkanInstance* instance, vulkanObject* _vkObject,
@@ -79,6 +82,7 @@ public:
 			textureManager, texturePath, textureSampler,
 			vkObject->getModelDescriptorSetLayout(), vkObject->getModelDescriptorPool()
 		);
+		calculateModelMatrix();
 	}
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
@@ -97,6 +101,7 @@ public:
 	vulkanModelData* getModelData() { return modelData; }
 
 	void updateTranslationVectors();
+	void calculateModelMatrix();
 	void updateModelTranslation(uint32_t currentFrame);
 
 private:

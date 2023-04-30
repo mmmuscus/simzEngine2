@@ -8,13 +8,15 @@ void object::updateTranslationVectors() {
 	scale = scale;
 }
 
-void object::updateModelTranslation(uint32_t currentFrame) {
-	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::translate(trans, pos);
-	trans = glm::rotate(trans, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	trans = glm::rotate(trans, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	trans = glm::rotate(trans, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, scale);
+void object::calculateModelMatrix() {
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, pos);
+	modelMatrix = glm::rotate(modelMatrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	modelMatrix = glm::scale(modelMatrix, scale);
+}
 
-	modelData->getMeshData()->getUniformBuffer()->updateModelUniformBuffer(trans, currentFrame, objectNumber);
+void object::updateModelTranslation(uint32_t currentFrame) {
+	modelData->getMeshData()->getUniformBuffer()->updateModelUniformBuffer(modelMatrix, currentFrame, objectNumber);
 }

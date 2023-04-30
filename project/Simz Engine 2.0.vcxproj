@@ -196,6 +196,9 @@
     <ClInclude Include="external\imGui\imstb_truetype.h" />
     <ClInclude Include="general\include\timer.h" />
     <ClInclude Include="imGuiWrappers\include\imGuiWrappersGeneralIncludes.h" />
+    <ClInclude Include="physicsSystem\include\BoxCollider.h" />
+    <ClInclude Include="physicsSystem\include\CapsuleCollider.h" />
+    <ClInclude Include="physicsSystem\include\Collider.h" />
     <ClInclude Include="renderLogic\include\camera.h" />
     <ClInclude Include="renderLogic\include\object.h" />
     <ClInclude Include="renderLogic\include\scene.h" />
