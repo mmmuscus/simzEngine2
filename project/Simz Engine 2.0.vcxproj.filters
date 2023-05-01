@@ -206,10 +206,10 @@
     <ClInclude Include="physicsSystem\include\Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="physicsSystem\include\BoxCollider.h">
+    <ClInclude Include="physicsSystem\include\SphereCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="physicsSystem\include\CapsuleCollider.h">
+    <ClInclude Include="physicsSystem\include\EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

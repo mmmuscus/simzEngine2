@@ -10,7 +10,7 @@ private:
 public:
 	SphereCollider(
 		glm::vec3* _pos,
-		float _radius
+		float _radius = 1.0f
 	) {
 		pos = _pos;
 		radius = _radius;
@@ -26,13 +26,15 @@ public:
 
 	void recalculateExtent() { extent = radius; }
 
-	bool doesCollideWith(SphereCollider& other) {
+	glm::vec3 doesCollideWith(SphereCollider other) {
 		if (glm::distance(*pos, *other.getPos()) > radius + other.getRadius())
-			return false;
+			return glm::vec3(0.0f, 0.0f, 0.0f);
 
-		printf("Collision!\n");
+		glm::vec3 res = glm::normalize(*other.getPos() - *pos);
+		float scale = radius + other.getRadius() - glm::distance(*pos, *other.getPos());
+		res *= scale;
 
-		return true;
+		return res;
 	}
 
 private:

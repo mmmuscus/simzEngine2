@@ -31,6 +31,8 @@
 #include "renderLogic/include/object.h"
 #include "renderLogic/include/camera.h"
 
+#include "physicsSystem/include/EventManager.h"
+
 class Application {
 public:
     void run() {
@@ -69,6 +71,9 @@ private:
 
     // Scene variables:
     scene mainScene;
+
+    // Collisions:
+    EventManager eventManager;
 
     // ImGui variables:
     imGuiInstance imGuiInst;
@@ -198,7 +203,13 @@ private:
             drawer.getNextImage(&surface);
 
             // Update translation of scene (and its objects)
+            for (size_t i = 0; i < mainScene.getObjects().size(); i++) {
+                for (size_t j = 0; j < mainScene.getObjects().size(); j++) {
+                    eventManager.checkCollision(mainScene.getObjects()[i], mainScene.getObjects()[j]);
+                }
+            }
             mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
+            eventManager.resolveEvents();
 
             // Record and submit engine command buffer
             drawer.drawFrame(

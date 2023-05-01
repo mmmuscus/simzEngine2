@@ -3,6 +3,8 @@
 
 #include "../../general/include/timer.h"
 
+#include "../../physicsSystem/include/SphereCollider.h"
+
 #include "../../vulkanWrappers/include/vulkanObject.h"
 #include "../../vulkanWrappers/include/vulkanMeshData.h"
 #include "../../vulkanWrappers/include/vulkanTextureData.h"
@@ -21,6 +23,9 @@ private:
 	// Model matrix:
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
+	// Collider
+	SphereCollider collider;
+
 	// Helper for uploading the dynamic uniformBuffer
 	uint32_t objectNumber;
 
@@ -32,7 +37,7 @@ private:
 	vulkanModelData* modelData;
 
 public:
-	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr) {}
+	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), collider(&pos) {}
 	object(
 		vulkanObject* _vkObject,
 		vulkanModelData* _modelData,
@@ -42,7 +47,8 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(_modelData),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), rotation(_rotation), scale(_scale),
+		collider(&pos)
 	{};
 	object(
 		vk::Device device, vulkanObject* _vkObject,
@@ -54,7 +60,8 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), rotation(_rotation), scale(_scale),
+		collider(&pos)
 	{
 		modelData->init(
 			device,
@@ -74,7 +81,8 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), rotation(_rotation), scale(_scale),
+		collider(&pos)
 	{
 		modelData->init(
 			instance,
@@ -96,6 +104,7 @@ public:
 	glm::vec3 getPos() { return pos; }
 	glm::vec3 getRotation() { return rotation; }
 	glm::vec3 getScale() { return scale; }
+	SphereCollider getCollider() { return collider; }
 	uint32_t getObjectNumber() { return objectNumber; }
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }
