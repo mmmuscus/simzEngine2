@@ -40,6 +40,7 @@ public:
 				collisionEvents[i].collisionVector.z
 			);
 
+			collisionEvents[i].obj1->addVelocity(collisionEvents[i].collisionVector);
 		}
 
 		collisionEvents.clear();

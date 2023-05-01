@@ -30,7 +30,7 @@ public:
 		if (glm::distance(*pos, *other.getPos()) > radius + other.getRadius())
 			return glm::vec3(0.0f, 0.0f, 0.0f);
 
-		glm::vec3 res = glm::normalize(*other.getPos() - *pos);
+		glm::vec3 res = glm::normalize(*pos - *other.getPos());
 		float scale = radius + other.getRadius() - glm::distance(*pos, *other.getPos());
 		res *= scale;
 

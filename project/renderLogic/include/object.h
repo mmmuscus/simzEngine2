@@ -113,6 +113,8 @@ public:
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }
 
+	void addVelocity(glm::vec3 _velocity) { velocity += _velocity; }
+
 	void updateTranslationVectors();
 	void calculateModelMatrix();
 	void updateModelTranslation(uint32_t currentFrame);
