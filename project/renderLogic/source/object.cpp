@@ -1,11 +1,18 @@
 #include "../include/object.h"
 
+const float EPSILON = 0.0001f;
+
 void object::updateTranslationVectors() {
 	sceneTimer->updateTime();
-
-	pos = pos;
-	//rotation.z = sceneTimer->getTime() * glm::radians(90.0f);
+	
+	pos += velocity * sceneTimer->getDeltaTime();
+	rotation = rotation;
 	scale = scale;
+
+	velocity *= dampening;
+	if (fabs(velocity.x) < EPSILON) velocity.x = 0;
+	if (fabs(velocity.y) < EPSILON) velocity.y = 0;
+	if (fabs(velocity.z) < EPSILON) velocity.z = 0;
 }
 
 void object::calculateModelMatrix() {

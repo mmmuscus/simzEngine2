@@ -23,6 +23,10 @@ private:
 	// Model matrix:
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
+	// Physics variables
+	glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 dampening = glm::vec3(0.95f, 0.95f, 0.95f);
+
 	// Collider
 	SphereCollider collider;
 
