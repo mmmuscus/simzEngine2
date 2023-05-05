@@ -1,8 +1,6 @@
 #ifndef EVENT_MANAGER_H_
 #define EVENT_MANAGER_H_
 
-#include "SphereCollider.h"
-
 #include "../../renderLogic/include/object.h"
 
 struct CollisionEvent {
@@ -23,8 +21,8 @@ public:
 		if (obj1 == obj2)
 			return;
 
-		glm::vec3 collVect = obj1->getCollider().doesCollideWith(obj2->getCollider());
-
+		glm::vec3 collVect = obj1->getCollider()->doesCollideWith(obj2->getCollider());
+		
 		if (collVect != glm::vec3(0.0f, 0.0f, 0.0f))
 			collisionEvents.push_back(CollisionEvent(obj1, obj2, collVect));
 	}

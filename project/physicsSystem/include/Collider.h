@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/hash.hpp>
 
+class SphereCollider;
+
 class Collider {
 protected:
 	// Collision variables:
@@ -23,6 +25,9 @@ public:
 	glm::vec3* getPos() { return pos; }
 
 	virtual void recalculateExtent() = 0;
+
+	glm::vec3 doesCollideWith(Collider* other);
+	virtual glm::vec3 doesCollideWith(SphereCollider* other) = 0;
 
 	/*void calculateModelMatrix() {
 		modelMatrix = glm::mat4(1.0f);

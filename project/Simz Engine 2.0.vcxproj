@@ -167,6 +167,7 @@
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceGui.cpp" />
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceInit.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="physicsSystem\src\ColliderDoesCollideWithDefinition.cpp" />
     <ClCompile Include="renderLogic\source\camera.cpp" />
     <ClCompile Include="renderLogic\source\object.cpp" />
     <ClCompile Include="renderLogic\source\scene.cpp" />
