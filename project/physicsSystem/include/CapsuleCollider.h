@@ -14,9 +14,11 @@ private:
 	glm::vec3 transformedBase;
 
 public:
-	CapsuleCollider(glm::vec3 _base, float _radius = 1.0f) {
-		base = _base;
-		radius = _radius;
+	CapsuleCollider(
+		glm::vec3 _base, float _radius = 1.0f
+	) :
+		base(_base), radius(_radius)
+	{
 		recalculateExtent();
 	}
 

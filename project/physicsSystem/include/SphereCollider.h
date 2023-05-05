@@ -8,8 +8,7 @@ private:
 	float radius;
 
 public:
-	SphereCollider(float _radius = 1.0f) {
-		radius = _radius;
+	SphereCollider(float _radius = 1.0f) : radius(_radius) {
 		recalculateExtent();
 	}
 
