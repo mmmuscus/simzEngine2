@@ -28,7 +28,7 @@ private:
 	glm::vec3 dampening = glm::vec3(0.95f, 0.95f, 0.95f);
 
 	// Collider
-	Collider* collider;
+	Collider* collider = nullptr;
 
 	// Helper for uploading the dynamic uniformBuffer
 	uint32_t objectNumber;
@@ -51,8 +51,7 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(_modelData),
-		pos(_pos), rotation(_rotation), scale(_scale),
-		collider(new SphereCollider(&pos))
+		pos(_pos), rotation(_rotation), scale(_scale)
 	{};
 	object(
 		vk::Device device, vulkanObject* _vkObject,
@@ -64,8 +63,7 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale),
-		collider(new SphereCollider(&pos))
+		pos(_pos), rotation(_rotation), scale(_scale)
 	{
 		modelData->init(
 			device,
@@ -85,8 +83,7 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale),
-		collider(new SphereCollider(&pos))
+		pos(_pos), rotation(_rotation), scale(_scale)
 	{
 		modelData->init(
 			instance,
@@ -100,6 +97,7 @@ public:
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
+	void setCollider(Collider* _collider) { collider = _collider; }
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
 	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
@@ -114,6 +112,8 @@ public:
 	vulkanModelData* getModelData() { return modelData; }
 
 	void addVelocity(glm::vec3 _velocity) { velocity += _velocity; }
+
+	void setColliderPos() { if (collider != nullptr) collider->setPos(&pos); }
 
 	void updateTranslationVectors();
 	void calculateModelMatrix();

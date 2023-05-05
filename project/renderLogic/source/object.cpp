@@ -3,10 +3,6 @@
 const float EPSILON = 0.0001f;
 const float VELOCITY_AMP = 100.0f;
 
-void printVec3(glm::vec3 vec) {
-	printf("(%f, %f, %f)", vec.x, vec.y, vec.z);
-}
-
 // Assumes that the sceneTimer was already updated.
 void object::updateTranslationVectors() {
 	pos += velocity * sceneTimer->getDeltaTime() * VELOCITY_AMP;

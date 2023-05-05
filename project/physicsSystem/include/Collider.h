@@ -14,15 +14,20 @@ class Collider {
 protected:
 	// Collision variables:
 	glm::vec3* pos;
-	//glm::vec3* rotation;
 	float extent;
 
 	// Model matrix:
-	//glm::mat4 modelMatrix;
+	glm::mat4 modelMatrix;
+
+	// Helper flag
+	bool rotateable;
 
 public:
 
 	glm::vec3* getPos() { return pos; }
+
+	void setPos(glm::vec3* _pos) { pos = _pos; }
+	void setModelMatrix(glm::mat4 _modelMatrix) { modelMatrix = _modelMatrix; }
 
 	virtual void recalculateExtent() = 0;
 

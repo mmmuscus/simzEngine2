@@ -169,6 +169,11 @@ private:
             glm::vec3(0.0f, 0.0f, 3.14f)
         ));
 
+        for (size_t i = 0; i < mainScene.getObjects().size(); i++) {
+            mainScene.getObjects()[i]->setCollider(new SphereCollider());
+            mainScene.getObjects()[i]->setColliderPos();
+        }
+
         mainScene.defragmentObjectNumbers();
     }
 

@@ -8,13 +8,11 @@ private:
 	float radius;
 
 public:
-	SphereCollider(
-		glm::vec3* _pos,
-		float _radius = 1.0f
-	) {
-		pos = _pos;
+	SphereCollider(float _radius = 1.0f) {
 		radius = _radius;
 		recalculateExtent();
+
+		rotateable = false;
 	}
 
 	float getRadius() { return radius; }
