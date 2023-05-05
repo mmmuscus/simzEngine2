@@ -165,7 +165,7 @@ private:
             &instance, negativeObject,
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/camouflage.jpg", &textureSampler,
-            glm::vec3(0.0f, -1.75f, -0.75f),
+            glm::vec3(0.0f, -2.25f, -0.75f),
             glm::vec3(0.0f, 0.0f, 3.14f)
         ));
 
@@ -208,8 +208,8 @@ private:
                     eventManager.checkCollision(mainScene.getObjects()[i], mainScene.getObjects()[j]);
                 }
             }
-            mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
             eventManager.resolveEvents();
+            mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
 
             // Record and submit engine command buffer
             drawer.drawFrame(

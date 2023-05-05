@@ -29,10 +29,11 @@ void scene::defragmentObjectNumbers() {
 
 void scene::updateScene(size_t currentFrame, vk::Extent2D extent) {
 	sceneData->updateSceneUniformBuffer(currentFrame, extent, cam->getViewMatrix());
+	sceneTimer->updateTime();
 
 	for (size_t i = 0; i < objects.size(); i++) {
-		objects[i]->calculateModelMatrix();
 		objects[i]->updateTranslationVectors();
+		objects[i]->calculateModelMatrix();
 		objects[i]->updateModelTranslation(currentFrame);
 	}
 }
