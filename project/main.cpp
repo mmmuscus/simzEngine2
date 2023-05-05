@@ -159,20 +159,21 @@ private:
         mainScene.addObject(new object(
             &instance, diffuseObject,
             &meshMngr, "models/viking_room.objj", &modelsBuffer,
-            &textureMngr, "textures/viking_room.png", &textureSampler
+            &textureMngr, "textures/viking_room.png", &textureSampler,
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(1.0f, 1.0f, 1.0f),
+            new SphereCollider()
         ));
         mainScene.addObject(new object(
             &instance, negativeObject,
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
-            glm::vec3(0.0f, 0.0f, 3.14f)
+            glm::vec3(0.0f, 0.0f, 3.14f),
+            glm::vec3(1.0f, 1.0f, 1.0f),
+            new SphereCollider()
         ));
-
-        for (size_t i = 0; i < mainScene.getObjects().size(); i++) {
-            mainScene.getObjects()[i]->setCollider(new SphereCollider());
-            mainScene.getObjects()[i]->setColliderPos();
-        }
 
         mainScene.defragmentObjectNumbers();
     }

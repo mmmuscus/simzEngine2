@@ -47,24 +47,32 @@ public:
 		vulkanModelData* _modelData,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f), 
+		Collider* _collider = nullptr
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(_modelData),
-		pos(_pos), rotation(_rotation), scale(_scale)
-	{};
+		pos(_pos), rotation(_rotation), scale(_scale),
+		collider(_collider)
+	{
+		setColliderPos();
+	};
 	object(
 		vk::Device device, vulkanObject* _vkObject,
 		meshDataManager* meshManager, size_t meshIndex,
 		textureDataManager* textureManager, size_t textureIndex,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f),
+		Collider* _collider = nullptr
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), rotation(_rotation), scale(_scale),
+		collider(_collider)
 	{
+		setColliderPos();
+
 		modelData->init(
 			device,
 			meshManager->getMeshDatas()[meshIndex],
@@ -79,12 +87,16 @@ public:
 		textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f),
+		Collider* _collider = nullptr
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), rotation(_rotation), scale(_scale),
+		collider(_collider)
 	{
+		setColliderPos();
+
 		modelData->init(
 			instance,
 			meshManager, meshPath, uniformBuffer,
