@@ -19,9 +19,6 @@ protected:
 	// Model matrix:
 	glm::mat4 modelMatrix;
 
-	// Helper flag
-	bool rotateable;
-
 public:
 
 	glm::vec3* getPos() { return pos; }
@@ -31,16 +28,10 @@ public:
 
 	virtual void recalculateExtent() = 0;
 
+	virtual void transformCollider() = 0;
+
 	glm::vec3 doesCollideWith(Collider* other);
 	virtual glm::vec3 doesCollideWith(SphereCollider* other) = 0;
-
-	/*void calculateModelMatrix() {
-		modelMatrix = glm::mat4(1.0f);
-		modelMatrix = glm::translate(modelMatrix, *pos);
-		modelMatrix = glm::rotate(modelMatrix, rotation->x, glm::vec3(1.0f, 0.0f, 0.0f));
-		modelMatrix = glm::rotate(modelMatrix, rotation->y, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelMatrix = glm::rotate(modelMatrix, rotation->z, glm::vec3(0.0f, 0.0f, 1.0f));
-	}*/
 
 private:
 

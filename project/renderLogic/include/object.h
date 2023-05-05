@@ -125,13 +125,14 @@ public:
 
 	void addVelocity(glm::vec3 _velocity) { velocity += _velocity; }
 
-	void setColliderPos() { if (collider != nullptr) collider->setPos(&pos); }
-
 	void updateTranslationVectors();
 	void calculateModelMatrix();
 	void updateModelTranslation(uint32_t currentFrame);
 
 private:
+
+	void setColliderPos() { if (collider != nullptr) collider->setPos(&pos); }
+	void setColliderModelMat() { if (collider != nullptr) collider->setModelMatrix(modelMatrix); }
 
 };
 

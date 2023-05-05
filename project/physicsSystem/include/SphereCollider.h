@@ -11,8 +11,6 @@ public:
 	SphereCollider(float _radius = 1.0f) {
 		radius = _radius;
 		recalculateExtent();
-
-		rotateable = false;
 	}
 
 	float getRadius() { return radius; }
@@ -23,6 +21,8 @@ public:
 	}
 
 	void recalculateExtent() { extent = radius; }
+
+	void transformCollider() { ; }
 
 	glm::vec3 doesCollideWith(SphereCollider* other) {
 		if (glm::distance(*pos, *other->getPos()) > radius + other->getRadius())
