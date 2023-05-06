@@ -170,6 +170,7 @@
     <ClCompile Include="physicsSystem\src\CapsuleCollider.cpp" />
     <ClCompile Include="physicsSystem\src\ColliderDoesCollideWithDefinition.cpp" />
     <ClCompile Include="physicsSystem\src\CollisionUtilities.cpp" />
+    <ClCompile Include="physicsSystem\src\RigidBody.cpp" />
     <ClCompile Include="physicsSystem\src\SphereCollider.cpp" />
     <ClCompile Include="renderLogic\source\camera.cpp" />
     <ClCompile Include="renderLogic\source\object.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="physicsSystem\include\Collider.h" />
     <ClInclude Include="physicsSystem\include\CollisionUtilities.h" />
     <ClInclude Include="physicsSystem\include\EventManager.h" />
+    <ClInclude Include="physicsSystem\include\RigidBody.h" />
     <ClInclude Include="physicsSystem\include\SphereCollider.h" />
     <ClInclude Include="renderLogic\include\camera.h" />
     <ClInclude Include="renderLogic\include\object.h" />

@@ -32,7 +32,7 @@ void scene::updateScene(size_t currentFrame, vk::Extent2D extent) {
 	sceneTimer->updateTime();
 
 	for (size_t i = 0; i < objects.size(); i++) {
-		objects[i]->updateTranslationVectors();
+		objects[i]->getRigidBody()->move(sceneTimer->getDeltaTime());
 		objects[i]->calculateModelMatrix();
 		objects[i]->updateModelTranslation(currentFrame);
 	}

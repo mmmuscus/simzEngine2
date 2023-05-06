@@ -29,8 +29,8 @@ public:
 
 	void resolveEvents() {
 		for (size_t i = 0; i < collisionEvents.size(); i++) {
-			collisionEvents[i].obj1->addVelocity(collisionEvents[i].collisionVector);
-			collisionEvents[i].obj2->addVelocity(-collisionEvents[i].collisionVector);
+			collisionEvents[i].obj1->getRigidBody()->addVelocity(collisionEvents[i].collisionVector);
+			collisionEvents[i].obj2->getRigidBody()->addVelocity(-collisionEvents[i].collisionVector);
 		}
 
 		collisionEvents.clear();

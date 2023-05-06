@@ -4,6 +4,7 @@
 #include "../../general/include/timer.h"
 
 #include "../../physicsSystem/include/Collider.h"
+#include "../../physicsSystem/include/RigidBody.h"
 
 #include "../../vulkanWrappers/include/vulkanObject.h"
 #include "../../vulkanWrappers/include/vulkanMeshData.h"
@@ -23,12 +24,9 @@ private:
 	// Model matrix:
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
-	// Physics variables
-	glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 dampening = glm::vec3(0.95f, 0.95f, 0.95f);
-
-	// Collider
+	// Collision variables
 	Collider* collider = nullptr;
+	RigidBody* rigidBody = nullptr;
 
 	// Helper for uploading the dynamic uniformBuffer
 	uint32_t objectNumber;
@@ -41,21 +39,23 @@ private:
 	vulkanModelData* modelData;
 
 public:
-	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), collider(nullptr) {}
+	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), collider(nullptr), rigidBody(nullptr) {}
 	object(
 		vulkanObject* _vkObject,
 		vulkanModelData* _modelData,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f), 
-		Collider* _collider = nullptr
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f),
+		Collider* _collider = nullptr, RigidBody* _rigidBody = nullptr
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(_modelData),
 		pos(_pos), rotation(_rotation), scale(_scale),
-		collider(_collider)
+		collider(_collider), rigidBody(_rigidBody)
 	{
 		setColliderPos();
+		setUpRigidBody();
+		setRigidBodyPos();
 	};
 	object(
 		vk::Device device, vulkanObject* _vkObject,
@@ -64,14 +64,16 @@ public:
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f),
-		Collider* _collider = nullptr
+		Collider* _collider = nullptr, RigidBody* _rigidBody = nullptr
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
 		pos(_pos), rotation(_rotation), scale(_scale),
-		collider(_collider)
+		collider(_collider), rigidBody(_rigidBody)
 	{
 		setColliderPos();
+		setUpRigidBody();
+		setRigidBodyPos();
 
 		modelData->init(
 			device,
@@ -88,14 +90,16 @@ public:
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f),
-		Collider* _collider = nullptr
+		Collider* _collider = nullptr, RigidBody* _rigidBody = nullptr
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
 		pos(_pos), rotation(_rotation), scale(_scale),
-		collider(_collider)
+		collider(_collider), rigidBody(_rigidBody)
 	{
 		setColliderPos();
+		setUpRigidBody();
+		setRigidBodyPos();
 
 		modelData->init(
 			instance,
@@ -119,13 +123,11 @@ public:
 	glm::vec3 getRotation() { return rotation; }
 	glm::vec3 getScale() { return scale; }
 	Collider* getCollider() { return collider; }
+	RigidBody* getRigidBody() { return rigidBody; }
 	uint32_t getObjectNumber() { return objectNumber; }
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }
 
-	void addVelocity(glm::vec3 _velocity) { velocity += _velocity; }
-
-	void updateTranslationVectors();
 	void calculateModelMatrix();
 	void updateModelTranslation(uint32_t currentFrame);
 
@@ -133,6 +135,8 @@ private:
 
 	void setColliderPos() { if (collider != nullptr) collider->setPos(&pos); }
 	void setColliderModelMat() { if (collider != nullptr) collider->setModelMatrix(modelMatrix); }
+	void setUpRigidBody() { if (collider != nullptr) rigidBody = new RigidBody(); }
+	void setRigidBodyPos() { if (rigidBody != nullptr) rigidBody->setPos(&pos); }
 
 };
 
