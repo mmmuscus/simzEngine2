@@ -20,6 +20,9 @@ protected:
 	// Model matrix:
 	glm::mat4 modelMatrix;
 
+	// Helper flags:
+	bool isTransformed;
+
 public:
 
 	glm::vec3* getPos() { return pos; }
@@ -27,6 +30,8 @@ public:
 
 	void setPos(glm::vec3* _pos) { pos = _pos; }
 	void setModelMatrix(glm::mat4 _modelMatrix) { modelMatrix = _modelMatrix; }
+
+	void resetIsTransformed() { isTransformed = false; }
 
 	virtual void recalculateExtent() = 0;
 

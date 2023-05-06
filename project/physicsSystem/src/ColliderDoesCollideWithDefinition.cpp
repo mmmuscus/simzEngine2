@@ -9,4 +9,6 @@ glm::vec3 Collider::doesCollideWith(Collider* other) {
 
 	if (dynamic_cast<CapsuleCollider*>(other))
 		return doesCollideWith(dynamic_cast<CapsuleCollider*>(other));
+
+	return glm::vec3(0.0f, 0.0f, 0.0f);
 }

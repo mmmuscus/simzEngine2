@@ -172,9 +172,9 @@ private:
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(0.0f, 0.0f, 3.14f),
             glm::vec3(1.0f, 1.0f, 1.0f),
-            new CapsuleCollider(glm::vec3(0.5f, 0.0f, 0.0f))
+            new CapsuleCollider(glm::vec3(0.75f, 0.0f, 0.0f))
         ));
 
         mainScene.defragmentObjectNumbers();
@@ -211,8 +211,10 @@ private:
             drawer.getNextImage(&surface);
 
             // Update translation of scene (and its objects)
+            for (size_t i = 0; i < mainScene.getObjects().size(); i++)
+                mainScene.getObjects()[i]->getCollider()->resetIsTransformed();
             for (size_t i = 0; i < mainScene.getObjects().size(); i++) {
-                for (size_t j = 0; j < mainScene.getObjects().size(); j++) {
+                for (size_t j = i + 1; j < mainScene.getObjects().size(); j++) {
                     eventManager.checkCollision(mainScene.getObjects()[i], mainScene.getObjects()[j]);
                 }
             }

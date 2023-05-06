@@ -29,16 +29,8 @@ public:
 
 	void resolveEvents() {
 		for (size_t i = 0; i < collisionEvents.size(); i++) {
-			printf(
-				"Object %d, collides with object %d with vector: (%f, %f, %f)\n",
-				collisionEvents[i].obj1->getObjectNumber(),
-				collisionEvents[i].obj2->getObjectNumber(),
-				collisionEvents[i].collisionVector.x,
-				collisionEvents[i].collisionVector.y,
-				collisionEvents[i].collisionVector.z
-			);
-
 			collisionEvents[i].obj1->addVelocity(collisionEvents[i].collisionVector);
+			collisionEvents[i].obj2->addVelocity(-collisionEvents[i].collisionVector);
 		}
 
 		collisionEvents.clear();
