@@ -3,7 +3,7 @@
 
 #include "../../general/include/timer.h"
 
-#include "../../physicsSystem/include/SphereCollider.h"
+#include "../../physicsSystem/include/Collider.h"
 
 #include "../../vulkanWrappers/include/vulkanObject.h"
 #include "../../vulkanWrappers/include/vulkanMeshData.h"

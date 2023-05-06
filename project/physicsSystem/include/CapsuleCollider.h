@@ -14,11 +14,7 @@ private:
 	glm::vec3 transformedBase;
 
 public:
-	CapsuleCollider(
-		glm::vec3 _base, float _radius = 1.0f
-	) :
-		base(_base), radius(_radius)
-	{
+	CapsuleCollider(glm::vec3 _base, float _radius = 1.0f) : base(_base), radius(_radius) {
 		recalculateExtent();
 	}
 
@@ -31,11 +27,18 @@ public:
 		recalculateExtent();
 	}
 
+	float getRadius() { return radius; }
+	glm::vec3 getTransformedBase() { return transformedBase; }
+	glm::vec3 getTransformedTip() { return *pos + *pos - transformedBase; }
+
 	void recalculateExtent() { extent = glm::length(base) + radius; }
 
 	void transformCollider() {
 		transformedBase = glm::vec3(modelMatrix * glm::vec4(base, 1.0f));
 	}
+
+	glm::vec3 doesCollideWith(SphereCollider* other);
+	glm::vec3 doesCollideWith(CapsuleCollider* other);
 
 private:
 

@@ -167,7 +167,10 @@
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceGui.cpp" />
     <ClCompile Include="imGuiWrappers\source\imGuiInstanceInit.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="physicsSystem\src\CapsuleCollider.cpp" />
     <ClCompile Include="physicsSystem\src\ColliderDoesCollideWithDefinition.cpp" />
+    <ClCompile Include="physicsSystem\src\CollisionUtilities.cpp" />
+    <ClCompile Include="physicsSystem\src\SphereCollider.cpp" />
     <ClCompile Include="renderLogic\source\camera.cpp" />
     <ClCompile Include="renderLogic\source\object.cpp" />
     <ClCompile Include="renderLogic\source\scene.cpp" />
@@ -199,6 +202,7 @@
     <ClInclude Include="imGuiWrappers\include\imGuiWrappersGeneralIncludes.h" />
     <ClInclude Include="physicsSystem\include\CapsuleCollider.h" />
     <ClInclude Include="physicsSystem\include\Collider.h" />
+    <ClInclude Include="physicsSystem\include\CollisionUtilities.h" />
     <ClInclude Include="physicsSystem\include\EventManager.h" />
     <ClInclude Include="physicsSystem\include\SphereCollider.h" />
     <ClInclude Include="renderLogic\include\camera.h" />

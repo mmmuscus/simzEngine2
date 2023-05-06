@@ -32,6 +32,8 @@
 #include "renderLogic/include/camera.h"
 
 #include "physicsSystem/include/EventManager.h"
+#include "physicsSystem/include/SphereCollider.h"
+#include "physicsSystem/include/CapsuleCollider.h"
 
 class Application {
 public:
