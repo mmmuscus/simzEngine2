@@ -3,6 +3,8 @@
 
 #include "../../renderLogic/include/object.h"
 
+const float FORCE_AMP = 100.0f;
+
 struct CollisionEvent {
 	object* obj1;
 	object* obj2;
@@ -29,8 +31,8 @@ public:
 
 	void resolveEvents() {
 		for (size_t i = 0; i < collisionEvents.size(); i++) {
-			collisionEvents[i].obj1->getRigidBody()->addVelocity(collisionEvents[i].collisionVector);
-			collisionEvents[i].obj2->getRigidBody()->addVelocity(-collisionEvents[i].collisionVector);
+			collisionEvents[i].obj1->getRigidBody()->addForce(FORCE_AMP * collisionEvents[i].collisionVector);
+			collisionEvents[i].obj2->getRigidBody()->addForce(FORCE_AMP * -collisionEvents[i].collisionVector);
 		}
 
 		collisionEvents.clear();
