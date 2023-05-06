@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+// https://wickedengine.net/2020/04/26/capsule-collision-detection/
 namespace Collisions {
 	glm::vec3 closestPointOnLineSegment(glm::vec3 A, glm::vec3 B, glm::vec3 point);
 	bool doBoundingSpheresCollide(glm::vec3 A, glm::vec3 B, float rA, float rB);

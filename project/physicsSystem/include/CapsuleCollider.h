@@ -5,6 +5,7 @@
 
 class CapsuleCollider : public Collider {
 private:
+	// Base is defined in model space
 	glm::vec3 base;
 	// Maybe we dont need this cos tip = base mirrored on pos
 	// glm::vec3 tip;

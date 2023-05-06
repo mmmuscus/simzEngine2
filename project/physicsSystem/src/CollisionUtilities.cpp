@@ -22,7 +22,7 @@ glm::vec3 Collisions::doCollision(SphereCollider* ego, SphereCollider* other) {
 
 glm::vec3 Collisions::doCollision(SphereCollider* ego, CapsuleCollider* other) {
 	if (doBoundingSpheresCollide(*ego->getPos(), *other->getPos(), ego->getRadius(), other->getExtent()))
-		return glm::vec3(1.0f, 1.0f, 1.0f);
+		return glm::vec3(0.0f, 0.0f, 0.0f);
 
 	other->transformCollider();
 
@@ -34,6 +34,9 @@ glm::vec3 Collisions::doCollision(SphereCollider* ego, CapsuleCollider* other) {
 
 	glm::vec3 res = glm::normalize(*ego->getPos() - closest);
 	float scale = ego->getRadius() + other->getRadius() - glm::distance(*ego->getPos(), closest);
+
+	if (scale < 0.0f)
+		return glm::vec3(0.0f, 0.0f, 0.0f);
 
 	return res *= scale;
 }

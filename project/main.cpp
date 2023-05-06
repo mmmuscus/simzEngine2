@@ -172,9 +172,9 @@ private:
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
-            glm::vec3(0.0f, 0.0f, 3.14f),
+            glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(1.0f, 1.0f, 1.0f),
-            new SphereCollider()
+            new CapsuleCollider(glm::vec3(0.5f, 0.0f, 0.0f))
         ));
 
         mainScene.defragmentObjectNumbers();
