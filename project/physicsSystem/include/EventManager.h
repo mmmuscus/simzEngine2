@@ -23,6 +23,9 @@ public:
 		if (obj1 == obj2)
 			return;
 
+		if (obj1->getCollider() == nullptr || obj2->getCollider() == nullptr)
+			return;
+
 		glm::vec3 collVect = obj1->getCollider()->doesCollideWith(obj2->getCollider());
 		
 		if (collVect != glm::vec3(0.0f, 0.0f, 0.0f))

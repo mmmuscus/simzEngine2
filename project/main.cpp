@@ -211,7 +211,8 @@ private:
 
             // Update translation of scene (and its objects)
             for (size_t i = 0; i < mainScene.getObjects().size(); i++)
-                mainScene.getObjects()[i]->getCollider()->resetIsTransformed();
+                if (mainScene.getObjects()[i]->getCollider() != nullptr)
+                    mainScene.getObjects()[i]->getCollider()->resetIsTransformed();
             for (size_t i = 0; i < mainScene.getObjects().size(); i++) {
                 for (size_t j = i + 1; j < mainScene.getObjects().size(); j++) {
                     eventManager.checkCollision(mainScene.getObjects()[i], mainScene.getObjects()[j]);
