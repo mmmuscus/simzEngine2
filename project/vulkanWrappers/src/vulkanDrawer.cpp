@@ -82,28 +82,6 @@ void vulkanDrawer::drawFrame(
     );
 }
 
-void vulkanDrawer::submitCommandBuffer(bool shouldRecreateSwapChain, vk::Queue graphicsQueue) {
-    if (shouldRecreateSwapChain)
-        return;
-    
-    vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
-    vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
-    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
-
-    auto submitInfo = vk::SubmitInfo(
-        1, waitSemaphores, waitStages,
-        1, &commandBuffers[currentFrame],
-        1, signalSemaphores
-    );
-
-    try {
-        graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
-    }
-    catch (vk::SystemError err) {
-        throw std::runtime_error("failed to submit draw command buffer!");
-    }
-}
-
 void vulkanDrawer::recordCommandBuffer(
     vk::CommandBuffer commandBuffer,
     vulkanRenderer* renderer,
@@ -185,6 +163,29 @@ void vulkanDrawer::recordCommandBuffer(
         throw std::runtime_error("failed to record command buffer!");
     }
 }
+
+void vulkanDrawer::submitCommandBuffer(bool shouldRecreateSwapChain, vk::Queue graphicsQueue) {
+    if (shouldRecreateSwapChain)
+        return;
+
+    vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
+    vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
+    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
+
+    auto submitInfo = vk::SubmitInfo(
+        1, waitSemaphores, waitStages,
+        1, &commandBuffers[currentFrame],
+        1, signalSemaphores
+    );
+
+    try {
+        graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("failed to submit draw command buffer!");
+    }
+}
+
 
 void vulkanDrawer::presentFrame(vulkanSurface* surface, vk::Queue presentQueue) {
     if (surface->getShouldRecreateSwapChain())

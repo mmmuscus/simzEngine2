@@ -48,7 +48,6 @@ public:
         );
         initScene();
         mainLoop();
-        cleanup();
     }
 
 private:
@@ -246,10 +245,6 @@ private:
         }
 
         instance.getDevice().waitIdle();
-    }
-
-    void cleanup() {
-
     }
 };
 
