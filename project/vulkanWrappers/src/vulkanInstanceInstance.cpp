@@ -1,8 +1,15 @@
 #include "../include/vulkanInstance.h"
 
 vulkanInstance::~vulkanInstance() {
-    device.get().destroyCommandPool(commandPool);
+    destroyCommandPool();
+    destroyCallback();
+}
 
+void vulkanInstance::destroyCommandPool() {
+    device.get().destroyCommandPool(commandPool);
+}
+
+void vulkanInstance::destroyCallback() {
     if (enableValidationLayers)
         DestroyDebugUtilsMessengerEXT(*instance, callback, nullptr);
 }

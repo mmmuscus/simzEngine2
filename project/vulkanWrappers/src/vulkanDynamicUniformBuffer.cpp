@@ -1,6 +1,10 @@
 #include "../include/vulkanDynamicUniformBuffer.h"
 
 vulkanDynamicUniformBuffer::~vulkanDynamicUniformBuffer() {
+    destroy();
+}
+
+void vulkanDynamicUniformBuffer::destroy() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroyBuffer(uniformBuffers[i]);
         device.freeMemory(uniformBuffersMemory[i]);

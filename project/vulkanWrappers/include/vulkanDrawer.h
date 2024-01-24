@@ -28,6 +28,7 @@ private:
 
 public:
 	~vulkanDrawer();
+	void destroySyncObjects();
 
 	std::vector<vk::Semaphore> getImageAvailableSemaphores() { return imageAvailableSemaphores; }
 	std::vector<vk::Semaphore> getRenderFinishedSemaphores() { return renderFinishedSemaphores; }

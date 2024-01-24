@@ -12,6 +12,7 @@ private:
 
 public:
 	~vulkanTextureSampler();
+	void destroy();
 
 	void setDevice(vk::Device _device) { device = _device; }
 

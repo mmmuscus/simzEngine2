@@ -49,6 +49,7 @@ private:
 
 public:
     ~vulkanObject();
+    void destroy();
     
     void setDevice(vk::Device _device) { device = _device; }
 

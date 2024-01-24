@@ -29,6 +29,9 @@ private:
 
 public:
 	~vulkanSurface();
+	void destroyImageViews();
+	void destroySwapChain();
+	void destroySurface();
 
 	bool getShouldRecreateSwapChain() { return shouldRecreateSwapChain; }
 

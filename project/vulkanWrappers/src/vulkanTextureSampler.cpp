@@ -1,7 +1,11 @@
 #include "../include/vulkanTextureSampler.h"
 
 vulkanTextureSampler::~vulkanTextureSampler() {
-	device.destroySampler(sampler);
+    destroy();
+}
+
+void vulkanTextureSampler::destroy() {
+    device.destroySampler(sampler);
 }
 
 void vulkanTextureSampler::init(vk::Device _device, vk::PhysicalDevice physicalDevice) {

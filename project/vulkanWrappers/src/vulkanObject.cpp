@@ -1,6 +1,10 @@
 #include "../include/vulkanObject.h"
 
 vulkanObject::~vulkanObject() {
+    destroy();
+}
+
+void vulkanObject::destroy() {
     // Descriptor Pools:
     device.destroyDescriptorPool(modelDescriptorPool);
 

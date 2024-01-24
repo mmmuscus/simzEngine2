@@ -8,6 +8,13 @@ private:
 	std::vector<vulkanObject*> vulkanObjects;
 
 public:
+	void destroyList() {
+		for (int i = 0; i < vulkanObjects.size(); i++)
+			vulkanObjects[i]->destroy();
+
+		vulkanObjects.clear();
+	}
+
 	std::vector<vulkanObject*> getVulkanObjects() { return vulkanObjects; }
 
 	vulkanObject* addVulkanObject(

@@ -17,6 +17,7 @@ private:
 
 public:
     ~vulkanDynamicUniformBuffer();
+    void destroy();
 
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
     size_t getDynamicAlignment() { return dynamicAlignment; }

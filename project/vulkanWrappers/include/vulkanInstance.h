@@ -31,6 +31,8 @@ private:
 
 public:
 	~vulkanInstance();
+	void destroyCallback();
+	void destroyCommandPool();
 
 	void setSurface(vk::SurfaceKHR _surface) { surface = _surface; }
 

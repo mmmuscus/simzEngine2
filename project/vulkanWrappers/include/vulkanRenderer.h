@@ -27,6 +27,10 @@ private:
 
 public:
 	~vulkanRenderer();
+	void destroyFramebuffers();
+	void destroyColorResources();
+	void destroyDepthResources();
+	void destroyRenderPass();
 
 	void setDevice(vk::Device _device) { device = _device; }
 
@@ -39,10 +43,6 @@ public:
 	void initMsaaSamples(vk::PhysicalDevice physicalDevice);
 	void initColorResources(vulkanInstance* instnace, vk::Format colorFormat, vk::Extent2D extent);
 	void initDepthResources(vulkanInstance* instance, vk::Extent2D extent);
-
-	void destroyFramebuffers();
-	void destroyColorResources();
-	void destroyDepthResources();
 
 private:
 	vk::Format findDepthFormat(vulkanInstance* instance);

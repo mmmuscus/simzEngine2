@@ -46,8 +46,10 @@ public:
             windowMngr.getWindow(), &instance, &surface,
             &vulkanObjectMngr, &meshMngr, &textureMngr
         );
+        imGuiInst.setIsEnabled(false);
         initScene();
-        mainLoop();
+        // mainLoop();
+        destroyVulkan();
     }
 
 private:
@@ -124,7 +126,7 @@ private:
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/negativeFrag.spv"
         );
 
-        // Color resources:
+        // Color Resources:
         renderer.initColorResources(&instance, surface.getFormat(), surface.getExtent());
 
         // Framebuffers:
@@ -146,6 +148,48 @@ private:
 
         // Dynamic Uniform Buffer:
         modelsBuffer.init(&instance);
+    }
+
+    void destroyVulkan() {
+        instance.getDevice().waitIdle();
+
+        // Dynamic Uniform Buffer:
+        modelsBuffer.destroy();
+
+        // Texture Sampler:
+        textureSampler.destroy();
+        
+        // Sync Objects:
+        drawer.destroySyncObjects();
+        
+        // Command Buffers are only detroyed when the Command Pool is destroyed
+        // Command Pool:
+        instance.destroyCommandPool();
+        
+        // Framebuffers + Color Resources:
+        renderer.destroyFramebuffers();
+        renderer.destroyColorResources();
+        
+        // NEGATIVE OBJECT + DIFFUSE OBJECT:
+        vulkanObjectMngr.destroyList();
+        
+        // Render Pass + Depth Resources:
+        // Msaa Samples is not a vulkan object
+        renderer.destroyRenderPass();
+        renderer.destroyDepthResources();
+        
+        // SwapChain + ImageViews:
+        surface.destroyImageViews();
+        surface.destroySwapChain();
+        
+        // Device + PhysicalDevice dosent need to be destroyed explicitly
+        
+        // Surface:
+        surface.destroySurface();
+        
+        // Callback
+        // Instance dosent need to be destroyed explicily
+        instance.destroyCallback();
     }
 
     void initScene() {
@@ -200,7 +244,8 @@ private:
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
                 // ImGui framebuffers recreation:
-                imGuiInst.recreateFramebuffers(&surface);
+                if (imGuiInst.getIsEnabled()) 
+                    imGuiInst.recreateFramebuffers(&surface);
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();

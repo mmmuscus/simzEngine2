@@ -1,13 +1,23 @@
 #include "../include/vulkanSurface.h"
 
 vulkanSurface::~vulkanSurface() {
+    destroyImageViews();
+    destroySwapChain();
+    destroySurface();
+}
+
+void vulkanSurface::destroyImageViews() {
     for (auto imageView : imageViews) {
         device.destroyImageView(imageView);
     }
+}
 
+void vulkanSurface::destroySwapChain() {
     device.destroySwapchainKHR(swapChain);
+}
 
-	instance.destroySurfaceKHR(surface);
+void vulkanSurface::destroySurface() {
+    instance.destroySurfaceKHR(surface);
 }
 
 void vulkanSurface::initSurface() {

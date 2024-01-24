@@ -1,6 +1,10 @@
 #include "../include/vulkanDrawer.h"
 
 vulkanDrawer::~vulkanDrawer() {
+    destroySyncObjects();
+}
+
+void vulkanDrawer::destroySyncObjects() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroySemaphore(renderFinishedSemaphores[i]);
         device.destroySemaphore(imageAvailableSemaphores[i]);

@@ -1,11 +1,10 @@
 #include "../include/vulkanRenderer.h"
 
 vulkanRenderer::~vulkanRenderer() {
+    destroyFramebuffers();
     destroyColorResources();
     destroyDepthResources();
-    destroyFramebuffers();
-
-    device.destroyRenderPass(renderPass);
+    destroyRenderPass();
 }
 
 void vulkanRenderer::destroyFramebuffers() {
@@ -24,6 +23,10 @@ void vulkanRenderer::destroyDepthResources() {
     device.destroyImageView(depthImageView);
     device.destroyImage(depthImage);
     device.freeMemory(depthImageMemory);
+}
+
+void vulkanRenderer::destroyRenderPass() {
+    device.destroyRenderPass(renderPass);
 }
 
 void vulkanRenderer::initRenderPass(vk::Format imageFormat) {
