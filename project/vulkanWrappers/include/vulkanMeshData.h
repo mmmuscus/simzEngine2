@@ -17,10 +17,10 @@ private:
     std::string name;
 
     // Buffers:
-    vk::Buffer vertexBuffer;
-    vk::DeviceMemory vertexBufferMemory;
-    vk::Buffer indexBuffer;
-    vk::DeviceMemory indexBufferMemory;
+    vk::Buffer vertexBuffer = VK_NULL_HANDLE;
+    vk::DeviceMemory vertexBufferMemory = VK_NULL_HANDLE;
+    vk::Buffer indexBuffer = VK_NULL_HANDLE;
+    vk::DeviceMemory indexBufferMemory = VK_NULL_HANDLE;
     // Uniform buffers:
     vulkanDynamicUniformBuffer* uniformBuffer;
 
@@ -33,6 +33,7 @@ private:
 
 public:
     ~vulkanMeshData();
+    void destroy();
 
     void setDevice(vk::Device _device) { device = _device; }
     void setDynamicUniformBuffer(vulkanDynamicUniformBuffer* _uniformBuffer) { uniformBuffer = _uniformBuffer; }

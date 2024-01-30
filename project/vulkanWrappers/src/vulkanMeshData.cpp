@@ -1,11 +1,19 @@
 #include "../include/vulkanMeshData.h"
 
 vulkanMeshData::~vulkanMeshData() {
+    destroy();
+}
+
+void vulkanMeshData::destroy() {
     device.destroyBuffer(indexBuffer);
+    indexBuffer = VK_NULL_HANDLE;
     device.freeMemory(indexBufferMemory);
+    indexBufferMemory = VK_NULL_HANDLE;
 
     device.destroyBuffer(vertexBuffer);
+    vertexBuffer = VK_NULL_HANDLE;
     device.freeMemory(vertexBufferMemory);
+    vertexBufferMemory = VK_NULL_HANDLE;
 }
 
 void vulkanMeshData::init(

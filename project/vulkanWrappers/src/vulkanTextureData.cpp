@@ -1,9 +1,16 @@
 #include "../include/vulkanTextureData.h"
 
 vulkanTextureData::~vulkanTextureData() {
+    destroy();
+}
+
+void vulkanTextureData::destroy() {
     device.destroyImageView(imageView);
+    imageView = VK_NULL_HANDLE;
     device.destroyImage(image);
+    image = VK_NULL_HANDLE;
     device.freeMemory(imageMemory);
+    imageMemory = VK_NULL_HANDLE;
 }
 
 void vulkanTextureData::init(

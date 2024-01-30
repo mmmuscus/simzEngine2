@@ -153,6 +153,10 @@ private:
     void destroyVulkan() {
         instance.getDevice().waitIdle();
 
+        // Destroying meshes and textures:
+        meshMngr.destroyList();
+        textureMngr.destroyList();
+
         // Dynamic Uniform Buffer:
         modelsBuffer.destroy();
 
@@ -187,7 +191,7 @@ private:
         // Surface:
         surface.destroySurface();
         
-        // Callback
+        // Callback:
         // Instance dosent need to be destroyed explicily
         instance.destroyCallback();
     }

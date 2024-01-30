@@ -17,9 +17,9 @@ private:
 
     // Textures:
     uint32_t mipLevels;
-    vk::Image image;
-    vk::DeviceMemory imageMemory;
-    vk::ImageView imageView;
+    vk::Image image = VK_NULL_HANDLE;
+    vk::DeviceMemory imageMemory = VK_NULL_HANDLE;
+    vk::ImageView imageView = VK_NULL_HANDLE;
 
     // Sampler
     vulkanTextureSampler* sampler;
@@ -29,6 +29,7 @@ private:
 
 public:
     ~vulkanTextureData();
+    void destroy();
 
     void setDevice(vk::Device _device) { device = _device; }
     void setSampler(vulkanTextureSampler* _sampler) { sampler = _sampler; }

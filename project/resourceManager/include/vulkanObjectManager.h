@@ -9,7 +9,7 @@ private:
 
 public:
 	void destroyList() {
-		for (int i = 0; i < vulkanObjects.size(); i++)
+		for (size_t i = 0; i < vulkanObjects.size(); i++)
 			vulkanObjects[i]->destroy();
 
 		vulkanObjects.clear();

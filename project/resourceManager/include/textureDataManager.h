@@ -8,6 +8,13 @@ private:
 	std::vector<vulkanTextureData*> textureDatas;
 
 public:
+	void destroyList() {
+		for (size_t i = 0; i < textureDatas.size(); i++)
+			textureDatas[i]->destroy();
+
+		textureDatas.clear();
+	}
+
 	std::vector<vulkanTextureData*> getTextureDatas() { return textureDatas; }
 
 	vulkanTextureData* addTextureData(

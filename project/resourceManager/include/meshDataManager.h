@@ -8,6 +8,13 @@ private:
 	std::vector<vulkanMeshData*> meshDatas;
 
 public:
+	void destroyList() {
+		for (size_t i = 0; i < meshDatas.size(); i++)
+			meshDatas[i]->destroy();
+
+		meshDatas.clear();
+	}
+
 	std::vector<vulkanMeshData*> getMeshDatas() { return meshDatas; }
 
 	vulkanMeshData* addMeshData(
