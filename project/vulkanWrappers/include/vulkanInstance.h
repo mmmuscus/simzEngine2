@@ -11,7 +11,7 @@ private:
 	// Instance:
 	vk::UniqueInstance instance;
 	// Callback:
-	VkDebugUtilsMessengerEXT callback;
+	VkDebugUtilsMessengerEXT callback = VK_NULL_HANDLE;;
 	// Devices:
 	vk::PhysicalDevice physicalDevice;
 	vk::UniqueDevice device;
@@ -20,7 +20,7 @@ private:
 	uint32_t graphicsQueueFamily;
 	vk::Queue presentQueue;
 	// CommandPool:
-	vk::CommandPool commandPool;
+	vk::CommandPool commandPool = VK_NULL_HANDLE;
 
 	const std::vector<const char*> deviceExtensions = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME

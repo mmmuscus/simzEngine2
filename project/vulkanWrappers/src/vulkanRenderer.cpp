@@ -8,25 +8,33 @@ vulkanRenderer::~vulkanRenderer() {
 }
 
 void vulkanRenderer::destroyFramebuffers() {
-    for (auto framebuffer : framebuffers) {
-        device.destroyFramebuffer(framebuffer);
+    for (size_t i = 0; i < framebuffers.size(); i++) {
+        device.destroyFramebuffer(framebuffers[i]);
+        framebuffers[i] = VK_NULL_HANDLE;
     }
 }
 
 void vulkanRenderer::destroyColorResources() {
     device.destroyImageView(colorImageView);
+    colorImageView = VK_NULL_HANDLE;
     device.destroyImage(colorImage);
+    colorImage = VK_NULL_HANDLE;
     device.freeMemory(colorImageMemory);
+    colorImageMemory = VK_NULL_HANDLE;
 }
 
 void vulkanRenderer::destroyDepthResources() {
     device.destroyImageView(depthImageView);
+    depthImageView = VK_NULL_HANDLE;
     device.destroyImage(depthImage);
+    depthImage = VK_NULL_HANDLE;
     device.freeMemory(depthImageMemory);
+    depthImageMemory = VK_NULL_HANDLE;
 }
 
 void vulkanRenderer::destroyRenderPass() {
     device.destroyRenderPass(renderPass);
+    renderPass = VK_NULL_HANDLE;
 }
 
 void vulkanRenderer::initRenderPass(vk::Format imageFormat) {

@@ -42,10 +42,10 @@ public:
         windowMngr.initWindow();
         windowMngr.initGlfwInputHandling();
         initVulkan();
-        imGuiInst.init(
+        /*imGuiInst.init(
             windowMngr.getWindow(), &instance, &surface,
             &vulkanObjectMngr, &meshMngr, &textureMngr
-        );
+        );*/
         imGuiInst.setIsEnabled(false);
         initScene();
         // mainLoop();

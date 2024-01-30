@@ -8,19 +8,19 @@
 class vulkanRenderer {
 private:
 	// Render pass + framebuffers:
-	vk::RenderPass renderPass;
+	vk::RenderPass renderPass = VK_NULL_HANDLE;;
 	std::vector<vk::Framebuffer> framebuffers;
 	// Depth resources:
-	vk::Image depthImage;
-	vk::DeviceMemory depthImageMemory;
-	vk::ImageView depthImageView;
+	vk::Image depthImage = VK_NULL_HANDLE;;
+	vk::DeviceMemory depthImageMemory = VK_NULL_HANDLE;;
+	vk::ImageView depthImageView = VK_NULL_HANDLE;;
 	vk::Format depthFormat;
 	// MSAA Count:
 	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
 	// Color resources:
-	vk::Image colorImage;
-	vk::DeviceMemory colorImageMemory;
-	vk::ImageView colorImageView;
+	vk::Image colorImage = VK_NULL_HANDLE;;
+	vk::DeviceMemory colorImageMemory = VK_NULL_HANDLE;;
+	vk::ImageView colorImageView = VK_NULL_HANDLE;;
 
 	// Not maintained by the class:
 	vk::Device device;

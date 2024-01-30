@@ -9,9 +9,9 @@
 class vulkanSurface {
 private:
 	// Surface:
-	vk::SurfaceKHR surface;
+	vk::SurfaceKHR surface = VK_NULL_HANDLE;
 	// SwapChain:
-	vk::SwapchainKHR swapChain;
+	vk::SwapchainKHR swapChain = VK_NULL_HANDLE;
 	// Images:
 	std::vector<vk::Image> images;
 	vk::Format imageFormat;

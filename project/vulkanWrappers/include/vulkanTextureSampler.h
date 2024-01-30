@@ -5,7 +5,7 @@
 
 class vulkanTextureSampler {
 private:
-	vk::Sampler sampler;
+	vk::Sampler sampler = VK_NULL_HANDLE;
 
 	// Not maintained by the class:
 	vk::Device device;

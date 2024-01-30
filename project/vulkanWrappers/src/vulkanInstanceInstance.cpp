@@ -7,11 +7,14 @@ vulkanInstance::~vulkanInstance() {
 
 void vulkanInstance::destroyCommandPool() {
     device.get().destroyCommandPool(commandPool);
+    commandPool = VK_NULL_HANDLE;
 }
 
 void vulkanInstance::destroyCallback() {
-    if (enableValidationLayers)
+    if (enableValidationLayers) {
         DestroyDebugUtilsMessengerEXT(*instance, callback, nullptr);
+        callback = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanInstance::listExtensions() {

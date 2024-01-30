@@ -6,6 +6,7 @@ vulkanTextureSampler::~vulkanTextureSampler() {
 
 void vulkanTextureSampler::destroy() {
     device.destroySampler(sampler);
+    sampler = VK_NULL_HANDLE;
 }
 
 void vulkanTextureSampler::init(vk::Device _device, vk::PhysicalDevice physicalDevice) {

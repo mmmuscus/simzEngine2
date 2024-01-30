@@ -7,8 +7,13 @@ vulkanDrawer::~vulkanDrawer() {
 void vulkanDrawer::destroySyncObjects() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         device.destroySemaphore(renderFinishedSemaphores[i]);
+        renderFinishedSemaphores[i] = VK_NULL_HANDLE;
+
         device.destroySemaphore(imageAvailableSemaphores[i]);
+        imageAvailableSemaphores[i] = VK_NULL_HANDLE;
+
         device.destroyFence(inFlightFences[i]);
+        inFlightFences[i] = VK_NULL_HANDLE;
     }
 }
 

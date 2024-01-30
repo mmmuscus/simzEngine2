@@ -36,13 +36,13 @@ private:
     // Name:
     std::string name;
     // Descriptor set layouts:
-    vk::DescriptorSetLayout sceneDescriptorSetLayout;
-    vk::DescriptorPool modelDescriptorPool;
-    vk::DescriptorSetLayout modelDescriptorSetLayout;
-    vk::DescriptorPool sceneDescriptorPool;
+    vk::DescriptorSetLayout sceneDescriptorSetLayout = VK_NULL_HANDLE;
+    vk::DescriptorPool modelDescriptorPool = VK_NULL_HANDLE;
+    vk::DescriptorSetLayout modelDescriptorSetLayout = VK_NULL_HANDLE;
+    vk::DescriptorPool sceneDescriptorPool = VK_NULL_HANDLE;
     // Pipeline
-    vk::PipelineLayout pipelineLayout;
-    vk::Pipeline graphicsPipeline;
+    vk::PipelineLayout pipelineLayout = VK_NULL_HANDLE;
+    vk::Pipeline graphicsPipeline = VK_NULL_HANDLE;
 
     // Not maintained by the class:
     vk::Device device;
