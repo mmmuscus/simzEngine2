@@ -1,16 +1,33 @@
 #include "../include/imGuiInstance.h"
 
 imGuiInstance::~imGuiInstance() {
+    destroy();
+}
+
+void imGuiInstance::destroy() {
     if (!isInstance)
         return;
+
+    device.waitIdle();
 
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    // ImGui_ImplVulkanH_DestroyWindow ???
 
+    destroyVulkanComponents();
+
+    isInstance = false;
+}
+
+void imGuiInstance::destroyVulkanComponents() {
     destroyFramebuffers();
-
+    
     device.destroyRenderPass(renderPass);
+    renderPass = VK_NULL_HANDLE;
+
+    device.destroyDescriptorPool(descriptorPool);
+    descriptorPool = VK_NULL_HANDLE;
 }
 
 void imGuiInstance::init(
@@ -21,6 +38,7 @@ void imGuiInstance::init(
     device = instance->getDevice();
     initRenderPass(surface->getFormat());
     initFramebuffers(surface);
+    initDescriptorPool();
     initImGui(window, instance);
     isEnabled = true;
     // Managers:
@@ -29,7 +47,7 @@ void imGuiInstance::init(
     textureManager = _textureManager;
 }
 
-vk::DescriptorPool imGuiInstance::initDescriptorPool() {
+void imGuiInstance::initDescriptorPool() {
     std::array<vk::DescriptorPoolSize, 1> poolSizes = {
         vk::DescriptorPoolSize(
             vk::DescriptorType::eCombinedImageSampler,
@@ -43,16 +61,13 @@ vk::DescriptorPool imGuiInstance::initDescriptorPool() {
         static_cast<uint32_t>(poolSizes.size()), poolSizes.data()
     );
 
-    vk::DescriptorPool imGuiPool;
     try {
-        imGuiPool = device.createDescriptorPool(poolInfo);
+        descriptorPool = device.createDescriptorPool(poolInfo);
     }
     catch (vk::SystemError err)
     {
         throw std::runtime_error("failed to create ImGui descriptor pool!");
     }
-
-    return imGuiPool;
 }
 
 void imGuiInstance::initRenderPass(vk::Format format) {
@@ -142,7 +157,7 @@ void imGuiInstance::initImGui(GLFWwindow* window, vulkanInstance* instance) {
     info.QueueFamily = instance->getGraphicsQueueFamily();
     info.Queue = instance->getGraphicsQueue();
     info.PipelineCache = VK_NULL_HANDLE;
-    info.DescriptorPool = initDescriptorPool();
+    info.DescriptorPool = descriptorPool;
     info.Subpass = 0;
     info.MinImageCount = IMGUI_MIN_IMAGE_COUNT;
     info.ImageCount = MAX_FRAMES_IN_FLIGHT;

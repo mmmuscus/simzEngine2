@@ -13,6 +13,8 @@
 #include "../../resourceManager/include/textureDataManager.h"
 #include "../../resourceManager/include/vulkanObjectManager.h"
 
+// Reference of ImGui integration with Vulkan and glfw:
+// https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 class imGuiInstance {
 private:
 	// Helper flag
@@ -35,12 +37,15 @@ private:
 	// Vulkan variables
 	vk::RenderPass renderPass;
 	std::vector<vk::Framebuffer> framebuffers;
+	vk::DescriptorPool descriptorPool;
 
 	// Not maintained by class
 	vk::Device device;
 
 public:
 	~imGuiInstance();
+	void destroy();
+	void destroyVulkanComponents();
 
 	bool getIsEnabled() { return isEnabled; }
 
@@ -67,7 +72,7 @@ public:
 	);
 
 private:
-	vk::DescriptorPool initDescriptorPool();
+	void initDescriptorPool();
 	void initRenderPass(vk::Format format);
 	void initFramebuffers(vulkanSurface* surface);
 	void initImGui(GLFWwindow* window, vulkanInstance* instance);

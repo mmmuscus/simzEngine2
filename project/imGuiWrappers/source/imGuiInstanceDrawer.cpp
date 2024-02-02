@@ -1,8 +1,9 @@
 #include "../include/imGuiInstance.h"
 
 void imGuiInstance::destroyFramebuffers() {
-    for (auto framebuffer : framebuffers) {
-        device.destroyFramebuffer(framebuffer);
+    for (size_t i = 0; i < framebuffers.size(); i++) {
+        device.destroyFramebuffer(framebuffers[i]);
+        framebuffers[i] = VK_NULL_HANDLE;
     }
 }
 
