@@ -26,6 +26,7 @@ private:
 
 public:
 	~vulkanSceneData();
+	void destroy();
 
 	void setDevice(vk::Device _device) { device = _device; }
 

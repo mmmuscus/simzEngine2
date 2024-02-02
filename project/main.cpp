@@ -49,6 +49,7 @@ public:
         imGuiInst.setIsEnabled(false);
         initScene();
         // mainLoop();
+        mainScene.destroy();
         destroyVulkan();
     }
 

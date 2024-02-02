@@ -1,5 +1,9 @@
 #include "../include/scene.h"
 
+void scene::destroy() {
+	sceneData->destroy();
+}
+
 void scene::addObject(object* _object) {
 	_object->setSceneTimer(sceneTimer);
 	objects.push_back(_object);

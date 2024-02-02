@@ -21,6 +21,8 @@ private:
 	timer* sceneTimer;
 
 public:
+	void destroy();
+
 	void setSceneData(vulkanSceneData* _sceneData) { sceneData = _sceneData; }
 	void setCam(camera* _cam) { cam = _cam; }
 
