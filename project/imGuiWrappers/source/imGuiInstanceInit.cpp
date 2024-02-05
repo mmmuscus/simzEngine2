@@ -8,6 +8,7 @@ void imGuiInstance::destroy() {
     if (!isCreated) return;
 
     device.waitIdle();
+    destroyFramebuffers();
     device.destroyRenderPass(renderPass);
     renderPass = VK_NULL_HANDLE;
 
@@ -19,6 +20,13 @@ void imGuiInstance::destroy() {
     descriptorPool = VK_NULL_HANDLE;
 
     isCreated = false;
+}
+
+void imGuiInstance::destroyFramebuffers() {
+    for (size_t i = 0; i < framebuffers.size(); i++) {
+        device.destroyFramebuffer(framebuffers[i]);
+        framebuffers[i] = VK_NULL_HANDLE;
+    }
 }
 
 void imGuiInstance::initDescriptorPool() {
@@ -90,6 +98,29 @@ void imGuiInstance::initRenderPass(vk::Format _format) {
     }
 }
 
+void imGuiInstance::initFramebuffers(vulkanSurface* _surface) {
+    framebuffers.resize(_surface->getImageViews().size());
+
+    for (size_t i = 0; i < _surface->getImageViews().size(); i++) {
+        std::array<vk::ImageView, 1> attachment = { _surface->getImageViews()[i] };
+
+        auto info = vk::FramebufferCreateInfo(
+            vk::FramebufferCreateFlags(),
+            renderPass,
+            static_cast<uint32_t>(attachment.size()), attachment.data(),
+            _surface->getExtent().width, _surface->getExtent().height,
+            1
+        );
+
+        try {
+            framebuffers[i] = device.createFramebuffer(info);
+        }
+        catch (vk::SystemError err) {
+            throw std::runtime_error("failed to create ImGui framebuffer");
+        }
+    }
+}
+
 void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface) {
     isCreated = false;
     
@@ -98,6 +129,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     // Vulkan inits
     initDescriptorPool();
     initRenderPass(_surface->getFormat());
+    initFramebuffers(_surface);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

@@ -43,6 +43,7 @@ public:
         windowMngr.initGlfwInputHandling();
         initVulkan();
         imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
+        imGuiInst.setIsEnabled(true);
         initScene();
 
         mainLoop();
@@ -247,7 +248,7 @@ private:
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
-                // ImGui framebuffers recreation:
+                // ImGui should be told IF the min image count changed (shouldnt apply to us)
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();

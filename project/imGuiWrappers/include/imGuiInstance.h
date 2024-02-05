@@ -13,15 +13,19 @@
 #include "../../resourceManager/include/textureDataManager.h"
 #include "../../resourceManager/include/vulkanObjectManager.h"
 
+// The base implementation of the class havily relies on this tutorial:
+// https://frguthmann.github.io/posts/vulkan_imgui/#IMGUI_RENDER_PASS_INITIAL_LAYOUT
 // Reference of ImGui integration with Vulkan and glfw:
 // https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 class imGuiInstance {
 private:
 	bool isCreated = false;
+	bool isEnabled = false;
 
 	// Vulkan components:
 	vk::DescriptorPool descriptorPool = VK_NULL_HANDLE;
 	vk::RenderPass renderPass = VK_NULL_HANDLE;
+	std::vector<vk::Framebuffer> framebuffers;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -29,12 +33,24 @@ private:
 public:
 	~imGuiInstance();
 	void destroy();
+	void destroyFramebuffers();
+
+	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
 
 	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
+
+	void drawGui() {
+		ImGui_ImplVulkan_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
+		ImGui::Render();
+	}
 
 private:
 	void initDescriptorPool();
 	void initRenderPass(vk::Format _format);
+	void initFramebuffers(vulkanSurface* _surface);
 };
 
 #endif // IMGUI_INSTANCE_H_

@@ -1,5 +1,5 @@
 #include "../include/imGuiInstance.h"
-
+/*
 void imGuiInstance::showGui(
     scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
@@ -130,4 +130,4 @@ void imGuiInstance::showObjectEditGui(object* obj) {
 
     ImGui::PopID();
 }
-
+*/
