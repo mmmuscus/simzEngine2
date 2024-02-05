@@ -20,7 +20,6 @@
 class imGuiInstance {
 private:
 	bool isCreated = false;
-	bool isEnabled = false;
 
 	// Vulkan components:
 	vk::DescriptorPool descriptorPool = VK_NULL_HANDLE;
@@ -35,16 +34,12 @@ public:
 	void destroy();
 	void destroyFramebuffers();
 
-	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
-
-	bool getIsEnabled() { return isEnabled; }
-
 	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
 	
 	void recreateFramebuffers(vulkanSurface* _surface);
 
 	void drawGui();
-	void drawFrame(vulkanInstance* _instance, vulkanSurface* _surface, uint32_t imageIndex);
+	void drawFrame(vk::CommandBuffer commandBuffer, vulkanSurface* _surface, uint32_t imageIndex);
 
 private:
 	void initDescriptorPool();

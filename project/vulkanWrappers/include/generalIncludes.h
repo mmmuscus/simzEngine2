@@ -1,5 +1,5 @@
-#ifndef GENERAL_INCLUDES_H_
-#define GENERAL_INCLUDES_H_
+#ifndef VULKAN_GENERAL_INCLUDES_H_
+#define VULKAN_GENERAL_INCLUDES_H_
 
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
@@ -12,6 +12,8 @@
 #include <glm/gtx/hash.hpp>
 
 #include <optional>
+
+#include "../../general/include/generalIncludes.h"
 
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
@@ -44,4 +46,4 @@ const int MAX_OBJECT_COUNT = 100;
 
 const uint32_t MAX_DESCRIPTORPOOL_SETS = 10000;
 
-#endif // GENERAL_INCLUDES_H_
+#endif // VULKAN_GENERAL_INCLUDES_H_

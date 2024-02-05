@@ -13,10 +13,10 @@ void imGuiInstance::drawGui() {
 	ImGui::Render();
 }
 
-void imGuiInstance::drawFrame(vulkanInstance* _instance, vulkanSurface* _surface, uint32_t imageIndex) {
+void imGuiInstance::drawFrame(vk::CommandBuffer commandBuffer, vulkanSurface* _surface, uint32_t imageIndex) {
 	if (_surface->getShouldRecreateSwapChain()) return;
 	
-	vk::CommandBuffer commandBuffer = _instance->beginSingleTimeCommands();
+	// vk::CommandBuffer commandBuffer = _instance->beginSingleTimeCommands();
 
 	std::array<vk::ClearValue, 1> clearValues;
 	clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -30,7 +30,7 @@ void imGuiInstance::drawFrame(vulkanInstance* _instance, vulkanSurface* _surface
 	commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
 	commandBuffer.endRenderPass();
-	_instance->endSingleTimeCommands(commandBuffer);
+	// _instance->endSingleTimeCommands(commandBuffer);
 
 	ImGui::EndFrame();
 	ImGui::UpdatePlatformWindows();

@@ -7,6 +7,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYOBJLOADER_IMPLEMENTATION
 
+#include "general/include/generalIncludes.h"
 #include "general/include/timer.h"
 
 #include "resourceManager/include/windowManager.h"
@@ -42,14 +43,17 @@ public:
         windowMngr.initWindow();
         windowMngr.initGlfwInputHandling();
         initVulkan();
+#ifdef IMGUI_DEBUG_ENABLED
         imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
-        imGuiInst.setIsEnabled(true);
+#endif // IMGUI_DEBUG_ENABLED
         initScene();
 
         mainLoop();
 
         mainScene.destroy();
+#ifdef IMGUI_DEBUG_ENABLED
         imGuiInst.destroy();
+#endif // IMGUI_DEBUG_ENABLED
         destroyVulkan();
     }
 
@@ -248,9 +252,10 @@ private:
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
+#ifdef IMGUI_DEBUG_ENABLED
                 // ImGui should be told IF the min image count changed (shouldnt apply to us)
-                if (imGuiInst.getIsEnabled())
-                    imGuiInst.recreateFramebuffers(&surface);
+                imGuiInst.recreateFramebuffers(&surface);
+#endif // IMGUI_DEBUG_ENABLED
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();
@@ -278,12 +283,12 @@ private:
                 &mainScene
             );
 
-            if (imGuiInst.getIsEnabled()) {
-                if (!surface.getShouldRecreateSwapChain()) 
-                    imGuiInst.drawGui();
+#ifdef IMGUI_DEBUG_ENABLED
+            if (!surface.getShouldRecreateSwapChain()) 
+                imGuiInst.drawGui();
                 
-                imGuiInst.drawFrame(&instance, &surface, drawer.getImageIndex());
-            }
+            imGuiInst.drawFrame(drawer.getCurrentCommandBuffer(), &surface, drawer.getImageIndex());
+#endif // IMGUI_DEBUG_ENABLED
 
             drawer.submitCommandBuffer(surface.getShouldRecreateSwapChain(), instance.getGraphicsQueue());
 

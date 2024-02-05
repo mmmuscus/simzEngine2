@@ -71,8 +71,11 @@ void vulkanRenderer::initRenderPass(vk::Format imageFormat) {
         vk::AttachmentLoadOp::eDontCare,
         vk::AttachmentStoreOp::eDontCare,
         vk::ImageLayout::eUndefined,
-        // vk::ImageLayout::ePresentSrcKHR
+#ifdef IMGUI_DEBUG_ENABLED
         vk::ImageLayout::eColorAttachmentOptimal
+#else // IMGUI_DEBUG_ENABLED
+        vk::ImageLayout::ePresentSrcKHR
+#endif // IMGUI_DEBUG_ENABLED
     );
 
     auto colorAttachmentRef = vk::AttachmentReference(0, vk::ImageLayout::eColorAttachmentOptimal);
