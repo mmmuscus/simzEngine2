@@ -249,6 +249,8 @@ private:
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
                 // ImGui should be told IF the min image count changed (shouldnt apply to us)
+                if (imGuiInst.getIsEnabled())
+                    imGuiInst.recreateFramebuffers(&surface);
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();
@@ -275,6 +277,13 @@ private:
                 &renderer,
                 &mainScene
             );
+
+            if (imGuiInst.getIsEnabled()) {
+                if (!surface.getShouldRecreateSwapChain()) 
+                    imGuiInst.drawGui();
+                
+                imGuiInst.drawFrame(&instance, &surface, drawer.getImageIndex());
+            }
 
             drawer.submitCommandBuffer(surface.getShouldRecreateSwapChain(), instance.getGraphicsQueue());
 

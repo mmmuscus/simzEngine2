@@ -37,15 +37,14 @@ public:
 
 	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
 
-	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
+	bool getIsEnabled() { return isEnabled; }
 
-	void drawGui() {
-		ImGui_ImplVulkan_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
-		ImGui::Render();
-	}
+	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
+	
+	void recreateFramebuffers(vulkanSurface* _surface);
+
+	void drawGui();
+	void drawFrame(vulkanInstance* _instance, vulkanSurface* _surface, uint32_t imageIndex);
 
 private:
 	void initDescriptorPool();
