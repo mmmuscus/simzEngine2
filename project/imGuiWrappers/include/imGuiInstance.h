@@ -17,76 +17,24 @@
 // https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 class imGuiInstance {
 private:
-	// Helper flag
-	bool isInstance = false;
-	bool isEnabled = false;
+	bool isCreated = false;
 
-	// TODO: move to someplace better
-	// Object adding paths
-	char meshPath[50] = "models/tank.objj";
-	char texturePath[50] = "textures/damn_texture.jpeg";
-	// Manager selectors
-	int currentMeshItem = 0;
-	int currentTextureItem = 0;
-	int currentVulkanObjectItem = 0;
-	// Managers:
-	vulkanObjectManager* vkObjectManager;
-	meshDataManager* meshManager;
-	textureDataManager* textureManager;
+	// Vulkan components:
+	vk::DescriptorPool descriptorPool = VK_NULL_HANDLE;
+	vk::RenderPass renderPass = VK_NULL_HANDLE;
 
-	// Vulkan variables
-	vk::RenderPass renderPass;
-	std::vector<vk::Framebuffer> framebuffers;
-	vk::DescriptorPool descriptorPool;
-
-	// Not maintained by class
+	// Not maintained by the class:
 	vk::Device device;
 
 public:
 	~imGuiInstance();
 	void destroy();
-	void destroyVulkanComponents();
 
-	bool getIsEnabled() { return isEnabled; }
-
-	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
-
-	void init(
-		GLFWwindow* window, vulkanInstance* instance, vulkanSurface* surface,
-		vulkanObjectManager* _vkObjectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
-	);
-
-	void recreateFramebuffers(vulkanSurface* surface);
-
-	void presentGui(
-		bool shouldRecreateSwapChain, scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
-		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
-	);
-
-	void drawFrame(
-		vk::CommandBuffer _commandBuffer,
-		vulkanSurface* surface,
-		vulkanInstance* instance,
-		uint32_t imageIndex
-	);
+	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
 
 private:
 	void initDescriptorPool();
-	void initRenderPass(vk::Format format);
-	void initFramebuffers(vulkanSurface* surface);
-	void initImGui(GLFWwindow* window, vulkanInstance* instance);
-	static void checkVkResult(VkResult err);
-
-	void destroyFramebuffers();
-
-	void showGui(
-		scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
-		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
-	);
-	void showObjectEditGui(object* obj);
-
+	void initRenderPass(vk::Format _format);
 };
 
 #endif // IMGUI_INSTANCE_H_

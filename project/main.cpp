@@ -42,13 +42,11 @@ public:
         windowMngr.initWindow();
         windowMngr.initGlfwInputHandling();
         initVulkan();
-        imGuiInst.init(
-            windowMngr.getWindow(), &instance, &surface,
-            &vulkanObjectMngr, &meshMngr, &textureMngr
-        );
-        // imGuiInst.setIsEnabled(false);
+        imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
         initScene();
-        // mainLoop();
+
+        mainLoop();
+
         mainScene.destroy();
         imGuiInst.destroy();
         destroyVulkan();
@@ -250,8 +248,6 @@ private:
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
                 // ImGui framebuffers recreation:
-                if (imGuiInst.getIsEnabled()) 
-                    imGuiInst.recreateFramebuffers(&surface);
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();
@@ -278,17 +274,6 @@ private:
                 &renderer,
                 &mainScene
             );
-
-            // record and submit ImGui commandBuffer
-            if (imGuiInst.getIsEnabled()) {
-                imGuiInst.presentGui(
-                    surface.getShouldRecreateSwapChain(), &mainScene,
-                    &instance, diffuseObject,
-                    &modelsBuffer, &textureSampler
-                );
-                // TODO: fix command Buffer things
-                imGuiInst.drawFrame(drawer.getCurrentCommandBuffer(), &surface, &instance, drawer.getImageIndex());
-            }
 
             drawer.submitCommandBuffer(surface.getShouldRecreateSwapChain(), instance.getGraphicsQueue());
 
