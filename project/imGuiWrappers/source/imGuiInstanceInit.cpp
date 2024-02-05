@@ -83,7 +83,7 @@ void imGuiInstance::initRenderPass(vk::Format _format) {
         vk::AccessFlagBits::eColorAttachmentWrite
     );
 
-    auto info = vk::RenderPassCreateInfo(
+    auto renderPassCreateInfo = vk::RenderPassCreateInfo(
         vk::RenderPassCreateFlags(),
         1, &attachment,
         1, &subpass,
@@ -91,7 +91,7 @@ void imGuiInstance::initRenderPass(vk::Format _format) {
     );
 
     try {
-        renderPass = device.createRenderPass(info);
+        renderPass = device.createRenderPass(renderPassCreateInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create ImGui renderpass");
@@ -104,7 +104,7 @@ void imGuiInstance::initFramebuffers(vulkanSurface* _surface) {
     for (size_t i = 0; i < _surface->getImageViews().size(); i++) {
         std::array<vk::ImageView, 1> attachment = { _surface->getImageViews()[i] };
 
-        auto info = vk::FramebufferCreateInfo(
+        auto framebufferCreateInfo = vk::FramebufferCreateInfo(
             vk::FramebufferCreateFlags(),
             renderPass,
             static_cast<uint32_t>(attachment.size()), attachment.data(),
@@ -113,7 +113,7 @@ void imGuiInstance::initFramebuffers(vulkanSurface* _surface) {
         );
 
         try {
-            framebuffers[i] = device.createFramebuffer(info);
+            framebuffers[i] = device.createFramebuffer(framebufferCreateInfo);
         }
         catch (vk::SystemError err) {
             throw std::runtime_error("failed to create ImGui framebuffer");
@@ -144,24 +144,24 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
 
     // Setup Render bindings
     ImGui_ImplGlfw_InitForVulkan(_window, true);
-    ImGui_ImplVulkan_InitInfo info = {};
-    info.Instance = _instance->getInstance();
-    info.PhysicalDevice = _instance->getPhysicalDevice();
-    info.Device = device;
+    ImGui_ImplVulkan_InitInfo imGuiInitInfo = {};
+    imGuiInitInfo.Instance = _instance->getInstance();
+    imGuiInitInfo.PhysicalDevice = _instance->getPhysicalDevice();
+    imGuiInitInfo.Device = device;
     // Dosent seem to be needed, but we are doing it for completeness sake
-    info.QueueFamily = _instance->getGraphicsQueueFamily();
-    info.Queue = _instance->getGraphicsQueue();
-    info.PipelineCache = VK_NULL_HANDLE;
-    info.DescriptorPool = descriptorPool;
-    info.Subpass = 0;
-    info.Allocator = nullptr;
-    info.MinImageCount = IMGUI_MIN_IMAGE_COUNT;
-    info.ImageCount = MAX_FRAMES_IN_FLIGHT;
-    info.CheckVkResultFn = [](VkResult err) {
+    imGuiInitInfo.QueueFamily = _instance->getGraphicsQueueFamily();
+    imGuiInitInfo.Queue = _instance->getGraphicsQueue();
+    imGuiInitInfo.PipelineCache = VK_NULL_HANDLE;
+    imGuiInitInfo.DescriptorPool = descriptorPool;
+    imGuiInitInfo.Subpass = 0;
+    imGuiInitInfo.Allocator = nullptr;
+    imGuiInitInfo.MinImageCount = IMGUI_MIN_IMAGE_COUNT;
+    imGuiInitInfo.ImageCount = MAX_FRAMES_IN_FLIGHT;
+    imGuiInitInfo.CheckVkResultFn = [](VkResult err) {
         if (err == 0) return;
         if (err < 0) abort();
     };
-    ImGui_ImplVulkan_Init(&info, renderPass);
+    ImGui_ImplVulkan_Init(&imGuiInitInfo, renderPass);
 
     vk::CommandBuffer commandBuffer = _instance->beginSingleTimeCommands();
     ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
