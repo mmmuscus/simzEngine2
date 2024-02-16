@@ -39,7 +39,7 @@ public:
 	void recreateFramebuffers(vulkanSurface* _surface);
 
 	void drawGui();
-	void drawFrame(vk::CommandBuffer commandBuffer, vulkanSurface* _surface, uint32_t imageIndex);
+	void drawFrame(vk::CommandBuffer _commandBuffer, vulkanSurface* _surface, uint32_t imageIndex);
 
 private:
 	void initDescriptorPool();
