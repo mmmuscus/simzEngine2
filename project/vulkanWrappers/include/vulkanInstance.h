@@ -87,6 +87,7 @@ public:
 		vk::ImageTiling tiling,
 		vk::ImageUsageFlags usage,
 		vk::MemoryPropertyFlags properties,
+		vk::ImageLayout initialLayout,
 		vk::Image& image, vk::DeviceMemory& imageMemory
 	);
 

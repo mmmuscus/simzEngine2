@@ -148,6 +148,7 @@ void vulkanRenderer::initColorResources(vulkanInstance* instance, vk::Format col
         extent.width, extent.height, colorFormat, 1, msaaSamples, vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eColorAttachment,
         vk::MemoryPropertyFlagBits::eDeviceLocal,
+        vk::ImageLayout::eUndefined,
         colorImage, colorImageMemory
     );
     colorImageView = instance->initImageView(colorImage, colorFormat, vk::ImageAspectFlagBits::eColor, 1);
@@ -160,6 +161,7 @@ void vulkanRenderer::initDepthResources(vulkanInstance* instance, vk::Extent2D e
         extent.width, extent.height, depthFormat, 1, msaaSamples, vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eDepthStencilAttachment,
         vk::MemoryPropertyFlagBits::eDeviceLocal,
+        vk::ImageLayout::eUndefined,
         depthImage, depthImageMemory
     );
     depthImageView = instance->initImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth, 1);

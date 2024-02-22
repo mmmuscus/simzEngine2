@@ -73,6 +73,7 @@ void vulkanInstance::initImage(
 	vk::ImageTiling tiling,
 	vk::ImageUsageFlags usage,
 	vk::MemoryPropertyFlags properties,
+    vk::ImageLayout initialLayout,
 	vk::Image& image, vk::DeviceMemory& imageMemory
 ) {
     auto imageInfo = vk::ImageCreateInfo(
@@ -86,7 +87,7 @@ void vulkanInstance::initImage(
         usage,
         vk::SharingMode::eExclusive,
         0, nullptr,                         // queue family inex count, indices
-        vk::ImageLayout::eUndefined
+        initialLayout
     );
 
     try {
