@@ -13,80 +13,42 @@
 #include "../../resourceManager/include/textureDataManager.h"
 #include "../../resourceManager/include/vulkanObjectManager.h"
 
+// The base implementation of the class havily relies on this tutorial:
+// https://frguthmann.github.io/posts/vulkan_imgui/#IMGUI_RENDER_PASS_INITIAL_LAYOUT
 // Reference of ImGui integration with Vulkan and glfw:
 // https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 class imGuiInstance {
 private:
-	// Helper flag
-	bool isInstance = false;
-	bool isEnabled = false;
+	bool isCreated = false;
 
-	// TODO: move to someplace better
-	// Object adding paths
-	char meshPath[50] = "models/tank.objj";
-	char texturePath[50] = "textures/damn_texture.jpeg";
-	// Manager selectors
-	int currentMeshItem = 0;
-	int currentTextureItem = 0;
-	int currentVulkanObjectItem = 0;
-	// Managers:
-	vulkanObjectManager* vkObjectManager;
-	meshDataManager* meshManager;
-	textureDataManager* textureManager;
-
-	// Vulkan variables
-	vk::RenderPass renderPass;
+	// Vulkan components:
+	vk::DescriptorPool descriptorPool = VK_NULL_HANDLE;
+	vk::RenderPass renderPass = VK_NULL_HANDLE;
 	std::vector<vk::Framebuffer> framebuffers;
-	vk::DescriptorPool descriptorPool;
+	vk::CommandPool commandPool = VK_NULL_HANDLE;
+	std::vector<vk::CommandBuffer> commandBuffers;
 
-	// Not maintained by class
+	// Not maintained by the class:
 	vk::Device device;
 
 public:
 	~imGuiInstance();
 	void destroy();
-	void destroyVulkanComponents();
+	void destroyFramebuffers();
 
-	bool getIsEnabled() { return isEnabled; }
+	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
+	
+	void recreateFramebuffers(vulkanSurface* _surface);
 
-	void setIsEnabled(bool _isEnabled) { isEnabled = _isEnabled; }
-
-	void init(
-		GLFWwindow* window, vulkanInstance* instance, vulkanSurface* surface,
-		vulkanObjectManager* _vkObjectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
-	);
-
-	void recreateFramebuffers(vulkanSurface* surface);
-
-	void presentGui(
-		bool shouldRecreateSwapChain, scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
-		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
-	);
-
-	void drawFrame(
-		vk::CommandBuffer _commandBuffer,
-		vulkanSurface* surface,
-		vulkanInstance* instance,
-		uint32_t imageIndex
-	);
+	void drawGui();
+	void drawFrame(vulkanSurface* _surface, uint32_t imageIndex, size_t currentFrame);
 
 private:
 	void initDescriptorPool();
-	void initRenderPass(vk::Format format);
-	void initFramebuffers(vulkanSurface* surface);
-	void initImGui(GLFWwindow* window, vulkanInstance* instance);
-	static void checkVkResult(VkResult err);
-
-	void destroyFramebuffers();
-
-	void showGui(
-		scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
-		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
-	);
-	void showObjectEditGui(object* obj);
-
+	void initRenderPass(vk::Format _format);
+	void initFramebuffers(vulkanSurface* _surface);
+	void initCommandPool(QueueFamilyIndices queueFamilyIndices);
+	void initCommandBuffers();
 };
 
 #endif // IMGUI_INSTANCE_H_

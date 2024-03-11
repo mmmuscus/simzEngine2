@@ -7,6 +7,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYOBJLOADER_IMPLEMENTATION
 
+#include "general/include/generalIncludes.h"
 #include "general/include/timer.h"
 
 #include "resourceManager/include/windowManager.h"
@@ -42,15 +43,15 @@ public:
         windowMngr.initWindow();
         windowMngr.initGlfwInputHandling();
         initVulkan();
-        imGuiInst.init(
-            windowMngr.getWindow(), &instance, &surface,
-            &vulkanObjectMngr, &meshMngr, &textureMngr
-        );
-        // imGuiInst.setIsEnabled(false);
+        if (enableImGuiDebugger)
+            imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
         initScene();
-        // mainLoop();
+
+        mainLoop();
+
         mainScene.destroy();
-        imGuiInst.destroy();
+        if (enableImGuiDebugger)
+            imGuiInst.destroy();
         destroyVulkan();
     }
 
@@ -249,8 +250,8 @@ private:
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
-                // ImGui framebuffers recreation:
-                if (imGuiInst.getIsEnabled()) 
+                // ImGui should be told IF the min image count changed (shouldnt apply to us)
+                if (enableImGuiDebugger)
                     imGuiInst.recreateFramebuffers(&surface);
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
@@ -279,15 +280,11 @@ private:
                 &mainScene
             );
 
-            // record and submit ImGui commandBuffer
-            if (imGuiInst.getIsEnabled()) {
-                imGuiInst.presentGui(
-                    surface.getShouldRecreateSwapChain(), &mainScene,
-                    &instance, diffuseObject,
-                    &modelsBuffer, &textureSampler
-                );
-                // TODO: fix command Buffer things
-                imGuiInst.drawFrame(drawer.getCurrentCommandBuffer(), &surface, &instance, drawer.getImageIndex());
+            if (enableImGuiDebugger) {
+                if (!surface.getShouldRecreateSwapChain())
+                    imGuiInst.drawGui();
+
+                imGuiInst.drawFrame(&surface, drawer.getImageIndex(), drawer.getCurrentFrame());
             }
 
             drawer.submitCommandBuffer(surface.getShouldRecreateSwapChain(), instance.getGraphicsQueue());

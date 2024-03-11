@@ -199,6 +199,7 @@
     <ClInclude Include="external\imGui\imstb_rectpack.h" />
     <ClInclude Include="external\imGui\imstb_textedit.h" />
     <ClInclude Include="external\imGui\imstb_truetype.h" />
+    <ClInclude Include="general\include\generalIncludes.h" />
     <ClInclude Include="general\include\timer.h" />
     <ClInclude Include="imGuiWrappers\include\imGuiWrappersGeneralIncludes.h" />
     <ClInclude Include="physicsSystem\include\CapsuleCollider.h" />

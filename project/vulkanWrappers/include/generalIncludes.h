@@ -1,5 +1,5 @@
-#ifndef GENERAL_INCLUDES_H_
-#define GENERAL_INCLUDES_H_
+#ifndef VULKAN_GENERAL_INCLUDES_H_
+#define VULKAN_GENERAL_INCLUDES_H_
 
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
@@ -13,11 +13,15 @@
 
 #include <optional>
 
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
+#include "../../general/include/generalIncludes.h"
+
+#define VALIDATION_LAYERS_ENABLED
+
+#ifdef VALIDATION_LAYERS_ENABLED
 const bool enableValidationLayers = true;
-#endif
+#else
+const bool enableValidationLayers = false;
+#endif // VALIDATION_LAYERS_ENABLED
 
 const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
@@ -44,4 +48,4 @@ const int MAX_OBJECT_COUNT = 100;
 
 const uint32_t MAX_DESCRIPTORPOOL_SETS = 10000;
 
-#endif // GENERAL_INCLUDES_H_
+#endif // VULKAN_GENERAL_INCLUDES_H_

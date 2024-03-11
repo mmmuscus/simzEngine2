@@ -1,62 +1,51 @@
 #include "../include/imGuiInstance.h"
 
-void imGuiInstance::destroyFramebuffers() {
-    for (size_t i = 0; i < framebuffers.size(); i++) {
-        device.destroyFramebuffer(framebuffers[i]);
-        framebuffers[i] = VK_NULL_HANDLE;
-    }
+void imGuiInstance::recreateFramebuffers(vulkanSurface* _surface) {
+	destroyFramebuffers();
+	initFramebuffers(_surface);
 }
 
-void imGuiInstance::recreateFramebuffers(vulkanSurface* surface) {
-    destroyFramebuffers();
-    initFramebuffers(surface);
+void imGuiInstance::drawGui() {
+	ImGui_ImplVulkan_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	ImGui::ShowDemoWindow();
+	ImGui::Render();
 }
 
-void imGuiInstance::presentGui(
-    bool shouldRecreateSwapChain, scene* currScene,
-    vulkanInstance* instance, vulkanObject* obj, 
-    vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
-) {
-    if (shouldRecreateSwapChain)
-        return;
+void imGuiInstance::drawFrame(vulkanSurface* _surface, uint32_t imageIndex, size_t currentFrame) {
+	if (_surface->getShouldRecreateSwapChain()) return;
 
-    ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    showGui(
-        currScene,
-        instance, obj, 
-        buffer, sampler
-    );
-    ImGui::Render();
-}
+	auto beginInfo = vk::CommandBufferBeginInfo();
 
-void imGuiInstance::drawFrame(
-    vk::CommandBuffer _commandBuffer,
-    vulkanSurface* surface,
-    vulkanInstance* instance,
-    uint32_t imageIndex
-) {
-    if (surface->getShouldRecreateSwapChain())
-        return;
+	try {
+		commandBuffers[currentFrame].begin(beginInfo);
+	}
+	catch (vk::SystemError err) {
+		throw std::runtime_error("failed to begin recording command buffer!");
+	}
 
-    vk::CommandBuffer commandBuffer = instance->beginSingleTimeCommands();
+	std::array<vk::ClearValue, 1> clearValues;
+	clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    std::array<vk::ClearValue, 1> clearValues;
-    clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
+	auto renderPassBeginInfo = vk::RenderPassBeginInfo(
+		renderPass, framebuffers[imageIndex], 
+		vk::Rect2D(vk::Offset2D(0, 0), _surface->getExtent()),
+		static_cast<uint32_t>(clearValues.size()), clearValues.data()
+	);
 
-    auto renderPassInfo = vk::RenderPassBeginInfo(
-        renderPass, framebuffers[imageIndex],
-        vk::Rect2D(vk::Offset2D(0, 0), surface->getExtent()),
-        static_cast<uint32_t>(clearValues.size()), clearValues.data()
-    );
+	commandBuffers[currentFrame].beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffers[currentFrame]);
+	commandBuffers[currentFrame].endRenderPass();
 
-    commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
-    commandBuffer.endRenderPass();
-    instance->endSingleTimeCommands(commandBuffer);
+	try {
+		commandBuffers[currentFrame].end();
+	}
+	catch (vk::SystemError err) {
+		throw std::runtime_error("failed to record command buffer!");
+	}
 
-    ImGui::EndFrame();
-    ImGui::UpdatePlatformWindows();
-    ImGui::RenderPlatformWindowsDefault();
+	ImGui::EndFrame();
+	ImGui::UpdatePlatformWindows();
+	ImGui::RenderPlatformWindowsDefault();
 }
