@@ -15,11 +15,13 @@
 
 #include "../../general/include/generalIncludes.h"
 
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
+#define VALIDATION_LAYERS_ENABLED
+
+#ifdef VALIDATION_LAYERS_ENABLED
 const bool enableValidationLayers = true;
-#endif
+#else
+const bool enableValidationLayers = false;
+#endif // VALIDATION_LAYERS_ENABLED
 
 const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"

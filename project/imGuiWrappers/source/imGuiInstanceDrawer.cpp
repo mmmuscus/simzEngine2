@@ -13,14 +13,13 @@ void imGuiInstance::drawGui() {
 	ImGui::Render();
 }
 
-void imGuiInstance::drawFrame(vk::CommandBuffer _commandBuffer, vulkanSurface* _surface, uint32_t imageIndex) {
+void imGuiInstance::drawFrame(vulkanSurface* _surface, uint32_t imageIndex, size_t currentFrame) {
 	if (_surface->getShouldRecreateSwapChain()) return;
-	
-	// vk::CommandBuffer commandBuffer = _instance->beginSingleTimeCommands();
+
 	auto beginInfo = vk::CommandBufferBeginInfo();
 
 	try {
-		_commandBuffer.begin(beginInfo);
+		commandBuffers[currentFrame].begin(beginInfo);
 	}
 	catch (vk::SystemError err) {
 		throw std::runtime_error("failed to begin recording command buffer!");
@@ -35,13 +34,12 @@ void imGuiInstance::drawFrame(vk::CommandBuffer _commandBuffer, vulkanSurface* _
 		static_cast<uint32_t>(clearValues.size()), clearValues.data()
 	);
 
-	_commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), _commandBuffer);
-	_commandBuffer.endRenderPass();
-	// _instance->endSingleTimeCommands(commandBuffer);
+	commandBuffers[currentFrame].beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffers[currentFrame]);
+	commandBuffers[currentFrame].endRenderPass();
 
 	try {
-		_commandBuffer.end();
+		commandBuffers[currentFrame].end();
 	}
 	catch (vk::SystemError err) {
 		throw std::runtime_error("failed to record command buffer!");

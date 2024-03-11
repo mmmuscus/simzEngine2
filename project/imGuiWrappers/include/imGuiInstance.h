@@ -25,6 +25,8 @@ private:
 	vk::DescriptorPool descriptorPool = VK_NULL_HANDLE;
 	vk::RenderPass renderPass = VK_NULL_HANDLE;
 	std::vector<vk::Framebuffer> framebuffers;
+	vk::CommandPool commandPool = VK_NULL_HANDLE;
+	std::vector<vk::CommandBuffer> commandBuffers;
 
 	// Not maintained by the class:
 	vk::Device device;
@@ -39,12 +41,14 @@ public:
 	void recreateFramebuffers(vulkanSurface* _surface);
 
 	void drawGui();
-	void drawFrame(vk::CommandBuffer _commandBuffer, vulkanSurface* _surface, uint32_t imageIndex);
+	void drawFrame(vulkanSurface* _surface, uint32_t imageIndex, size_t currentFrame);
 
 private:
 	void initDescriptorPool();
 	void initRenderPass(vk::Format _format);
 	void initFramebuffers(vulkanSurface* _surface);
+	void initCommandPool(QueueFamilyIndices queueFamilyIndices);
+	void initCommandBuffers();
 };
 
 #endif // IMGUI_INSTANCE_H_

@@ -18,6 +18,9 @@ void imGuiInstance::destroy() {
 
     device.destroyDescriptorPool(descriptorPool);
     descriptorPool = VK_NULL_HANDLE;
+    device.freeCommandBuffers(commandPool, commandBuffers);
+    device.destroyCommandPool(commandPool);
+    commandPool = VK_NULL_HANDLE;
 
     isCreated = false;
 }
@@ -121,6 +124,37 @@ void imGuiInstance::initFramebuffers(vulkanSurface* _surface) {
     }
 }
 
+void imGuiInstance::initCommandPool(QueueFamilyIndices queueFamilyIndices) {
+    vk::CommandPoolCreateInfo commandPoolCreateInfo = {
+        vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
+        queueFamilyIndices.graphicsFamily.value()
+    };
+    
+    try {
+        commandPool = device.createCommandPool(commandPoolCreateInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("Failed to create imGui command pool!");
+    }
+}
+
+void imGuiInstance::initCommandBuffers() {
+    commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+
+    vk::CommandBufferAllocateInfo commandBufferAllocateInfo = {
+        commandPool,
+        vk::CommandBufferLevel::ePrimary,
+        static_cast<uint32_t>(commandBuffers.size())
+    };
+
+    try {
+        commandBuffers = device.allocateCommandBuffers(commandBufferAllocateInfo);
+    }
+    catch (vk::SystemError err) {
+        throw std::runtime_error("Failed to create imGui command buffers!");
+    }
+}
+
 void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface) {
     isCreated = false;
     
@@ -130,6 +164,8 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     initDescriptorPool();
     initRenderPass(_surface->getFormat());
     initFramebuffers(_surface);
+    initCommandPool(_instance->findQueueFamilies(_instance->getPhysicalDevice()));
+    initCommandBuffers();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -163,6 +199,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     };
     ImGui_ImplVulkan_Init(&imGuiInitInfo, renderPass);
 
+    // Upload fonts
     vk::CommandBuffer commandBuffer = _instance->beginSingleTimeCommands();
     ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
     _instance->endSingleTimeCommands(commandBuffer);

@@ -43,17 +43,15 @@ public:
         windowMngr.initWindow();
         windowMngr.initGlfwInputHandling();
         initVulkan();
-#ifdef IMGUI_DEBUG_ENABLED
-        imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
-#endif // IMGUI_DEBUG_ENABLED
+        if (enableImGuiDebugger)
+            imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
         initScene();
 
         mainLoop();
 
         mainScene.destroy();
-#ifdef IMGUI_DEBUG_ENABLED
-        imGuiInst.destroy();
-#endif // IMGUI_DEBUG_ENABLED
+        if (enableImGuiDebugger)
+            imGuiInst.destroy();
         destroyVulkan();
     }
 
@@ -252,10 +250,9 @@ private:
             if (surface.getShouldRecreateSwapChain()) {
                 std::cout << "swap chain out of date/suboptimal/window resized - recreating" << std::endl;
                 surface.recreateSwapChain(&renderer, &instance);
-#ifdef IMGUI_DEBUG_ENABLED
                 // ImGui should be told IF the min image count changed (shouldnt apply to us)
-                imGuiInst.recreateFramebuffers(&surface);
-#endif // IMGUI_DEBUG_ENABLED
+                if (enableImGuiDebugger)
+                    imGuiInst.recreateFramebuffers(&surface);
                 // Admin stuff
                 surface.setShouldRecreateSwapChain(false);
                 drawer.resetImageIndex();
@@ -283,12 +280,12 @@ private:
                 &mainScene
             );
 
-#ifdef IMGUI_DEBUG_ENABLED
-            if (!surface.getShouldRecreateSwapChain()) 
-                imGuiInst.drawGui();
-                
-            imGuiInst.drawFrame(drawer.getCurrentCommandBuffer(), &surface, drawer.getImageIndex());
-#endif // IMGUI_DEBUG_ENABLED
+            if (enableImGuiDebugger) {
+                if (!surface.getShouldRecreateSwapChain())
+                    imGuiInst.drawGui();
+
+                imGuiInst.drawFrame(&surface, drawer.getImageIndex(), drawer.getCurrentFrame());
+            }
 
             drawer.submitCommandBuffer(surface.getShouldRecreateSwapChain(), instance.getGraphicsQueue());
 
