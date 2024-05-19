@@ -31,16 +31,35 @@ private:
 	// Not maintained by the class:
 	vk::Device device;
 
+	// Variables for editor:
+	// Paths:
+	char meshPath[50] = "models/tank.objj";
+	char texturePath[50] = "textures/damn_texture.jpeg";
+	// Manager selectors:
+	int currentMeshItem = 0;
+	int currentTextureItem = 0;
+	int currentVulkanObjectItem = 0;
+
+	// Managers:
+	vulkanObjectManager* objectManager;
+	meshDataManager* meshManager;
+	textureDataManager* textureManager;
+
 public:
 	~imGuiInstance();
 	void destroy();
 	void destroyFramebuffers();
 
-	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface);
+	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface,
+		vulkanObjectManager* _objectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
+	);
 	
 	void recreateFramebuffers(vulkanSurface* _surface);
 
-	void drawGui();
+	void drawGui(
+		scene* currScene, vulkanInstance* instance, vulkanObject* obj,
+		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+	);
 	void drawFrame(vulkanSurface* _surface, uint32_t imageIndex, size_t currentFrame);
 
 private:
@@ -49,6 +68,17 @@ private:
 	void initFramebuffers(vulkanSurface* _surface);
 	void initCommandPool(QueueFamilyIndices queueFamilyIndices);
 	void initCommandBuffers();
+
+	void initEditor(vulkanObjectManager* _objectManager,
+		meshDataManager* _meshManager, textureDataManager* _textureManager
+	);
+
+	void showGui(
+		scene* currScene,
+		vulkanInstance* instance, vulkanObject* obj,
+		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+	);
+	void showObjectEditGui(object* obj);
 };
 
 #endif // IMGUI_INSTANCE_H_

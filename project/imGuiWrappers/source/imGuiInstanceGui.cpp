@@ -1,12 +1,10 @@
 #include "../include/imGuiInstance.h"
-/*
+
 void imGuiInstance::showGui(
     scene* currScene,
     vulkanInstance* instance, vulkanObject* obj,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
-    ImGui::ShowDemoWindow();
-
     // Adding new objects by path:
     ImGui::PushID("Files");
     ImGui::Text("Add with files:");
@@ -47,10 +45,10 @@ void imGuiInstance::showGui(
         }
         ImGui::EndCombo();
     }
-    if (ImGui::BeginCombo("Pipelines", vkObjectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str())) {
-        for (size_t i = 0; i < vkObjectManager->getVulkanObjects().size(); i++) {
+    if (ImGui::BeginCombo("Pipelines", objectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str())) {
+        for (size_t i = 0; i < objectManager->getVulkanObjects().size(); i++) {
             bool isSelected = i == currentVulkanObjectItem;
-            if (ImGui::Selectable(vkObjectManager->getVulkanObjects()[i]->getName().c_str()))
+            if (ImGui::Selectable(objectManager->getVulkanObjects()[i]->getName().c_str()))
                 currentVulkanObjectItem = i;
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
@@ -62,10 +60,10 @@ void imGuiInstance::showGui(
             "Adding object: %s, %s, %s\n",
             meshManager->getMeshDatas()[currentMeshItem]->getName().c_str(),
             textureManager->getTextureDatas()[currentTextureItem]->getName().c_str(),
-            vkObjectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str()
+            objectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str()
         );
         currScene->addObject(new object(
-            instance->getDevice(), vkObjectManager->getVulkanObjects()[currentVulkanObjectItem],
+            instance->getDevice(), objectManager->getVulkanObjects()[currentVulkanObjectItem],
             meshManager, currentMeshItem,
             textureManager, currentTextureItem
         ));
@@ -121,13 +119,12 @@ void imGuiInstance::showObjectEditGui(object* obj) {
     }
     // Pipeline
     if (ImGui::BeginCombo("Pipeline", obj->getVulkanObject()->getName().c_str())) {
-        for (size_t i = 0; i < vkObjectManager->getVulkanObjects().size(); i++) 
-            if (ImGui::Selectable(vkObjectManager->getVulkanObjects()[i]->getName().c_str()))
-                obj->setVulkanObject(vkObjectManager->getVulkanObjects()[i]);
+        for (size_t i = 0; i < objectManager->getVulkanObjects().size(); i++) 
+            if (ImGui::Selectable(objectManager->getVulkanObjects()[i]->getName().c_str()))
+                obj->setVulkanObject(objectManager->getVulkanObjects()[i]);
 
         ImGui::EndCombo();
     }
 
     ImGui::PopID();
 }
-*/

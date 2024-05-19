@@ -5,11 +5,18 @@ void imGuiInstance::recreateFramebuffers(vulkanSurface* _surface) {
 	initFramebuffers(_surface);
 }
 
-void imGuiInstance::drawGui() {
+void imGuiInstance::drawGui(
+	scene* currScene, vulkanInstance* instance, vulkanObject* obj,
+	vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
+) {
 	ImGui_ImplVulkan_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
+
+	// This is where the code goes that describes the Editor:
+	// ImGui::ShowDemoWindow();
+	showGui(currScene, instance, obj, buffer, sampler);
+
 	ImGui::Render();
 }
 

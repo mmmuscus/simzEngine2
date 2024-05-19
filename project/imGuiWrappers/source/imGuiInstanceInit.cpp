@@ -155,7 +155,17 @@ void imGuiInstance::initCommandBuffers() {
     }
 }
 
-void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface) {
+void imGuiInstance::initEditor(vulkanObjectManager* _objectManager,
+    meshDataManager* _meshManager, textureDataManager* _textureManager
+) {
+    objectManager = _objectManager;
+    meshManager = _meshManager;
+    textureManager = _textureManager;
+}
+
+void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface,
+    vulkanObjectManager* _objectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
+) {
     isCreated = false;
     
     device = _instance->getDevice();
@@ -206,6 +216,9 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
 
     _instance->getDevice().waitIdle();
     ImGui_ImplVulkan_DestroyFontUploadObjects();
+
+    // Add references to managers for editor:
+    initEditor(_objectManager, _meshManager, _textureManager);
 
     isCreated = true;
 }

@@ -44,7 +44,8 @@ public:
         windowMngr.initGlfwInputHandling();
         initVulkan();
         if (enableImGuiDebugger)
-            imGuiInst.init(windowMngr.getWindow(), &instance, &surface);
+            imGuiInst.init(windowMngr.getWindow(), &instance, &surface,
+                &vulkanObjectMngr, &meshMngr, &textureMngr);
         initScene();
 
         mainLoop();
@@ -282,7 +283,8 @@ private:
 
             if (enableImGuiDebugger) {
                 if (!surface.getShouldRecreateSwapChain())
-                    imGuiInst.drawGui();
+                    imGuiInst.drawGui(&mainScene, &instance, diffuseObject,
+                        &modelsBuffer, &textureSampler);
 
                 imGuiInst.drawFrame(&surface, drawer.getImageIndex(), drawer.getCurrentFrame());
             }
