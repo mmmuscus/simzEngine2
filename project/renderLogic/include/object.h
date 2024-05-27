@@ -57,6 +57,7 @@ public:
 		setUpRigidBody();
 		setRigidBodyPos();
 	};
+
 	object(
 		vk::Device device, vulkanObject* _vkObject,
 		meshDataManager* meshManager, size_t meshIndex,

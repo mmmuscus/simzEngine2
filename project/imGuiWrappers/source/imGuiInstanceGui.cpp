@@ -7,7 +7,7 @@ void imGuiInstance::showGui(
 ) {
     // Adding new objects by path:
     ImGui::PushID("Files");
-    ImGui::Text("Add with files:");
+    ImGui::Text("Add with path:");
     ImGui::InputText("Mesh Path", meshPath, IM_ARRAYSIZE(meshPath));
     ImGui::InputText("Texture Path", texturePath, IM_ARRAYSIZE(texturePath));
     if (ImGui::Button("Add Object!")) {

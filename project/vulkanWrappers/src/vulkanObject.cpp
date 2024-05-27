@@ -140,7 +140,6 @@ void vulkanObject::initPipeline(
     vk::DescriptorSetLayout descriptorSetLayouts[] = { sceneDescriptorSetLayout, modelDescriptorSetLayout };
     auto pipelineLayoutInfo = vk::PipelineLayoutCreateInfo(
         vk::PipelineLayoutCreateFlags(),
-        //1, &descriptorSetLayout,        // set layouts
         2, descriptorSetLayouts,        // set layouts
         0, nullptr                      // push constant range
     );
@@ -267,11 +266,11 @@ void vulkanObject::initModelDescriptorPool() {
     std::array<vk::DescriptorPoolSize, 2> poolSizes = {
         vk::DescriptorPoolSize(
             vk::DescriptorType::eUniformBufferDynamic,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+            static_cast<uint32_t>(MAX_DYNAMIC_UBOS_PER_PIPELINE)
         ),
         vk::DescriptorPoolSize(
             vk::DescriptorType::eCombinedImageSampler,
-            static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+            static_cast<uint32_t>(MAX_DYNAMIC_UBOS_PER_PIPELINE)
         )
     };
 
