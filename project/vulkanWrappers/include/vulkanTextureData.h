@@ -25,13 +25,13 @@ private:
     vulkanTextureSampler* sampler;
 
     // Not maintained by the class:
-    vk::Device device;
+    vk::Device* device;
 
 public:
     ~vulkanTextureData();
     void destroy();
 
-    void setDevice(vk::Device _device) { device = _device; }
+    void setDevice(vk::Device* _device) { device = _device; }
     void setSampler(vulkanTextureSampler* _sampler) { sampler = _sampler; }
 
     std::string getName() { return name; }

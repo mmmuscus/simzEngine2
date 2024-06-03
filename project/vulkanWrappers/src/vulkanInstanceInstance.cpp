@@ -3,10 +3,11 @@
 vulkanInstance::~vulkanInstance() {
     destroyCommandPool();
     destroyCallback();
+    destroyDevice();
 }
 
 void vulkanInstance::destroyCommandPool() {
-    device.get().destroyCommandPool(commandPool);
+    device.destroyCommandPool(commandPool);
     commandPool = VK_NULL_HANDLE;
 }
 
@@ -15,6 +16,11 @@ void vulkanInstance::destroyCallback() {
         DestroyDebugUtilsMessengerEXT(*instance, callback, nullptr);
         callback = VK_NULL_HANDLE;
     }
+}
+
+void vulkanInstance::destroyDevice() {
+    device.destroy();
+    device = VK_NULL_HANDLE;
 }
 
 void vulkanInstance::listExtensions() {

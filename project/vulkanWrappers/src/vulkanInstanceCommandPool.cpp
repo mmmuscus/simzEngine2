@@ -5,7 +5,7 @@ void vulkanInstance::initCommandPool() {
 		findQueueFamilies(physicalDevice);
 
 	try {
-		commandPool = device.get().createCommandPool(vk::CommandPoolCreateInfo(
+		commandPool = device.createCommandPool(vk::CommandPoolCreateInfo(
 			vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
 			queueFamilyIndices.graphicsFamily.value()
 		));
@@ -22,7 +22,7 @@ vk::CommandBuffer vulkanInstance::beginSingleTimeCommands() {
 		1
 	);
 
-	vk::CommandBuffer commandBuffer = device.get().allocateCommandBuffers(allocInfo)[0];
+	vk::CommandBuffer commandBuffer = device.allocateCommandBuffers(allocInfo)[0];
 	auto beginInfo = vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
 	commandBuffer.begin(beginInfo);
 
@@ -40,5 +40,5 @@ void vulkanInstance::endSingleTimeCommands(vk::CommandBuffer commandBuffer) {
 	graphicsQueue.submit(submitInfo, nullptr);
 	graphicsQueue.waitIdle();
 
-	device.get().freeCommandBuffers(commandPool, commandBuffer);
+	device.freeCommandBuffers(commandPool, commandBuffer);
 }

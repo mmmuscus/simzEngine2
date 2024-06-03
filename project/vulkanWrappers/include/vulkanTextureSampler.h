@@ -8,17 +8,17 @@ private:
 	vk::Sampler sampler = VK_NULL_HANDLE;
 
 	// Not maintained by the class:
-	vk::Device device;
+	vk::Device* device;
 
 public:
 	~vulkanTextureSampler();
 	void destroy();
 
-	void setDevice(vk::Device _device) { device = _device; }
+	void setDevice(vk::Device* _device) { device = _device; }
 
 	vk::Sampler get() { return sampler; }
 
-	void init(vk::Device _device, vk::PhysicalDevice physicalDevice);
+	void init(vk::Device* _device, vk::PhysicalDevice physicalDevice);
 
 private:
 	void initSampler(vk::PhysicalDevice physicalDevice);

@@ -13,7 +13,7 @@ void vulkanModelData::init(
 }
 
 void vulkanModelData::init(
-    vk::Device _device,
+    vk::Device* _device,
     vulkanMeshData* _meshData,
     vulkanTextureData* _textureData,
     vk::DescriptorSetLayout descriptorSetLayout,
@@ -40,7 +40,7 @@ void vulkanModelData::initDescriptorSets(
     descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
 
     try {
-        descriptorSets = device.allocateDescriptorSets(allocInfo);
+        descriptorSets = device->allocateDescriptorSets(allocInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor sets!");
@@ -72,6 +72,6 @@ void vulkanModelData::initDescriptorSets(
             )
         };
 
-        device.updateDescriptorSets(descriptorWrites, 0);
+        device->updateDescriptorSets(descriptorWrites, 0);
     }
 }

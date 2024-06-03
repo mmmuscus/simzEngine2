@@ -6,13 +6,13 @@ vulkanDrawer::~vulkanDrawer() {
 
 void vulkanDrawer::destroySyncObjects() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        device.destroySemaphore(renderFinishedSemaphores[i]);
+        device->destroySemaphore(renderFinishedSemaphores[i]);
         renderFinishedSemaphores[i] = VK_NULL_HANDLE;
 
-        device.destroySemaphore(imageAvailableSemaphores[i]);
+        device->destroySemaphore(imageAvailableSemaphores[i]);
         imageAvailableSemaphores[i] = VK_NULL_HANDLE;
 
-        device.destroyFence(inFlightFences[i]);
+        device->destroyFence(inFlightFences[i]);
         inFlightFences[i] = VK_NULL_HANDLE;
     }
 }
@@ -27,7 +27,7 @@ void vulkanDrawer::initCommandBuffers(vk::CommandPool commandPool) {
     );
 
     try {
-        commandBuffers = device.allocateCommandBuffers(allocInfo);
+        commandBuffers = device->allocateCommandBuffers(allocInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to allocate command buffers!");
@@ -41,9 +41,9 @@ void vulkanDrawer::initSyncObjects() {
 
     try {
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-            imageAvailableSemaphores[i] = device.createSemaphore({});
-            renderFinishedSemaphores[i] = device.createSemaphore({});
-            inFlightFences[i] = device.createFence({ vk::FenceCreateFlagBits::eSignaled });
+            imageAvailableSemaphores[i] = device->createSemaphore({});
+            renderFinishedSemaphores[i] = device->createSemaphore({});
+            inFlightFences[i] = device->createFence({ vk::FenceCreateFlagBits::eSignaled });
         }
     }
     catch (vk::SystemError err) {
@@ -52,10 +52,10 @@ void vulkanDrawer::initSyncObjects() {
 }
 
 void vulkanDrawer::getNextImage(vulkanSurface* surface) {
-    device.waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+    device->waitForFences(1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
     try {
-        vk::ResultValue result = device.acquireNextImageKHR(
+        vk::ResultValue result = device->acquireNextImageKHR(
             surface->getSwapChain(),
             std::numeric_limits<uint64_t>::max(),
             imageAvailableSemaphores[currentFrame],
@@ -79,7 +79,7 @@ void vulkanDrawer::drawFrame(
     if (surface->getShouldRecreateSwapChain())
         return;
 
-    device.resetFences(1, &inFlightFences[currentFrame]);
+    device->resetFences(1, &inFlightFences[currentFrame]);
 
     commandBuffers[currentFrame].reset();
     recordCommandBuffer(

@@ -29,13 +29,13 @@ private:
     std::vector<uint32_t> indices;
 
     // Not maintained by the class:
-    vk::Device device;
+    vk::Device* device;
 
 public:
     ~vulkanMeshData();
     void destroy();
 
-    void setDevice(vk::Device _device) { device = _device; }
+    void setDevice(vk::Device* _device) { device = _device; }
     void setDynamicUniformBuffer(vulkanDynamicUniformBuffer* _uniformBuffer) { uniformBuffer = _uniformBuffer; }
 
     std::string getName() { return name; }

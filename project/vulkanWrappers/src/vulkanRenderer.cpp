@@ -9,31 +9,31 @@ vulkanRenderer::~vulkanRenderer() {
 
 void vulkanRenderer::destroyFramebuffers() {
     for (size_t i = 0; i < framebuffers.size(); i++) {
-        device.destroyFramebuffer(framebuffers[i]);
+        device->destroyFramebuffer(framebuffers[i]);
         framebuffers[i] = VK_NULL_HANDLE;
     }
 }
 
 void vulkanRenderer::destroyColorResources() {
-    device.destroyImageView(colorImageView);
+    device->destroyImageView(colorImageView);
     colorImageView = VK_NULL_HANDLE;
-    device.destroyImage(colorImage);
+    device->destroyImage(colorImage);
     colorImage = VK_NULL_HANDLE;
-    device.freeMemory(colorImageMemory);
+    device->freeMemory(colorImageMemory);
     colorImageMemory = VK_NULL_HANDLE;
 }
 
 void vulkanRenderer::destroyDepthResources() {
-    device.destroyImageView(depthImageView);
+    device->destroyImageView(depthImageView);
     depthImageView = VK_NULL_HANDLE;
-    device.destroyImage(depthImage);
+    device->destroyImage(depthImage);
     depthImage = VK_NULL_HANDLE;
-    device.freeMemory(depthImageMemory);
+    device->freeMemory(depthImageMemory);
     depthImageMemory = VK_NULL_HANDLE;
 }
 
 void vulkanRenderer::destroyRenderPass() {
-    device.destroyRenderPass(renderPass);
+    device->destroyRenderPass(renderPass);
     renderPass = VK_NULL_HANDLE;
 }
 
@@ -105,7 +105,7 @@ void vulkanRenderer::initRenderPass(vk::Format imageFormat) {
     );
 
     try {
-        renderPass = device.createRenderPass(renderPassInfo);
+        renderPass = device->createRenderPass(renderPassInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create render pass!");
@@ -127,7 +127,7 @@ void vulkanRenderer::initFrameBuffers(std::vector<vk::ImageView> imageViews, vk:
         );
 
         try {
-            framebuffers[i] = device.createFramebuffer(framebufferInfo);
+            framebuffers[i] = device->createFramebuffer(framebufferInfo);
         }
         catch (vk::SystemError err) {
             throw std::runtime_error("failed to create framebuffer!");

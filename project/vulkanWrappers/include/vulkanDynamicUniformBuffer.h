@@ -13,7 +13,7 @@ private:
     std::vector<vk::DeviceMemory> uniformBuffersMemory;
 
     // Not maintained by the class:
-    vk::Device device;
+    vk::Device* device;
 
 public:
     ~vulkanDynamicUniformBuffer();
@@ -22,7 +22,7 @@ public:
     std::vector<vk::Buffer> getUniformBuffers() { return uniformBuffers; }
     size_t getDynamicAlignment() { return dynamicAlignment; }
 
-    void setDevice(vk::Device _device) { device = _device; }
+    void setDevice(vk::Device* _device) { device = _device; }
 
     void init(vulkanInstance* instance);
     void initUniformBuffers(vulkanInstance* instance);

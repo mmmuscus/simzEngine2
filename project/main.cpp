@@ -155,7 +155,7 @@ private:
     }
 
     void destroyVulkan() {
-        instance.getDevice().waitIdle();
+        instance.getDevice()->waitIdle();
 
         // Destroying meshes and textures:
         meshMngr.destroyList();
@@ -295,7 +295,7 @@ private:
             drawer.presentFrame(&surface, instance.getPresentQueue());
         }
 
-        instance.getDevice().waitIdle();
+        instance.getDevice()->waitIdle();
     }
 };
 

@@ -23,7 +23,7 @@ private:
 	vk::ImageView colorImageView = VK_NULL_HANDLE;;
 
 	// Not maintained by the class:
-	vk::Device device;
+	vk::Device* device;
 
 public:
 	~vulkanRenderer();
@@ -32,7 +32,7 @@ public:
 	void destroyDepthResources();
 	void destroyRenderPass();
 
-	void setDevice(vk::Device _device) { device = _device; }
+	void setDevice(vk::Device* _device) { device = _device; }
 
 	vk::RenderPass getRenderPass() { return renderPass; }
 	std::vector<vk::Framebuffer> getFramebuffers() { return framebuffers; }

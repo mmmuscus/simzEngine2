@@ -21,7 +21,7 @@ vk::ImageView vulkanInstance::initImageView(
 
 	vk::ImageView imageView;
 	try {
-		imageView = device.get().createImageView(viewInfo);
+		imageView = device.createImageView(viewInfo);
 	}
 	catch (vk::SystemError err) {
 		throw std::runtime_error("failed to create texture image view!");
@@ -42,13 +42,13 @@ void vulkanInstance::initBuffer(
     );
 
     try {
-        buffer = device.get().createBuffer(bufferInfo);
+        buffer = device.createBuffer(bufferInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create buffer!");
     }
 
-    vk::MemoryRequirements memRequirements = device.get().getBufferMemoryRequirements(buffer);
+    vk::MemoryRequirements memRequirements = device.getBufferMemoryRequirements(buffer);
 
     auto allocInfo = vk::MemoryAllocateInfo(
         memRequirements.size,
@@ -56,13 +56,13 @@ void vulkanInstance::initBuffer(
     );
 
     try {
-        bufferMemory = device.get().allocateMemory(allocInfo);
+        bufferMemory = device.allocateMemory(allocInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to allocate buffer memory!");
     }
 
-    device.get().bindBufferMemory(buffer, bufferMemory, 0);
+    device.bindBufferMemory(buffer, bufferMemory, 0);
 }
 
 void vulkanInstance::initImage(
@@ -91,14 +91,14 @@ void vulkanInstance::initImage(
     );
 
     try {
-        image = device.get().createImage(imageInfo);
+        image = device.createImage(imageInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create image!");
     }
 
     vk::MemoryRequirements memRequirements;
-    device.get().getImageMemoryRequirements(image, &memRequirements);
+    device.getImageMemoryRequirements(image, &memRequirements);
 
     auto allocInfo = vk::MemoryAllocateInfo(
         memRequirements.size,
@@ -106,13 +106,13 @@ void vulkanInstance::initImage(
     );
 
     try {
-        imageMemory = device.get().allocateMemory(allocInfo);
+        imageMemory = device.allocateMemory(allocInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to allocate image memory!");
     }
 
-    device.get().bindImageMemory(image, imageMemory, 0);
+    device.bindImageMemory(image, imageMemory, 0);
 }
 
 uint32_t vulkanInstance::findMemoryType( uint32_t typeFilter, vk::MemoryPropertyFlags properties) {

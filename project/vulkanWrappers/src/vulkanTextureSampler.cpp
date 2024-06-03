@@ -5,11 +5,11 @@ vulkanTextureSampler::~vulkanTextureSampler() {
 }
 
 void vulkanTextureSampler::destroy() {
-    device.destroySampler(sampler);
+    device->destroySampler(sampler);
     sampler = VK_NULL_HANDLE;
 }
 
-void vulkanTextureSampler::init(vk::Device _device, vk::PhysicalDevice physicalDevice) {
+void vulkanTextureSampler::init(vk::Device* _device, vk::PhysicalDevice physicalDevice) {
     device = _device;
     initSampler(physicalDevice);
 }
@@ -35,7 +35,7 @@ void vulkanTextureSampler::initSampler(vk::PhysicalDevice physicalDevice) {
     );
 
     try {
-        sampler = device.createSampler(samplerInfo);
+        sampler = device->createSampler(samplerInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create texture sampler!");

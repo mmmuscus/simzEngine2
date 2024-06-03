@@ -14,7 +14,7 @@ private:
 	VkDebugUtilsMessengerEXT callback = VK_NULL_HANDLE;;
 	// Devices:
 	vk::PhysicalDevice physicalDevice;
-	vk::UniqueDevice device;
+	vk::Device device = VK_NULL_HANDLE;
 	// Queues:
 	vk::Queue graphicsQueue;
 	uint32_t graphicsQueueFamily;
@@ -33,12 +33,13 @@ public:
 	~vulkanInstance();
 	void destroyCallback();
 	void destroyCommandPool();
+	void destroyDevice();
 
 	void setSurface(vk::SurfaceKHR _surface) { surface = _surface; }
 
 	vk::Instance getInstance() { return instance.get(); }
 	vk::PhysicalDevice getPhysicalDevice() { return physicalDevice; }
-	vk::Device getDevice() { return device.get(); }
+	vk::Device* getDevice() { return &device; }
 	vk::Queue getGraphicsQueue() { return graphicsQueue; }
 	uint32_t getGraphicsQueueFamily() { return graphicsQueueFamily; }
 	vk::Queue getPresentQueue() { return presentQueue; }

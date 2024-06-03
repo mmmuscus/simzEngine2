@@ -6,26 +6,26 @@ vulkanObject::~vulkanObject() {
 
 void vulkanObject::destroy() {
     // Descriptor Pools:
-    device.destroyDescriptorPool(modelDescriptorPool);
+    device->destroyDescriptorPool(modelDescriptorPool);
     modelDescriptorPool = VK_NULL_HANDLE;
-    device.destroyDescriptorPool(sceneDescriptorPool);
+    device->destroyDescriptorPool(sceneDescriptorPool);
     sceneDescriptorPool = VK_NULL_HANDLE;
 
     // Descriptor set Layouts:
-    device.destroyDescriptorSetLayout(sceneDescriptorSetLayout);
+    device->destroyDescriptorSetLayout(sceneDescriptorSetLayout);
     sceneDescriptorSetLayout = VK_NULL_HANDLE;
-    device.destroyDescriptorSetLayout(modelDescriptorSetLayout);
+    device->destroyDescriptorSetLayout(modelDescriptorSetLayout);
     modelDescriptorSetLayout = VK_NULL_HANDLE;
 
     // Pipeline and Pipeline layout
-    device.destroyPipeline(graphicsPipeline);
+    device->destroyPipeline(graphicsPipeline);
     graphicsPipeline = VK_NULL_HANDLE;
-    device.destroyPipelineLayout(pipelineLayout);
+    device->destroyPipelineLayout(pipelineLayout);
     pipelineLayout = VK_NULL_HANDLE;
 }
 
 void vulkanObject::init(
-    std::string _name, vk::Device _device,
+    std::string _name, vk::Device* _device,
     vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
     std::string vertexShaderPath, std::string fragmentShaderPath
 ) {
@@ -145,7 +145,7 @@ void vulkanObject::initPipeline(
     );
 
     try {
-        pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
+        pipelineLayout = device->createPipelineLayout(pipelineLayoutInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create pipeline layout!");
@@ -171,7 +171,7 @@ void vulkanObject::initPipeline(
 
     try {
         vk::Result result;
-        std::tie( result, graphicsPipeline ) = device.createGraphicsPipeline(nullptr, pipelineInfo);
+        std::tie( result, graphicsPipeline ) = device->createGraphicsPipeline(nullptr, pipelineInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create graphics pipeline!");
@@ -201,7 +201,7 @@ void vulkanObject::initSceneDescriptorSetLayout() {
     );
 
     try {
-        sceneDescriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+        sceneDescriptorSetLayout = device->createDescriptorSetLayout(layoutInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor set layout!");
@@ -222,7 +222,7 @@ void vulkanObject::initSceneDescriptorPool() {
     );
 
     try {
-        sceneDescriptorPool = device.createDescriptorPool(poolInfo);
+        sceneDescriptorPool = device->createDescriptorPool(poolInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor pool!");
@@ -255,7 +255,7 @@ void vulkanObject::initModelDescriptorSetLayout() {
     );
 
     try {
-        modelDescriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+        modelDescriptorSetLayout = device->createDescriptorSetLayout(layoutInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor set layout!");
@@ -280,7 +280,7 @@ void vulkanObject::initModelDescriptorPool() {
     );
 
     try {
-        modelDescriptorPool = device.createDescriptorPool(poolInfo);
+        modelDescriptorPool = device->createDescriptorPool(poolInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor pool!");
@@ -289,7 +289,7 @@ void vulkanObject::initModelDescriptorPool() {
 
 vk::UniqueShaderModule vulkanObject::createShaderModule(const std::vector<char>& code) {
     try {
-        return device.createShaderModuleUnique({
+        return device->createShaderModuleUnique({
             vk::ShaderModuleCreateFlags(),
             code.size(),
             reinterpret_cast<const uint32_t*>(code.data())

@@ -8,13 +8,13 @@ vulkanSurface::~vulkanSurface() {
 
 void vulkanSurface::destroyImageViews() {
     for (size_t i = 0; i < imageViews.size(); i++) {
-        device.destroyImageView(imageViews[i]);
+        device->destroyImageView(imageViews[i]);
         imageViews[i] = VK_NULL_HANDLE;
     }
 }
 
 void vulkanSurface::destroySwapChain() {
-    device.destroySwapchainKHR(swapChain);
+    device->destroySwapchainKHR(swapChain);
     swapChain = VK_NULL_HANDLE;
 }
 
@@ -77,13 +77,13 @@ void vulkanSurface::initSwapChain(vulkanInstance* inst) {
     createInfo.oldSwapchain = vk::SwapchainKHR(nullptr);
 
     try {
-        swapChain = device.createSwapchainKHR(createInfo);
+        swapChain = device->createSwapchainKHR(createInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create swap chain!");
     }
 
-    images = device.getSwapchainImagesKHR(swapChain);
+    images = device->getSwapchainImagesKHR(swapChain);
 
     imageFormat = surfaceFormat.format;
     extent = choosenExtent;
@@ -102,10 +102,10 @@ void vulkanSurface::cleanupSwapChain(vulkanRenderer* renderer) {
     renderer->destroyFramebuffers();
 
     for (auto imageView : imageViews) {
-        device.destroyImageView(imageView);
+        device->destroyImageView(imageView);
     }
 
-    device.destroySwapchainKHR(swapChain);
+    device->destroySwapchainKHR(swapChain);
 }
 
 void vulkanSurface::recreateSwapChain(vulkanRenderer* renderer, vulkanInstance* inst) {
@@ -116,7 +116,7 @@ void vulkanSurface::recreateSwapChain(vulkanRenderer* renderer, vulkanInstance* 
         glfwWaitEvents();
     }
 
-    device.waitIdle();
+    device->waitIdle();
 
     cleanupSwapChain(renderer);
 

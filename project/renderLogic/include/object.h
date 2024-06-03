@@ -59,7 +59,7 @@ public:
 	};
 
 	object(
-		vk::Device device, vulkanObject* _vkObject,
+		vk::Device* device, vulkanObject* _vkObject,
 		meshDataManager* meshManager, size_t meshIndex,
 		textureDataManager* textureManager, size_t textureIndex,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),

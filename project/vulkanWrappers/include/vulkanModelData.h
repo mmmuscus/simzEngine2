@@ -18,10 +18,10 @@ private:
 	std::vector<vk::DescriptorSet> descriptorSets;
 
 	// Not maintained by class
-	vk::Device device;
+	vk::Device* device;
 
 public:
-	void setDevice(vk::Device _device) { device = _device; }
+	void setDevice(vk::Device* _device) { device = _device; }
 	void setMeshData(vulkanMeshData* _meshData) { meshData = _meshData; }
 	void setTextureData(vulkanTextureData* _textureData) { textureData = _textureData; }
 
@@ -36,7 +36,7 @@ public:
 		vk::DescriptorSetLayout descriptorSetLayout, vk::DescriptorPool descriptorPool
 	);
 	void init(
-		vk::Device _device,
+		vk::Device* _device,
 		vulkanMeshData* _meshData,
 		vulkanTextureData* _textureData,
 		vk::DescriptorSetLayout descriptorSetLayout,

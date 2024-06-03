@@ -24,7 +24,7 @@ private:
 	uint32_t imageIndex;
 
 	// Not maintained by the class:
-	vk::Device device;
+	vk::Device* device;
 
 public:
 	~vulkanDrawer();
@@ -36,7 +36,7 @@ public:
 	size_t getCurrentFrame() { return currentFrame; }
 	uint32_t getImageIndex() { return imageIndex; }
 
-	void setDevice(vk::Device _device) { device = _device; }
+	void setDevice(vk::Device* _device) { device = _device; }
 
 	void resetImageIndex() { imageIndex = 0; }
 

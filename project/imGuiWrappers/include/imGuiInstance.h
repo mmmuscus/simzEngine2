@@ -29,7 +29,7 @@ private:
 	std::vector<vk::CommandBuffer> commandBuffers;
 
 	// Not maintained by the class:
-	vk::Device device;
+	vk::Device* device;
 
 	// Variables for editor:
 	// Paths:

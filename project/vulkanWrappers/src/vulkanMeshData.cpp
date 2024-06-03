@@ -5,14 +5,14 @@ vulkanMeshData::~vulkanMeshData() {
 }
 
 void vulkanMeshData::destroy() {
-    device.destroyBuffer(indexBuffer);
+    device->destroyBuffer(indexBuffer);
     indexBuffer = VK_NULL_HANDLE;
-    device.freeMemory(indexBufferMemory);
+    device->freeMemory(indexBufferMemory);
     indexBufferMemory = VK_NULL_HANDLE;
 
-    device.destroyBuffer(vertexBuffer);
+    device->destroyBuffer(vertexBuffer);
     vertexBuffer = VK_NULL_HANDLE;
-    device.freeMemory(vertexBufferMemory);
+    device->freeMemory(vertexBufferMemory);
     vertexBufferMemory = VK_NULL_HANDLE;
 }
 
@@ -90,9 +90,9 @@ void vulkanMeshData::initVertexBuffer(vulkanInstance* instance) {
         stagingBuffer, stagingBufferMemory
     );
 
-    void* data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    void* data = device->mapMemory(stagingBufferMemory, 0, bufferSize);
     memcpy(data, vertices.data(), (size_t)bufferSize);
-    device.unmapMemory(stagingBufferMemory);
+    device->unmapMemory(stagingBufferMemory);
 
     instance->initBuffer(
         bufferSize,
@@ -106,8 +106,8 @@ void vulkanMeshData::initVertexBuffer(vulkanInstance* instance) {
         instance
     );
 
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
+    device->destroyBuffer(stagingBuffer);
+    device->freeMemory(stagingBufferMemory);
 }
 
 void vulkanMeshData::initIndexBuffer(vulkanInstance* instance) {
@@ -125,9 +125,9 @@ void vulkanMeshData::initIndexBuffer(vulkanInstance* instance) {
         stagingBuffer, stagingBufferMemory
     );
 
-    void* data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    void* data = device->mapMemory(stagingBufferMemory, 0, bufferSize);
     memcpy(data, indices.data(), (size_t)bufferSize);
-    device.unmapMemory(stagingBufferMemory);
+    device->unmapMemory(stagingBufferMemory);
 
     instance->initBuffer(
         bufferSize,
@@ -141,8 +141,8 @@ void vulkanMeshData::initIndexBuffer(vulkanInstance* instance) {
         instance
     );
 
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
+    device->destroyBuffer(stagingBuffer);
+    device->freeMemory(stagingBufferMemory);
 }
 
 void vulkanMeshData::copyBuffer(

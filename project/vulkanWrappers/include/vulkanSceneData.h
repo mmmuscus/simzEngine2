@@ -22,13 +22,13 @@ private:
 	std::vector<vk::DescriptorSet> descriptorSets;
 
 	// Not maintained by the class:
-	vk::Device device;
+	vk::Device* device;
 
 public:
 	~vulkanSceneData();
 	void destroy();
 
-	void setDevice(vk::Device _device) { device = _device; }
+	void setDevice(vk::Device* _device) { device = _device; }
 
 	std::vector<vk::DescriptorSet> getDescriptorSets() { return descriptorSets; }
 

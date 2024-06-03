@@ -6,10 +6,10 @@ vulkanDynamicUniformBuffer::~vulkanDynamicUniformBuffer() {
 
 void vulkanDynamicUniformBuffer::destroy() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        device.destroyBuffer(uniformBuffers[i]);
+        device->destroyBuffer(uniformBuffers[i]);
         uniformBuffers[i] = VK_NULL_HANDLE;
 
-        device.freeMemory(uniformBuffersMemory[i]);
+        device->freeMemory(uniformBuffersMemory[i]);
         uniformBuffersMemory[i] = VK_NULL_HANDLE;
     }
 }
@@ -47,11 +47,11 @@ void vulkanDynamicUniformBuffer::updateModelUniformBuffer(glm::mat4 modelMat, ui
     modelUniformBufferObject mbo{};
     mbo.model = modelMat;
 
-    void* mData = device.mapMemory(
+    void* mData = device->mapMemory(
         uniformBuffersMemory[currentFrame],
         objectNumber * dynamicAlignment,
         vk::DeviceSize(sizeof(mbo))
     );
     memcpy(mData, &mbo, sizeof(mbo));
-    device.unmapMemory(uniformBuffersMemory[currentFrame]);
+    device->unmapMemory(uniformBuffersMemory[currentFrame]);
 }

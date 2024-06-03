@@ -18,7 +18,7 @@ public:
 	std::vector<vulkanObject*> getVulkanObjects() { return vulkanObjects; }
 
 	vulkanObject* addVulkanObject(
-		std::string name, vk::Device device,
+		std::string name, vk::Device* device,
 		vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
 		std::string vertexShaderPath, std::string fragmentShaderPath
 	) {

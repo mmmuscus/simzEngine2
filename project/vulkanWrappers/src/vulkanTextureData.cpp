@@ -5,11 +5,11 @@ vulkanTextureData::~vulkanTextureData() {
 }
 
 void vulkanTextureData::destroy() {
-    device.destroyImageView(imageView);
+    device->destroyImageView(imageView);
     imageView = VK_NULL_HANDLE;
-    device.destroyImage(image);
+    device->destroyImage(image);
     image = VK_NULL_HANDLE;
-    device.freeMemory(imageMemory);
+    device->freeMemory(imageMemory);
     imageMemory = VK_NULL_HANDLE;
 }
 
@@ -56,9 +56,9 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         stagingBuffer, stagingBufferMemory
     );
 
-    void* data = device.mapMemory(stagingBufferMemory, 0, imageSize);
+    void* data = device->mapMemory(stagingBufferMemory, 0, imageSize);
     memcpy(data, pixels, static_cast<size_t>(imageSize));
-    device.unmapMemory(stagingBufferMemory);
+    device->unmapMemory(stagingBufferMemory);
     stbi_image_free(pixels);
 
     instance->initImage(
@@ -85,8 +85,8 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
         instance
     );
 
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
+    device->destroyBuffer(stagingBuffer);
+    device->freeMemory(stagingBufferMemory);
 
     generateMipmaps(
         image, vk::Format::eR8G8B8A8Srgb,

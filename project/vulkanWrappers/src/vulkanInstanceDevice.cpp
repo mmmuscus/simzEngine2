@@ -53,16 +53,16 @@ void vulkanInstance::initDevice() {
     }
 
     try {
-        device = physicalDevice.createDeviceUnique(createInfo);
+        device = physicalDevice.createDevice(createInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create logical device!");
     }
 
-    graphicsQueue = device->getQueue(indices.graphicsFamily.value(), 0);
+    graphicsQueue = device.getQueue(indices.graphicsFamily.value(), 0);
     graphicsQueueFamily = indices.graphicsFamily.value();
 
-    presentQueue = device->getQueue(indices.presentFamily.value(), 0);
+    presentQueue = device.getQueue(indices.presentFamily.value(), 0);
 }
 
 bool vulkanInstance::isDeviceSuitable(const vk::PhysicalDevice& physDevice) {

@@ -6,9 +6,9 @@ vulkanSceneData::~vulkanSceneData() {
 
 void vulkanSceneData::destroy() {
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        device.destroyBuffer(uniformBuffers[i]);
+        device->destroyBuffer(uniformBuffers[i]);
         uniformBuffers[i] = VK_NULL_HANDLE;
-        device.freeMemory(uniformBuffersMemory[i]);
+        device->freeMemory(uniformBuffersMemory[i]);
         uniformBuffersMemory[i] = VK_NULL_HANDLE;
     }
 }
@@ -38,7 +38,7 @@ void vulkanSceneData::initUniformBuffers(vulkanInstance* instance) {
             uniformBuffers[i], uniformBuffersMemory[i]
         );
 
-        uniformBuffersMapped[i] = device.mapMemory(uniformBuffersMemory[i], 0, bufferSize);
+        uniformBuffersMapped[i] = device->mapMemory(uniformBuffersMemory[i], 0, bufferSize);
     }
 }
 
@@ -66,7 +66,7 @@ void vulkanSceneData::initDescriptorSets(
     descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
 
     try {
-        descriptorSets = device.allocateDescriptorSets(allocInfo);
+        descriptorSets = device->allocateDescriptorSets(allocInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create descriptor sets!");
@@ -87,6 +87,6 @@ void vulkanSceneData::initDescriptorSets(
             )
         };
 
-        device.updateDescriptorSets(descriptorWrites, 0);
+        device->updateDescriptorSets(descriptorWrites, 0);
     }
 }

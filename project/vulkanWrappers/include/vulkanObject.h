@@ -45,13 +45,13 @@ private:
     vk::Pipeline graphicsPipeline = VK_NULL_HANDLE;
 
     // Not maintained by the class:
-    vk::Device device;
+    vk::Device* device;
 
 public:
     ~vulkanObject();
     void destroy();
     
-    void setDevice(vk::Device _device) { device = _device; }
+    void setDevice(vk::Device* _device) { device = _device; }
 
     // Name
     std::string getName() { return name; }
@@ -63,10 +63,10 @@ public:
     // Pipeline
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
-    vk::Device getDevice() { return device; }
+    vk::Device* getDevice() { return device; }
 
     void init(
-        std::string _name, vk::Device _device,
+        std::string _name, vk::Device* _device,
         vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
         std::string vertexShaderPath, std::string fragmentShaderPath
     );
