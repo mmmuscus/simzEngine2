@@ -7,19 +7,19 @@ imGuiInstance::~imGuiInstance() {
 void imGuiInstance::destroy() {
     if (!isCreated) return;
 
-    device.waitIdle();
+    device->waitIdle();
     destroyFramebuffers();
-    device.destroyRenderPass(renderPass);
+    device->destroyRenderPass(renderPass);
     renderPass = VK_NULL_HANDLE;
 
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    device.destroyDescriptorPool(descriptorPool);
+    device->destroyDescriptorPool(descriptorPool);
     descriptorPool = VK_NULL_HANDLE;
-    device.freeCommandBuffers(commandPool, commandBuffers);
-    device.destroyCommandPool(commandPool);
+    device->freeCommandBuffers(commandPool, commandBuffers);
+    device->destroyCommandPool(commandPool);
     commandPool = VK_NULL_HANDLE;
 
     isCreated = false;
@@ -27,7 +27,7 @@ void imGuiInstance::destroy() {
 
 void imGuiInstance::destroyFramebuffers() {
     for (size_t i = 0; i < framebuffers.size(); i++) {
-        device.destroyFramebuffer(framebuffers[i]);
+        device->destroyFramebuffer(framebuffers[i]);
         framebuffers[i] = VK_NULL_HANDLE;
     }
 }
@@ -47,7 +47,7 @@ void imGuiInstance::initDescriptorPool() {
     );
 
     try {
-        descriptorPool = device.createDescriptorPool(poolInfo);
+        descriptorPool = device->createDescriptorPool(poolInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("Failed to create ImGui descriptor pool");
@@ -94,7 +94,7 @@ void imGuiInstance::initRenderPass(vk::Format _format) {
     );
 
     try {
-        renderPass = device.createRenderPass(renderPassCreateInfo);
+        renderPass = device->createRenderPass(renderPassCreateInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create ImGui renderpass");
@@ -116,7 +116,7 @@ void imGuiInstance::initFramebuffers(vulkanSurface* _surface) {
         );
 
         try {
-            framebuffers[i] = device.createFramebuffer(framebufferCreateInfo);
+            framebuffers[i] = device->createFramebuffer(framebufferCreateInfo);
         }
         catch (vk::SystemError err) {
             throw std::runtime_error("failed to create ImGui framebuffer");
@@ -131,7 +131,7 @@ void imGuiInstance::initCommandPool(QueueFamilyIndices queueFamilyIndices) {
     };
     
     try {
-        commandPool = device.createCommandPool(commandPoolCreateInfo);
+        commandPool = device->createCommandPool(commandPoolCreateInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("Failed to create imGui command pool!");
@@ -148,7 +148,7 @@ void imGuiInstance::initCommandBuffers() {
     };
 
     try {
-        commandBuffers = device.allocateCommandBuffers(commandBufferAllocateInfo);
+        commandBuffers = device->allocateCommandBuffers(commandBufferAllocateInfo);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("Failed to create imGui command buffers!");
@@ -193,7 +193,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     ImGui_ImplVulkan_InitInfo imGuiInitInfo = {};
     imGuiInitInfo.Instance = _instance->getInstance();
     imGuiInitInfo.PhysicalDevice = _instance->getPhysicalDevice();
-    imGuiInitInfo.Device = device;
+    imGuiInitInfo.Device = *device;
     // Dosent seem to be needed, but we are doing it for completeness sake
     imGuiInitInfo.QueueFamily = _instance->getGraphicsQueueFamily();
     imGuiInitInfo.Queue = _instance->getGraphicsQueue();
@@ -203,6 +203,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     imGuiInitInfo.Allocator = nullptr;
     imGuiInitInfo.MinImageCount = IMGUI_MIN_IMAGE_COUNT;
     imGuiInitInfo.ImageCount = MAX_FRAMES_IN_FLIGHT;
+    imGuiInitInfo.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
     imGuiInitInfo.CheckVkResultFn = [](VkResult err) {
         if (err == 0) return;
         if (err < 0) abort();
@@ -214,7 +215,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
     _instance->endSingleTimeCommands(commandBuffer);
 
-    _instance->getDevice().waitIdle();
+    _instance->getDevice()->waitIdle();
     ImGui_ImplVulkan_DestroyFontUploadObjects();
 
     // Add references to managers for editor:
