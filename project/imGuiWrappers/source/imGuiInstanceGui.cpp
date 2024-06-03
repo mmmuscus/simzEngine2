@@ -14,7 +14,7 @@ void imGuiInstance::showGui(
         std::string currentMeshPath(meshPath);
         std::string currentTexturePath(texturePath);
         printf("Adding object: %s, %s\n", currentMeshPath.c_str(), currentTexturePath.c_str());
-        currScene->addObject(new object(
+        currScene->addObject(new gameObject(
             instance, obj,
             meshManager, currentMeshPath, buffer,
             textureManager, currentTexturePath, sampler
@@ -62,7 +62,7 @@ void imGuiInstance::showGui(
             textureManager->getTextureDatas()[currentTextureItem]->getName().c_str(),
             objectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str()
         );
-        currScene->addObject(new object(
+        currScene->addObject(new gameObject(
             instance->getDevicePtr(), objectManager->getVulkanObjects()[currentVulkanObjectItem],
             meshManager, currentMeshItem,
             textureManager, currentTextureItem
@@ -79,7 +79,7 @@ void imGuiInstance::showGui(
     ImGui::EndChild();
 }
 
-void imGuiInstance::showObjectEditGui(object* obj) {
+void imGuiInstance::showObjectEditGui(gameObject* obj) {
     ImGui::PushID(obj);
 
     ImGui::Text("Object %d:", obj->getObjectNumber());

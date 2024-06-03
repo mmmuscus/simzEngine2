@@ -4,9 +4,9 @@ void scene::destroy() {
 	sceneData->destroy();
 }
 
-void scene::addObject(object* _object) {
+void scene::addObject(gameObject* _object) {
 	_object->setSceneTimer(sceneTimer);
-	objects.push_back(_object);
+	gameObjects.push_back(_object);
 }
 
 void scene::init(
@@ -22,23 +22,23 @@ void scene::init(
 void scene::resetSceneTimer() {
 	sceneTimer = new timer();
 
-	for (size_t i = 0; i < objects.size(); i++)
-		objects[i]->setSceneTimer(sceneTimer);
+	for (size_t i = 0; i < gameObjects.size(); i++)
+		gameObjects[i]->setSceneTimer(sceneTimer);
 }
 
 void scene::defragmentObjectNumbers() {
-	for (size_t i = 0; i < objects.size(); i++)
-		objects[i]->setObjectNumber(i);
+	for (size_t i = 0; i < gameObjects.size(); i++)
+		gameObjects[i]->setObjectNumber(i);
 }
 
 void scene::updateScene(size_t currentFrame, vk::Extent2D extent) {
 	sceneData->updateSceneUniformBuffer(currentFrame, extent, cam->getViewMatrix());
 	sceneTimer->updateTime();
 
-	for (size_t i = 0; i < objects.size(); i++) {
-		if (objects[i]->getRigidBody() != nullptr)
-			objects[i]->getRigidBody()->move(sceneTimer->getDeltaTime());
-		objects[i]->calculateModelMatrix();
-		objects[i]->updateModelTranslation(currentFrame);
+	for (size_t i = 0; i < gameObjects.size(); i++) {
+		if (gameObjects[i]->getRigidBody() != nullptr)
+			gameObjects[i]->getRigidBody()->move(sceneTimer->getDeltaTime());
+		gameObjects[i]->calculateModelMatrix();
+		gameObjects[i]->updateModelTranslation(currentFrame);
 	}
 }

@@ -173,7 +173,7 @@
     <ClCompile Include="physicsSystem\src\RigidBody.cpp" />
     <ClCompile Include="physicsSystem\src\SphereCollider.cpp" />
     <ClCompile Include="renderLogic\source\camera.cpp" />
-    <ClCompile Include="renderLogic\source\object.cpp" />
+    <ClCompile Include="renderLogic\source\gameObject.cpp" />
     <ClCompile Include="renderLogic\source\scene.cpp" />
     <ClCompile Include="resourceManager\source\inputManager.cpp" />
     <ClCompile Include="resourceManager\source\windowManager.cpp" />
@@ -209,7 +209,7 @@
     <ClInclude Include="physicsSystem\include\RigidBody.h" />
     <ClInclude Include="physicsSystem\include\SphereCollider.h" />
     <ClInclude Include="renderLogic\include\camera.h" />
-    <ClInclude Include="renderLogic\include\object.h" />
+    <ClInclude Include="renderLogic\include\gameObject.h" />
     <ClInclude Include="renderLogic\include\scene.h" />
     <ClInclude Include="resourceManager\include\meshDataManager.h" />
     <ClInclude Include="resourceManager\include\resourceManagerGeneralIncludes.h" />

@@ -6,7 +6,7 @@
 #include "../../vulkanWrappers/include/vulkanSceneData.h"
 
 #include "camera.h"
-#include "object.h"
+#include "gameObject.h"
 
 #include <vector>
 
@@ -15,7 +15,7 @@ private:
 	vulkanSceneData* sceneData;
 
 	camera* cam;
-	std::vector<object*> objects;
+	std::vector<gameObject*> gameObjects;
 
 	// timer
 	timer* sceneTimer;
@@ -26,12 +26,12 @@ public:
 	void setSceneData(vulkanSceneData* _sceneData) { sceneData = _sceneData; }
 	void setCam(camera* _cam) { cam = _cam; }
 
-	void addObject(object* _object);
+	void addObject(gameObject* _object);
 
 	vulkanSceneData* getSceneData() { return sceneData; }
 	camera* getCam() { return cam; }
 
-	std::vector<object*> getObjects() { return objects; }
+	std::vector<gameObject*> getObjects() { return gameObjects; }
 
 	void init(
 		vulkanInstance* instance, 

@@ -1,16 +1,16 @@
 #ifndef EVENT_MANAGER_H_
 #define EVENT_MANAGER_H_
 
-#include "../../renderLogic/include/object.h"
+#include "../../renderLogic/include/gameObject.h"
 
 const float FORCE_AMP = 100.0f;
 
 struct CollisionEvent {
-	object* obj1;
-	object* obj2;
+	gameObject* obj1;
+	gameObject* obj2;
 	glm::vec3 collisionVector;
 
-	CollisionEvent(object* _obj1, object* _obj2, glm::vec3 _collisionVector
+	CollisionEvent(gameObject* _obj1, gameObject* _obj2, glm::vec3 _collisionVector
 	) : obj1(_obj1), obj2(_obj2), collisionVector(_collisionVector) {}
 };
 
@@ -19,7 +19,7 @@ private:
 	std::vector<CollisionEvent> collisionEvents;
 
 public:
-	void checkCollision(object* obj1, object* obj2) {
+	void checkCollision(gameObject* obj1, gameObject* obj2) {
 		if (obj1 == obj2)
 			return;
 

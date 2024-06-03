@@ -1,5 +1,5 @@
-#ifndef OBJECT_H_
-#define OBJECT_H_
+#ifndef GAME_OBJECT_H_
+#define GAME_OBJECT_H_
 
 #include "../../general/include/timer.h"
 
@@ -14,7 +14,7 @@
 #include "../../resourceManager/include/meshDataManager.h"
 #include "../../resourceManager/include/textureDataManager.h"
 
-class object {
+class gameObject {
 private:
 	// Transform vectors:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -39,8 +39,8 @@ private:
 	vulkanModelData* modelData;
 
 public:
-	object() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), collider(nullptr), rigidBody(nullptr) {}
-	object(
+	gameObject() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr), collider(nullptr), rigidBody(nullptr) {}
+	gameObject(
 		vulkanObject* _vkObject,
 		vulkanModelData* _modelData,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -58,7 +58,7 @@ public:
 		setRigidBodyPos();
 	};
 
-	object(
+	gameObject(
 		vk::Device* device, vulkanObject* _vkObject,
 		meshDataManager* meshManager, size_t meshIndex,
 		textureDataManager* textureManager, size_t textureIndex,
@@ -84,7 +84,7 @@ public:
 		);
 		calculateModelMatrix();
 	}
-	object(
+	gameObject(
 		vulkanInstance* instance, vulkanObject* _vkObject,
 		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
 		textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
@@ -141,4 +141,4 @@ private:
 
 };
 
-#endif // OBJECT_H_
+#endif // GAME_OBJECT_H_

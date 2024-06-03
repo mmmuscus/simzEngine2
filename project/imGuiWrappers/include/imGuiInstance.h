@@ -78,7 +78,7 @@ private:
 		vulkanInstance* instance, vulkanObject* obj,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
-	void showObjectEditGui(object* obj);
+	void showObjectEditGui(gameObject* obj);
 };
 
 #endif // IMGUI_INSTANCE_H_

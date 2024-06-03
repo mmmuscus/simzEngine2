@@ -84,7 +84,7 @@
     <ClCompile Include="renderLogic\source\scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderLogic\source\object.cpp">
+    <ClCompile Include="renderLogic\source\gameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vulkanWrappers\src\vulkanSceneData.cpp">
@@ -179,7 +179,7 @@
     <ClInclude Include="renderLogic\include\scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="renderLogic\include\object.h">
+    <ClInclude Include="renderLogic\include\gameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vulkanWrappers\include\vulkanSceneData.h">

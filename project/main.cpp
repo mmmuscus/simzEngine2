@@ -29,7 +29,7 @@
 #include "imGuiWrappers/include/imGuiInstance.h"
 
 #include "renderLogic/include/scene.h"
-#include "renderLogic/include/object.h"
+#include "renderLogic/include/gameObject.h"
 #include "renderLogic/include/camera.h"
 
 #include "physicsSystem/include/EventManager.h"
@@ -209,7 +209,7 @@ private:
         );
 
         // Add objects
-        mainScene.addObject(new object(
+        mainScene.addObject(new gameObject(
             &instance, diffuseObject,
             &meshMngr, "models/viking_room.objj", &modelsBuffer,
             &textureMngr, "textures/viking_room.png", &textureSampler,
@@ -218,7 +218,7 @@ private:
             glm::vec3(1.0f, 1.0f, 1.0f),
             new SphereCollider()
         ));
-        mainScene.addObject(new object(
+        mainScene.addObject(new gameObject(
             &instance, negativeObject,
             &meshMngr, "models/tank.objj", &modelsBuffer,
             &textureMngr, "textures/camouflage.jpg", &textureSampler,

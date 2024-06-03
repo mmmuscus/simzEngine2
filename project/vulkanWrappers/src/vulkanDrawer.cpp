@@ -141,10 +141,10 @@ void vulkanDrawer::recordCommandBuffer(
     );
 
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
-        object* currObject = currScene->getObjects()[i];
-        vulkanMeshData* currMesh = currObject->getModelData()->getMeshData();
+        gameObject* currGameObject = currScene->getObjects()[i];
+        vulkanMeshData* currMesh = currGameObject->getModelData()->getMeshData();
 
-        commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, currObject->getVulkanObject()->getPipeline());
+        commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, currGameObject->getVulkanObject()->getPipeline());
 
         vk::Buffer vertexBuffers[] = { currMesh->getVertexBuffer() };
         vk::DeviceSize offsets[] = { 0 };
@@ -152,10 +152,10 @@ void vulkanDrawer::recordCommandBuffer(
         commandBuffer.bindIndexBuffer(currMesh->getIndexBuffer(), 0, vk::IndexType::eUint32);
         commandBuffer.bindDescriptorSets(
             vk::PipelineBindPoint::eGraphics,
-            currObject->getVulkanObject()->getPipelineLayout(),
+            currGameObject->getVulkanObject()->getPipelineLayout(),
             1,
-            currObject->getModelData()->getDescriptorSets()[currentFrame],
-            currObject->getObjectNumber() * static_cast<uint32_t>(currMesh->getUniformBuffer()->getDynamicAlignment())
+            currGameObject->getModelData()->getDescriptorSets()[currentFrame],
+            currGameObject->getObjectNumber() * static_cast<uint32_t>(currMesh->getUniformBuffer()->getDynamicAlignment())
         );
         commandBuffer.drawIndexed(
             static_cast<uint32_t>(currMesh->getIndices().size()),

@@ -1,6 +1,6 @@
-#include "../include/object.h"
+#include "../include/gameObject.h"
 
-void object::calculateModelMatrix() {
+void gameObject::calculateModelMatrix() {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, pos);
 	modelMatrix = glm::rotate(modelMatrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -10,6 +10,6 @@ void object::calculateModelMatrix() {
 	modelMatrix = glm::scale(modelMatrix, scale);
 }
 
-void object::updateModelTranslation(uint32_t currentFrame) {
+void gameObject::updateModelTranslation(uint32_t currentFrame) {
 	modelData->getMeshData()->getUniformBuffer()->updateModelUniformBuffer(modelMatrix, currentFrame, objectNumber);
 }
