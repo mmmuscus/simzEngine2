@@ -6,7 +6,7 @@ void vulkanModelData::init(
     textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
     vk::DescriptorSetLayout descriptorSetLayout, vk::DescriptorPool descriptorPool
 ) {
-    device = instance->getDevice();
+    device = instance->getDevicePtr();
     meshData = meshManager->addMeshData(meshPath, instance, uniformBuffer);
     textureData = textureManager->addTextureData(texturePath, instance, textureSampler);
     initDescriptorSets(descriptorSetLayout, descriptorPool);

@@ -168,7 +168,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
 ) {
     isCreated = false;
     
-    device = _instance->getDevice();
+    device = _instance->getDevicePtr();
 
     // Vulkan inits
     initDescriptorPool();
@@ -215,7 +215,7 @@ void imGuiInstance::init(GLFWwindow* _window, vulkanInstance* _instance, vulkanS
     ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
     _instance->endSingleTimeCommands(commandBuffer);
 
-    _instance->getDevice()->waitIdle();
+    _instance->getDevicePtr()->waitIdle();
     ImGui_ImplVulkan_DestroyFontUploadObjects();
 
     // Add references to managers for editor:

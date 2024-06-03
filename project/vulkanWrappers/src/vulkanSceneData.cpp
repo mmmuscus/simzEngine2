@@ -18,7 +18,7 @@ void vulkanSceneData::init(
     vk::DescriptorSetLayout descriptorSetLayout,
     vk::DescriptorPool descriptorPool
 ) {
-    device = instance->getDevice();
+    device = instance->getDevicePtr();
     initUniformBuffers(instance);
     initDescriptorSets(descriptorSetLayout, descriptorPool);
 }

@@ -102,7 +102,7 @@ private:
         instance.initDevice();
 
         // SwapChain:
-        surface.setDevice(instance.getDevice());
+        surface.setDevice(instance.getDevicePtr());
         surface.initSwapChain(&instance);
         surface.initImageViews(&instance);
 
@@ -113,19 +113,19 @@ private:
         renderer.initDepthResources(&instance, surface.getExtent());
 
         // Render Pass:
-        renderer.setDevice(instance.getDevice());
+        renderer.setDevice(instance.getDevicePtr());
         renderer.initRenderPass(surface.getFormat());
 
         // DIFFUSE OBJECT:
         diffuseObject = vulkanObjectMngr.addVulkanObject(
-            "Diffuse", instance.getDevice(),
+            "Diffuse", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
         negativeObject = vulkanObjectMngr.addVulkanObject(
-            "Negative", instance.getDevice(),
+            "Negative", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/negativeFrag.spv"
         );
@@ -140,7 +140,7 @@ private:
         instance.initCommandPool();
 
         // CommandBuffers:
-        drawer.setDevice(instance.getDevice());
+        drawer.setDevice(instance.getDevicePtr());
         drawer.initCommandBuffers(instance.getCommandPool());
 
         // SyncObjects:
@@ -148,14 +148,14 @@ private:
 
         // HELPERS FOR MESHES, TEXTURES:
         // Texture Sampler:
-        textureSampler.init(instance.getDevice(), instance.getPhysicalDevice());
+        textureSampler.init(instance.getDevicePtr(), instance.getPhysicalDevice());
 
         // Dynamic Uniform Buffer:
         modelsBuffer.init(&instance);
     }
 
     void destroyVulkan() {
-        instance.getDevice()->waitIdle();
+        instance.getDevicePtr()->waitIdle();
 
         // Destroying meshes and textures:
         meshMngr.destroyList();
@@ -295,7 +295,7 @@ private:
             drawer.presentFrame(&surface, instance.getPresentQueue());
         }
 
-        instance.getDevice()->waitIdle();
+        instance.getDevicePtr()->waitIdle();
     }
 };
 

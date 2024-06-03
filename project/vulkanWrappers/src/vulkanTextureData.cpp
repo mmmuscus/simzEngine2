@@ -18,7 +18,7 @@ void vulkanTextureData::init(
     vulkanInstance* instance, 
     vulkanTextureSampler* _sampler
 ) {
-    device = instance->getDevice();
+    device = instance->getDevicePtr();
     sampler = _sampler;
     initTextureImage(texturePath, instance);
     initTextureImageView(instance);

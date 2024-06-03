@@ -63,7 +63,6 @@ public:
     // Pipeline
     vk::PipelineLayout getPipelineLayout() { return pipelineLayout; }
     vk::Pipeline getPipeline() { return graphicsPipeline; }
-    vk::Device* getDevice() { return device; }
 
     void init(
         std::string _name, vk::Device* _device,

@@ -40,7 +40,7 @@ public:
 	vk::Instance* getInstancePtr() { return &instance; }
 	vk::Instance getInstance() { return instance; }
 	vk::PhysicalDevice getPhysicalDevice() { return physicalDevice; }
-	vk::Device* getDevice() { return &device; }
+	vk::Device* getDevicePtr() { return &device; }
 	vk::Queue getGraphicsQueue() { return graphicsQueue; }
 	uint32_t getGraphicsQueueFamily() { return graphicsQueueFamily; }
 	vk::Queue getPresentQueue() { return presentQueue; }

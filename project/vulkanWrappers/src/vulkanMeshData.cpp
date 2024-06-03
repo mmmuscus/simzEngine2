@@ -21,7 +21,7 @@ void vulkanMeshData::init(
     vulkanInstance* instance, 
     vulkanDynamicUniformBuffer* _uniformBuffer
 ) {
-    device = instance->getDevice();
+    device = instance->getDevicePtr();
     uniformBuffer = _uniformBuffer;
     loadMesh(meshPath);
     initVertexBuffer(instance);

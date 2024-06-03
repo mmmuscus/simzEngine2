@@ -15,7 +15,7 @@ void vulkanDynamicUniformBuffer::destroy() {
 }
 
 void vulkanDynamicUniformBuffer::init(vulkanInstance* instance) {
-    device = instance->getDevice();
+    device = instance->getDevicePtr();
     initUniformBuffers(instance);
 }
 

@@ -63,7 +63,7 @@ void imGuiInstance::showGui(
             objectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str()
         );
         currScene->addObject(new object(
-            instance->getDevice(), objectManager->getVulkanObjects()[currentVulkanObjectItem],
+            instance->getDevicePtr(), objectManager->getVulkanObjects()[currentVulkanObjectItem],
             meshManager, currentMeshItem,
             textureManager, currentTextureItem
         ));
