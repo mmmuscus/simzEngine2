@@ -7,34 +7,34 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYOBJLOADER_IMPLEMENTATION
 
-#include "general/include/generalIncludes.h"
-#include "general/include/timer.h"
+#include "engine/general/include/generalIncludes.h"
+#include "engine/general/include/timer.h"
 
-#include "resourceManager/include/windowManager.h"
-#include "resourceManager/include/inputManager.h"
-#include "resourceManager/include/meshDataManager.h"
-#include "resourceManager/include/textureDataManager.h"
-#include "resourceManager/include/vulkanObjectManager.h"
+#include "engine/resourceManager/include/windowManager.h"
+#include "engine/resourceManager/include/inputManager.h"
+#include "engine/resourceManager/include/meshDataManager.h"
+#include "engine/resourceManager/include/textureDataManager.h"
+#include "engine/resourceManager/include/vulkanObjectManager.h"
 
-#include "vulkanWrappers/include/vulkanInstance.h"
-#include "vulkanWrappers/include/vulkanSurface.h"
-#include "vulkanWrappers/include/vulkanObject.h"
-#include "vulkanWrappers/include/vulkanRenderer.h"
-#include "vulkanWrappers/include/vulkanDrawer.h"
-#include "vulkanWrappers/include/vulkanMeshData.h"
-#include "vulkanWrappers/include/vulkanTextureData.h"
-#include "vulkanWrappers/include/vulkanModelData.h"
-#include "vulkanWrappers/include/vulkanSceneData.h"
+#include "engine/vulkanWrappers/include/vulkanInstance.h"
+#include "engine/vulkanWrappers/include/vulkanSurface.h"
+#include "engine/vulkanWrappers/include/vulkanObject.h"
+#include "engine/vulkanWrappers/include/vulkanRenderer.h"
+#include "engine/vulkanWrappers/include/vulkanDrawer.h"
+#include "engine/vulkanWrappers/include/vulkanMeshData.h"
+#include "engine/vulkanWrappers/include/vulkanTextureData.h"
+#include "engine/vulkanWrappers/include/vulkanModelData.h"
+#include "engine/vulkanWrappers/include/vulkanSceneData.h"
 
-#include "imGuiWrappers/include/imGuiInstance.h"
+#include "engine/imGuiWrappers/include/imGuiInstance.h"
 
-#include "renderLogic/include/scene.h"
-#include "renderLogic/include/gameObject.h"
-#include "renderLogic/include/camera.h"
+#include "engine/sceneSystem/include/scene.h"
+#include "engine/sceneSystem/include/gameObject.h"
+#include "engine/sceneSystem/include/camera.h"
 
-#include "physicsSystem/include/EventManager.h"
-#include "physicsSystem/include/SphereCollider.h"
-#include "physicsSystem/include/CapsuleCollider.h"
+#include "engine/physicsSystem/include/EventManager.h"
+#include "engine/physicsSystem/include/SphereCollider.h"
+#include "engine/physicsSystem/include/CapsuleCollider.h"
 
 class Application {
 public:
@@ -120,14 +120,14 @@ private:
         diffuseObject = vulkanObjectMngr.addVulkanObject(
             "Diffuse", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
-            "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/diffuseFrag.spv"
+            "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
         negativeObject = vulkanObjectMngr.addVulkanObject(
             "Negative", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
-            "shaders/vertexShaders/diffuseVert.spv", "shaders/fragmentShaders/negativeFrag.spv"
+            "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/negativeFrag.spv"
         );
 
         // Color Resources:
@@ -211,8 +211,8 @@ private:
         // Add objects
         mainScene.addObject(new gameObject(
             &instance, diffuseObject,
-            &meshMngr, "models/viking_room.objj", &modelsBuffer,
-            &textureMngr, "textures/viking_room.png", &textureSampler,
+            &meshMngr, "assets/models/viking_room.objj", &modelsBuffer,
+            &textureMngr, "assets/textures/viking_room.png", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(1.0f, 1.0f, 1.0f),
@@ -220,8 +220,8 @@ private:
         ));
         mainScene.addObject(new gameObject(
             &instance, negativeObject,
-            &meshMngr, "models/tank.objj", &modelsBuffer,
-            &textureMngr, "textures/camouflage.jpg", &textureSampler,
+            &meshMngr, "assets/models/tank.objj", &modelsBuffer,
+            &textureMngr, "assets/textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
             glm::vec3(0.0f, 0.0f, 3.14f),
             glm::vec3(1.0f, 1.0f, 1.0f),
@@ -307,6 +307,8 @@ int main() {
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
+        // Errors can happen that make it seem like Vulkan is not working but its just
+        // not getting destructed
         return EXIT_FAILURE;
     }
 

@@ -7,7 +7,7 @@
 
 #include "../../vulkanWrappers/include/vulkanSurface.h"
 
-#include "../../renderLogic/include/scene.h"
+#include "../../sceneSystem/include/scene.h"
 
 #include "../../resourceManager/include/meshDataManager.h"
 #include "../../resourceManager/include/textureDataManager.h"
@@ -33,8 +33,8 @@ private:
 
 	// Variables for editor:
 	// Paths:
-	char meshPath[50] = "models/tank.objj";
-	char texturePath[50] = "textures/damn_texture.jpeg";
+	char meshPath[50] = "assets/models/tank.objj";
+	char texturePath[50] = "assets/textures/damn_texture.jpeg";
 	// Manager selectors:
 	int currentMeshItem = 0;
 	int currentTextureItem = 0;

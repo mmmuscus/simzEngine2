@@ -1,7 +1,7 @@
 #ifndef EVENT_MANAGER_H_
 #define EVENT_MANAGER_H_
 
-#include "../../renderLogic/include/gameObject.h"
+#include "../../sceneSystem/include/gameObject.h"
 
 const float FORCE_AMP = 100.0f;
 

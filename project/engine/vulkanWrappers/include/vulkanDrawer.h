@@ -6,7 +6,7 @@
 #include "vulkanRenderer.h"
 #include "vulkanSurface.h"
 
-#include "../../renderLogic/include/scene.h"
+#include "../../sceneSystem/include/scene.h"
 
 class vulkanDrawer {
 private:
