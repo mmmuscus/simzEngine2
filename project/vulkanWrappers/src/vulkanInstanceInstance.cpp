@@ -13,7 +13,7 @@ void vulkanInstance::destroyCommandPool() {
 
 void vulkanInstance::destroyCallback() {
     if (enableValidationLayers) {
-        DestroyDebugUtilsMessengerEXT(*instance, callback, nullptr);
+        DestroyDebugUtilsMessengerEXT(instance, callback, nullptr);
         callback = VK_NULL_HANDLE;
     }
 }
@@ -59,7 +59,7 @@ void vulkanInstance::initInstance() {
     }
 
     try {
-        instance = vk::createInstanceUnique(createInfo, nullptr);
+        instance = vk::createInstance(createInfo, nullptr);
     }
     catch (vk::SystemError err) {
         throw std::runtime_error("failed to create instance!");

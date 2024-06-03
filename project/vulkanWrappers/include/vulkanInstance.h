@@ -9,7 +9,7 @@
 class vulkanInstance {
 private:
 	// Instance:
-	vk::UniqueInstance instance;
+	vk::Instance instance;
 	// Callback:
 	VkDebugUtilsMessengerEXT callback = VK_NULL_HANDLE;;
 	// Devices:
@@ -37,7 +37,8 @@ public:
 
 	void setSurface(vk::SurfaceKHR _surface) { surface = _surface; }
 
-	vk::Instance getInstance() { return instance.get(); }
+	vk::Instance* getInstancePtr() { return &instance; }
+	vk::Instance getInstance() { return instance; }
 	vk::PhysicalDevice getPhysicalDevice() { return physicalDevice; }
 	vk::Device* getDevice() { return &device; }
 	vk::Queue getGraphicsQueue() { return graphicsQueue; }

@@ -19,14 +19,14 @@ void vulkanSurface::destroySwapChain() {
 }
 
 void vulkanSurface::destroySurface() {
-    instance.destroySurfaceKHR(surface);
+    instance->destroySurfaceKHR(surface);
     surface = VK_NULL_HANDLE;
 }
 
 void vulkanSurface::initSurface() {
 	VkSurfaceKHR surf;
 
-	if (glfwCreateWindowSurface(instance, window, nullptr, &surf) != VK_SUCCESS)
+	if (glfwCreateWindowSurface(*instance, window, nullptr, &surf) != VK_SUCCESS)
 		throw std::runtime_error("failed to create window surface!");
 
 	surface = surf;

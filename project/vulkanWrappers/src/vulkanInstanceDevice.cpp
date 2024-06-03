@@ -1,7 +1,7 @@
 #include "../include/vulkanInstance.h"
 
 void vulkanInstance::initPhysicalDevice() {
-    auto devices = instance->enumeratePhysicalDevices();
+    auto devices = instance.enumeratePhysicalDevices();
     if (devices.size() == 0) {
         throw std::runtime_error("failed to find GPUs with Vulkan support!");
     }

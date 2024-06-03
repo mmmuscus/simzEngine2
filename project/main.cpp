@@ -93,7 +93,7 @@ private:
 
         // Surface:
         surface.setWindow(windowMngr.getWindow());
-        surface.setInstance(instance.getInstance());
+        surface.setInstance(instance.getInstancePtr());
         surface.initSurface();
 
         // Devices:

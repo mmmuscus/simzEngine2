@@ -24,7 +24,7 @@ private:
 
 	// Not maintained by the class:
 	GLFWwindow* window;
-	vk::Instance instance;
+	vk::Instance* instance;
 	vk::Device* device;
 
 public:
@@ -37,7 +37,7 @@ public:
 
 	void setShouldRecreateSwapChain(bool _shouldRecreateSwapChain) { shouldRecreateSwapChain = _shouldRecreateSwapChain; }
 	void setWindow(GLFWwindow* _window) { window = _window; }
-	void setInstance(vk::Instance _instance) { instance = _instance; }
+	void setInstance(vk::Instance* _instance) { instance = _instance; }
 	void setDevice(vk::Device* _device) { device = _device; }
 
 	vk::SurfaceKHR getSurface() { return surface; }
