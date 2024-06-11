@@ -14,7 +14,7 @@
 #include "../../resourceManager/include/vulkanObjectManager.h"
 
 // The base implementation of the class havily relies on this tutorial:
-// https://frguthmann.github.io/posts/vulkan_imgui/#IMGUI_RENDER_PASS_INITIAL_LAYOUT
+// https://frguthmann.github.io/posts/vulkan_imgui
 // Reference of ImGui integration with Vulkan and glfw:
 // https://github.com/ocornut/imgui/blob/master/examples/example_glfw_vulkan/main.cpp
 class imGuiInstance {

@@ -14,7 +14,6 @@ void imGuiInstance::drawGui(
 	ImGui::NewFrame();
 
 	// This is where the code goes that describes the Editor:
-	// ImGui::ShowDemoWindow();
 	showGui(currScene, instance, obj, buffer, sampler);
 
 	ImGui::Render();
