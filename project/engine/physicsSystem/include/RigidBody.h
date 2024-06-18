@@ -10,6 +10,9 @@
 
 #include <math.h>
 
+// Rigid Body used to be an integral part of the gameobject
+// Commit id:
+
 class RigidBody {
 private:
 	glm::vec3* pos;

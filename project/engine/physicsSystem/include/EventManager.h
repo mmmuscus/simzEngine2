@@ -5,6 +5,11 @@
 
 const float FORCE_AMP = 100.0f;
 
+// This class used to record and resolve physics events (collisions) in every tick of
+// the main loop
+// commit id:
+
+
 struct CollisionEvent {
 	gameObject* obj1;
 	gameObject* obj2;
@@ -19,7 +24,7 @@ private:
 	std::vector<CollisionEvent> collisionEvents;
 
 public:
-	void checkCollision(gameObject* obj1, gameObject* obj2) {
+	/*void checkCollision(gameObject* obj1, gameObject* obj2) {
 		if (obj1 == obj2)
 			return;
 
@@ -30,16 +35,16 @@ public:
 		
 		if (collVect != glm::vec3(0.0f, 0.0f, 0.0f))
 			collisionEvents.push_back(CollisionEvent(obj1, obj2, collVect));
-	}
+	}*/
 
-	void resolveEvents() {
+	/*void resolveEvents() {
 		for (size_t i = 0; i < collisionEvents.size(); i++) {
 			collisionEvents[i].obj1->getRigidBody()->addForce(FORCE_AMP * collisionEvents[i].collisionVector);
 			collisionEvents[i].obj2->getRigidBody()->addForce(FORCE_AMP * -collisionEvents[i].collisionVector);
 		}
 
 		collisionEvents.clear();
-	}
+	}*/
 
 private:
 };

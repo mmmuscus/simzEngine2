@@ -32,10 +32,6 @@
 #include "engine/sceneSystem/include/gameObject.h"
 #include "engine/sceneSystem/include/camera.h"
 
-#include "engine/physicsSystem/include/EventManager.h"
-#include "engine/physicsSystem/include/SphereCollider.h"
-#include "engine/physicsSystem/include/CapsuleCollider.h"
-
 class Application {
 public:
     void run() {
@@ -78,9 +74,6 @@ private:
 
     // Scene variables:
     scene mainScene;
-
-    // Collisions:
-    EventManager eventManager;
 
     // ImGui variables:
     imGuiInstance imGuiInst;
@@ -215,8 +208,7 @@ private:
             &textureMngr, "assets/textures/viking_room.png", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            new SphereCollider()
+            glm::vec3(1.0f, 1.0f, 1.0f)
         ));
         mainScene.addObject(new gameObject(
             &instance, negativeObject,
@@ -224,8 +216,7 @@ private:
             &textureMngr, "assets/textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
             glm::vec3(0.0f, 0.0f, 3.14f),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            new CapsuleCollider(glm::vec3(0.75f, 0.0f, 0.0f))
+            glm::vec3(1.0f, 1.0f, 1.0f)
         ));
 
         mainScene.defragmentObjectNumbers();
@@ -262,16 +253,8 @@ private:
             // Acquire the next swapchain image
             drawer.getNextImage(&surface);
 
-            // Update translation of scene (and its objects)
-            for (size_t i = 0; i < mainScene.getObjects().size(); i++)
-                if (mainScene.getObjects()[i]->getCollider() != nullptr)
-                    mainScene.getObjects()[i]->getCollider()->resetIsTransformed();
-            for (size_t i = 0; i < mainScene.getObjects().size(); i++) {
-                for (size_t j = i + 1; j < mainScene.getObjects().size(); j++) {
-                    eventManager.checkCollision(mainScene.getObjects()[i], mainScene.getObjects()[j]);
-                }
-            }
-            eventManager.resolveEvents();
+            // This is where the physics system updates used to be
+
             mainScene.updateScene(drawer.getCurrentFrame(), surface.getExtent());
 
             // Record and submit engine command buffer

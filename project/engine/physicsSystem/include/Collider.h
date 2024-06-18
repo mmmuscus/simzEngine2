@@ -11,6 +11,9 @@
 class SphereCollider;
 class CapsuleCollider;
 
+// Collider used to be an integral part of the gameobject
+// Commit id:
+
 class Collider {
 protected:
 	// Collision variables:

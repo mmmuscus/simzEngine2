@@ -36,8 +36,7 @@ void scene::updateScene(size_t currentFrame, vk::Extent2D extent) {
 	sceneTimer->updateTime();
 
 	for (size_t i = 0; i < gameObjects.size(); i++) {
-		if (gameObjects[i]->getRigidBody() != nullptr)
-			gameObjects[i]->getRigidBody()->move(sceneTimer->getDeltaTime());
+		// Here is where the physics used to move the game objects
 		gameObjects[i]->calculateModelMatrix();
 		gameObjects[i]->updateModelTranslation(currentFrame);
 	}
