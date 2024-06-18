@@ -20,6 +20,7 @@ void vulkanTextureData::init(
 ) {
     device = instance->getDevicePtr();
     sampler = _sampler;
+    name = texturePath;
     initTextureImage(texturePath, instance);
     initTextureImageView(instance);
 }
@@ -42,10 +43,6 @@ void vulkanTextureData::initTextureImage(std::string texturePath, vulkanInstance
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");
     }
-
-    name = texturePath.substr(texturePath.find_last_of("/\\") + 1);
-    std::string::size_type lastDot(name.find_last_of('.'));
-    name = name.substr(0, lastDot);
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;

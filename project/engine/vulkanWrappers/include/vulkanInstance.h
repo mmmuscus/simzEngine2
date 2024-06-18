@@ -117,7 +117,6 @@ private:
 		const VkAllocationCallbacks* pAllocator);
 
 	// Devices:
-	// TODO: ranking devices based on reqs and selecting the best one
 	bool isDeviceSuitable(const vk::PhysicalDevice& physDevice);
 	bool checkDeviceExtensionSupport(const vk::PhysicalDevice& physDevice);
 };

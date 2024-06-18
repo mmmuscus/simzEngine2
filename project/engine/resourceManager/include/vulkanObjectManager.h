@@ -22,8 +22,9 @@ public:
 		vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
 		std::string vertexShaderPath, std::string fragmentShaderPath
 	) {
-		// TODO:
-		// What if már benne van ez a vkObject?
+		for (int i = 0; i < vulkanObjects.size(); i++)
+			if (name == vulkanObjects[i]->getName())
+				return vulkanObjects[i];
 
 		vulkanObjects.push_back(new vulkanObject());
 		vulkanObjects.back()->init(

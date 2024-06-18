@@ -23,6 +23,7 @@ void vulkanMeshData::init(
 ) {
     device = instance->getDevicePtr();
     uniformBuffer = _uniformBuffer;
+    name = meshPath;
     loadMesh(meshPath);
     initVertexBuffer(instance);
     initIndexBuffer(instance);
@@ -41,10 +42,6 @@ void vulkanMeshData::loadMesh(std::string meshPath) {
     if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, meshPath.c_str())) {
         throw std::runtime_error(warn + err);
     }
-
-    name = meshPath.substr(meshPath.find_last_of("/\\") + 1);
-    std::string::size_type lastDot(name.find_last_of('.'));
-    name = name.substr(0, lastDot);
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 

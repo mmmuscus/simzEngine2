@@ -47,7 +47,6 @@ public:
 
 	void getNextImage(vulkanSurface* surface);
 
-	// TODO: rename function
 	void drawFrame(
 		vulkanSurface* surface,
 		vulkanRenderer* renderer,

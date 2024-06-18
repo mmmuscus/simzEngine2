@@ -111,14 +111,14 @@ private:
 
         // DIFFUSE OBJECT:
         diffuseObject = vulkanObjectMngr.addVulkanObject(
-            "Diffuse", instance.getDevicePtr(),
+            "DIFFUSE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
         negativeObject = vulkanObjectMngr.addVulkanObject(
-            "Negative", instance.getDevicePtr(),
+            "NEGATIVE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/negativeFrag.spv"
         );
