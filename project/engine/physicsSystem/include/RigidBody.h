@@ -11,7 +11,7 @@
 #include <math.h>
 
 // Rigid Body used to be an integral part of the gameobject
-// Commit id:
+// Commit link: https://github.com/mmmuscus/simzEngine2/commit/3d304b47dcb2378ef3e8f39ae6a3b31c36ef2277
 
 class RigidBody {
 private:

@@ -7,7 +7,7 @@ const float FORCE_AMP = 100.0f;
 
 // This class used to record and resolve physics events (collisions) in every tick of
 // the main loop
-// commit id:
+// Commit link: https://github.com/mmmuscus/simzEngine2/commit/3d304b47dcb2378ef3e8f39ae6a3b31c36ef2277
 
 
 struct CollisionEvent {
