@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\general\source\Quat.cpp" />
     <ClCompile Include="external\imGui\imgui.cpp" />
     <ClCompile Include="external\imGui\imgui_demo.cpp" />
     <ClCompile Include="external\imGui\imgui_draw.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="engine\vulkanWrappers\source\vulkanTextureSampler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\general\include\Quat.h" />
     <ClInclude Include="external\imGui\imconfig.h" />
     <ClInclude Include="external\imGui\imgui_internal.h" />
     <ClInclude Include="external\imGui\imstb_rectpack.h" />
