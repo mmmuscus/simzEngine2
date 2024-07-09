@@ -115,7 +115,16 @@ void Quat::conjugate() {
 
 // Rotation
 glm::vec3 Quat::rotate(const glm::vec3& vec) const {
-	;
+	float c1 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
+	// This might be bad, I should check up on it
+	float c2 = w * w - x * x - y * y - z * z;
+	float c3 = 2 * w;
+
+	return glm::vec3(
+		c1 * x + c2 * vec.x + c3 * (y * vec.z - z * vec.y),
+		c1 * y + c2 * vec.y + c3 * (z * vec.x - x * vec.z),
+		c1 * z + c2 * vec.z + c3 * (x * vec.y - y * vec.x)
+	);
 }
 
 
