@@ -63,6 +63,9 @@ public:
 	// Rotates the vector with the quaternion (twice the angle and same axis)
 	glm::vec3 rotate(const glm::vec3& vec) const;
 
+	// Conversions
+	glm::mat4 toMat();
+	void setFromMat(glm::mat4 mat);
 };
 
 std::ostream& operator<<(std::ostream& os, const Quat& q);

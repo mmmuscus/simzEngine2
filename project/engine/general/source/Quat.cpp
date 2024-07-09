@@ -128,6 +128,47 @@ glm::vec3 Quat::rotate(const glm::vec3& vec) const {
 }
 
 
+// Conversions
+// According to https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
+glm::mat4 Quat::toMat() {
+	// m00 m01 m02
+	// m10 m11 m12
+	// m20 m21 m22
+
+	float m00 = 1 - 2.0f * y * y - 2.0f * z * z;
+	float m01 = 2.0f * x * y - 2.0f * z * w;
+	float m02 = 2.0f * x * z + 2.0f * y * w;
+
+	float m10 = 2.0f * x * y + 2.0f * z * w;
+	float m11 = 1 - 2.0f * x * x - 2.0f * z * z;
+	float m12 = 2.0f * y * z - 2.0f * x * w;
+
+	float m20 = 2.0f * x * z - 2.0f * y * w;
+	float m21 = 2.0f * y * z + 2.0f * x * w;
+	float m22 = 1 - 2.0 * x * x - 2.0f * y * y;
+
+	return glm::mat4(
+		m00, m01, m02, 0.0f,
+		m10, m11, m12, 0.0f,
+		m20, m21, m22, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	);
+}
+
+// Based on: https://github.com/kromenak/gengine/blob/master/Source/Math/Matrix4.cpp
+// and: https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+void Quat::setFromMat(glm::mat4 mat) {
+	w = sqrt(std::max(0.0f, 1.0f + mat[0][0] + mat[1][1] + mat[2][2])) / 2.0f;
+	x = sqrt(std::max(0.0f, 1.0f + mat[0][0] - mat[1][1] - mat[2][2])) / 2.0f;
+	y = sqrt(std::max(0.0f, 1.0f - mat[0][0] + mat[1][1] - mat[2][2])) / 2.0f;
+	z = sqrt(std::max(0.0f, 1.0f - mat[0][0] - mat[1][1] + mat[2][2])) / 2.0f;
+
+	x = mat[2][1] - mat[1][2] > 0 ? fabs(x) : -fabs(x);
+	y = mat[0][2] - mat[2][0] > 0 ? fabs(y) : -fabs(y);
+	z = mat[1][0] - mat[0][1] > 0 ? fabs(z) : -fabs(z);
+}
+
+
 std::ostream& operator<<(std::ostream& os, const Quat& q) {
 	os << q.x << " " << q.y << " " << q.z << " " << q.w;
 	return os;
