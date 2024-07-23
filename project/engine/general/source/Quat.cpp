@@ -62,6 +62,7 @@ Quat Quat::operator*=(float scalar) {
 	y *= scalar;
 	z *= scalar;
 	w *= scalar;
+	return *this;
 }
 
 // From: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
@@ -170,6 +171,6 @@ void Quat::setFromMat(glm::mat4 mat) {
 
 
 std::ostream& operator<<(std::ostream& os, const Quat& q) {
-	os << q.x << " " << q.y << " " << q.z << " " << q.w;
+	os << "x: " << q.x << ", y: " << q.y << ", z: " << q.z << ", w: " << q.w;
 	return os;
 }

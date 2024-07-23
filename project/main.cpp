@@ -210,14 +210,14 @@ private:
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(1.0f, 1.0f, 1.0f)
         ));
-        mainScene.addObject(new gameObject(
+        /*mainScene.addObject(new gameObject(
             &instance, negativeObject,
             &meshMngr, "assets/models/tank.objj", &modelsBuffer,
             &textureMngr, "assets/textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
             glm::vec3(0.0f, 0.0f, 3.14f),
             glm::vec3(1.0f, 1.0f, 1.0f)
-        ));
+        ));*/
 
         mainScene.defragmentObjectNumbers();
     }

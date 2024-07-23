@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H_
 
 #include "../../general/include/timer.h"
+#include "../../general/include/Quat.h"
 
 #include "../../vulkanWrappers/include/vulkanObject.h"
 #include "../../vulkanWrappers/include/vulkanMeshData.h"
