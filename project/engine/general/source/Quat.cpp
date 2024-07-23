@@ -169,6 +169,40 @@ void Quat::setFromMat(glm::mat4 mat) {
 	z = mat[1][0] - mat[0][1] > 0 ? fabs(z) : -fabs(z);
 }
 
+// Based on: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+glm::vec3 Quat::toEuler() {
+	glm::vec3 res;
+
+	float x1 = 2.0f * (w * x + y * z);
+	float x2 = 1.0f - 2.0f * (x * x + y * y);
+	res.x = std::atan2(x1, x2);
+
+	float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
+	float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
+	res.y = 2.0f * std::atan2(y1, y2) - M_PI / 2.0f;
+
+	float z1 = 2.0f * (w * z + x * y);
+	float z2 = 1.0f - 2.0f * (y * y + z * z);
+	res.z = std::atan2(z1, z2);
+
+	return res;
+}
+
+// Also based on: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+void Quat::setFromEuler(glm::vec3 eul) {
+	float cosX = glm::cos(eul.x * 0.5f);
+	float sinX = glm::sin(eul.x * 0.5f);
+	float cosY = glm::cos(eul.y * 0.5f);
+	float sinY = glm::sin(eul.y * 0.5f);
+	float cosZ = glm::cos(eul.z * 0.5f);
+	float sinZ = glm::sin(eul.z * 0.5f);
+
+	w = cosX * cosY * cosZ + sinX * sinY * sinZ;
+	x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+	y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+	z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+}
+
 
 std::ostream& operator<<(std::ostream& os, const Quat& q) {
 	os << "x: " << q.x << ", y: " << q.y << ", z: " << q.z << ", w: " << q.w;

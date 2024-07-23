@@ -10,6 +10,8 @@
 // Class will be used for rotations, so _theoretically_ only unit quaternions will be 
 // needed. Because of this the class will focuns on these.
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/epsilon.hpp>
@@ -66,6 +68,8 @@ public:
 	// Conversions
 	glm::mat4 toMat();
 	void setFromMat(glm::mat4 mat);
+	glm::vec3 toEuler();
+	void setFromEuler(glm::vec3 eul);
 };
 
 std::ostream& operator<<(std::ostream& os, const Quat& q);
