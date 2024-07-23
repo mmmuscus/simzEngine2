@@ -12,17 +12,13 @@ void gameObject::calculateModelMatrix() {
 	modelMatrix = modelMatrix * rotMat;*/
 
 	// Creating quat from matrix and matrix from quat:
-	glm::mat4 rotMat = glm::mat4(1.0f);
+	/*glm::mat4 rotMat = glm::mat4(1.0f);
 	rotMat = glm::rotate(rotMat, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	rotMat = glm::rotate(rotMat, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	rotMat = glm::rotate(rotMat, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	Quat q;
-	q.setFromMat(rotMat);
-	glm::mat4 quatMat = q.toMat();
-	modelMatrix = modelMatrix * rotMat;
-
-	glm::vec3 eul = q.toEuler();
-	std::cout << eul.x << " " << eul.y << " " << eul.z << std::endl;
+	rotMat = glm::rotate(rotMat, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));*/
+	// qt.setFromMat(rotMat);
+	glm::mat4 quatMat = qt.toMat();
+	modelMatrix = modelMatrix * quatMat;
 
 	// Method so far:
 	/*modelMatrix = glm::rotate(modelMatrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));

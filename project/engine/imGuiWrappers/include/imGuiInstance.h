@@ -5,6 +5,8 @@
 
 #include "imGuiWrappersGeneralIncludes.h"
 
+#include "../../general/include/Quat.h"
+
 #include "../../vulkanWrappers/include/vulkanSurface.h"
 
 #include "../../sceneSystem/include/scene.h"

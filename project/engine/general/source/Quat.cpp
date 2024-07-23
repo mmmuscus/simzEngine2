@@ -175,15 +175,19 @@ glm::vec3 Quat::toEuler() {
 
 	float x1 = 2.0f * (w * x + y * z);
 	float x2 = 1.0f - 2.0f * (x * x + y * y);
-	res.x = std::atan2(x1, x2);
+	res.x = std::atan2f(x1, x2);
 
 	float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
 	float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
-	res.y = 2.0f * std::atan2(y1, y2) - M_PI / 2.0f;
+	res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;
 
 	float z1 = 2.0f * (w * z + x * y);
 	float z2 = 1.0f - 2.0f * (y * y + z * z);
-	res.z = std::atan2(z1, z2);
+	res.z = std::atan2f(z1, z2);
+
+	std::cout << " --- Quaternion to Euler --- " << std::endl;
+	std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
+	std::cout << "Euler: x: " << res.x << ", y: " << res.y << ", z: " << res.z << std::endl;
 
 	return res;
 }
@@ -201,6 +205,12 @@ void Quat::setFromEuler(glm::vec3 eul) {
 	x = sinX * cosY * cosZ - cosX * sinY * sinZ;
 	y = cosX * sinY * cosZ + sinX * cosY * sinZ;
 	z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+
+	this->normalize();
+
+	std::cout << " --- Euler to Quaternion --- " << std::endl;
+	std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
+	std::cout << "Euler: x: " << eul.x << ", y: " << eul.y << ", z: " << eul.z << std::endl;
 }
 
 

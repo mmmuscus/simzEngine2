@@ -17,6 +17,7 @@ private:
 	// Transform vectors:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	// TODO: IMPLEMENT QUATERNIONS
+	Quat qt = Quat(0.0f, 0.0f, 0.0f, 0.0f);
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	// Model matrix:
@@ -88,6 +89,7 @@ public:
 	}
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
+	void setQt(Quat _qt) { qt = _qt; }
 	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
@@ -96,6 +98,8 @@ public:
 	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 
 	glm::vec3 getPos() { return pos; }
+	Quat getQt() { return qt; }
+	glm::vec3 getEuler() { return qt.toEuler(); }
 	glm::vec3 getRotation() { return rotation; }
 	glm::vec3 getScale() { return scale; }
 	uint32_t getObjectNumber() { return objectNumber; }
