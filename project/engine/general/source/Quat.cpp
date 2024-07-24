@@ -171,23 +171,41 @@ void Quat::setFromMat(glm::mat4 mat) {
 
 // Based on: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 glm::vec3 Quat::toEuler() {
+	// Singularities
+	/*if (w * y - x * z > 0.5f - EPSILON) {
+		std::cout << "SINGULARITY!!!!" << std::endl;
+		return glm::vec3(
+			2.0f * atan2f(w, x),
+			M_PI / 2.0f,
+			0.0f
+		);
+	}
+	if (w * y - x * z < -0.5f + EPSILON) {
+		return glm::vec3(
+			-2.0f * atan2f(w, x),
+			-M_PI / 2.0f,
+			0.0f
+		);
+	}*/
+
 	glm::vec3 res;
 
 	float x1 = 2.0f * (w * x + y * z);
 	float x2 = 1.0f - 2.0f * (x * x + y * y);
 	res.x = std::atan2f(x1, x2);
 
-	float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
+	/*float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
 	float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
-	res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;
+	res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;*/
+	res.y = asinf(2.0f * (w * y - x * z));
 
 	float z1 = 2.0f * (w * z + x * y);
 	float z2 = 1.0f - 2.0f * (y * y + z * z);
 	res.z = std::atan2f(z1, z2);
 
-	std::cout << " --- Quaternion to Euler --- " << std::endl;
-	std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
-	std::cout << "Euler: x: " << res.x << ", y: " << res.y << ", z: " << res.z << std::endl;
+	// std::cout << " --- Quaternion to Euler --- " << std::endl;
+	// std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
+	// std::cout << "Euler: x: " << res.x << ", y: " << res.y << ", z: " << res.z << std::endl;
 
 	return res;
 }
@@ -208,9 +226,9 @@ void Quat::setFromEuler(glm::vec3 eul) {
 
 	this->normalize();
 
-	std::cout << " --- Euler to Quaternion --- " << std::endl;
-	std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
-	std::cout << "Euler: x: " << eul.x << ", y: " << eul.y << ", z: " << eul.z << std::endl;
+	// std::cout << " --- Euler to Quaternion --- " << std::endl;
+	// std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
+	// std::cout << "Euler: x: " << eul.x << ", y: " << eul.y << ", z: " << eul.z << std::endl;
 }
 
 

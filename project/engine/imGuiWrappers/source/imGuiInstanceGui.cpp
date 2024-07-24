@@ -90,7 +90,9 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
 
     if (ImGui::DragFloat3("Position", pos, 0.1f))
         obj->setPos(glm::vec3(pos[0], pos[1], pos[2]));
-    if (ImGui::DragFloat3("Rotation", rot, 0.1f)) {
+    Quat objQt = obj->getQt();
+    ImGui::Text("Quaternion: x: %f y: %f z: %f w: %f", objQt.x, objQt.y, objQt.z, objQt.w);
+    if (ImGui::DragFloat3("Rotation", rot, 0.01f)) {
         Quat q;
         q.setFromEuler(glm::vec3(rot[0], rot[1], rot[2]));
         obj->setQt(q);
