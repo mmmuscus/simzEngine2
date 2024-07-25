@@ -172,7 +172,7 @@ void Quat::setFromMat(glm::mat4 mat) {
 // Based on: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 glm::vec3 Quat::toEuler() {
 	// Singularities
-	/*if (w * y - x * z > 0.5f - EPSILON) {
+	if (w * y - x * z > 0.5f - EPSILON) {
 		std::cout << "SINGULARITY!!!!" << std::endl;
 		return glm::vec3(
 			2.0f * atan2f(w, x),
@@ -186,7 +186,7 @@ glm::vec3 Quat::toEuler() {
 			-M_PI / 2.0f,
 			0.0f
 		);
-	}*/
+	}
 
 	glm::vec3 res;
 
@@ -194,9 +194,9 @@ glm::vec3 Quat::toEuler() {
 	float x2 = 1.0f - 2.0f * (x * x + y * y);
 	res.x = std::atan2f(x1, x2);
 
-	/*float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
-	float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
-	res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;*/
+	// float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
+	// float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
+	// res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;
 	res.y = asinf(2.0f * (w * y - x * z));
 
 	float z1 = 2.0f * (w * z + x * y);
@@ -230,6 +230,56 @@ void Quat::setFromEuler(glm::vec3 eul) {
 	// std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
 	// std::cout << "Euler: x: " << eul.x << ", y: " << eul.y << ", z: " << eul.z << std::endl;
 }
+
+
+// Based on: eucledian space
+/*glm::vec3 Quat::toEuler() {
+	float singularityTest = x * y + z * w;
+	if (singularityTest > 0.5f - EPSILON) {
+		return glm::vec3(
+			2.0f * atan2f(x, w),
+			M_PI,
+			0.0f
+		);
+	}
+	if (singularityTest < -0.5f + EPSILON) {
+		return glm::vec3(
+			-2.0f * atan2f(x, w),
+			-M_PI,
+			0.0f
+		);
+	}
+
+	glm::vec3 res;
+
+	res.x = atan2f(
+		2.0f * (y * w - x * z),
+		1.0f - 2.0f * (y * y - z * z)
+	);
+	res.y = asinf(2.0f * singularityTest);
+	res.z = atan2f(
+		2.0f * (x * w - y * z),
+		1.0f - 2.0f * (x * x - z * z)
+	);
+
+	return res;
+}
+
+void Quat::setFromEuler(glm::vec3 eul) {
+	float cosX = glm::cos(eul.x * 0.5f);
+	float cosY = glm::cos(eul.y * 0.5f);
+	float cosZ = glm::cos(eul.z * 0.5f);
+	float sinX = glm::sin(eul.x * 0.5f);
+	float sinY = glm::sin(eul.y * 0.5f);
+	float sinZ = glm::sin(eul.z * 0.5f);
+
+	w = cosX * cosY * cosZ - sinX * sinY * sinZ;
+	x = sinX * sinY * cosZ + cosX * cosY * sinZ;
+	y = sinX * cosY * cosZ + cosX * sinY * sinZ;
+	z = cosX * sinY * cosZ - sinX * cosY * sinZ;
+
+	this->normalize();
+}*/
 
 
 std::ostream& operator<<(std::ostream& os, const Quat& q) {
