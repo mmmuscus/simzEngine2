@@ -85,21 +85,29 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
     ImGui::Text("Object %d:", obj->getObjectNumber());
 
     float pos[3] = { obj->getPos().x, obj->getPos().y, obj->getPos().z };
-    float rot[3] = { obj->getEuler().x, obj->getEuler().y, obj->getEuler().z };
+    float rot[3] = { obj->getRotation().x, obj->getRotation().y, obj->getRotation().z };
+    float quat[4] = { obj->getQt().x, obj->getQt().y, obj->getQt().z, obj->getQt().w };
+    // float rot[3] = { obj->getEuler().x, obj->getEuler().y, obj->getEuler().z };
     float scale[3] = { obj->getScale().x, obj->getScale().y, obj->getScale().z };
 
     if (ImGui::DragFloat3("Position", pos, 0.1f))
         obj->setPos(glm::vec3(pos[0], pos[1], pos[2]));
     Quat objQt = obj->getQt();
+    if (ImGui::DragFloat4("Quaternions", quat, 0.0001f)) {
+        Quat q = Quat(quat[0], quat[1], quat[2], quat[3]);
+        obj->setQt(q);
+    }
+        
+        
     ImGui::Text("Quaternion: x: %f y: %f z: %f w: %f", objQt.x, objQt.y, objQt.z, objQt.w);
     if (ImGui::DragFloat3("Rotation", rot, 0.01f)) {
-        Quat q;
+        /*Quat q;
         q.setFromEuler(glm::vec3(rot[0], rot[1], rot[2]));
         obj->setQt(q);
-        /*glm::vec3 eul = obj->getQt().toEuler();
+        glm::vec3 eul = obj->getQt().toEuler();
         std::cout << eul.x << " " << eul.y << " " << eul.z << std::endl;
         std::cout << q << std::endl;*/
-        /*obj->setRotation(glm::vec3(rot[0], rot[1], rot[2])); */
+        obj->setRotation(glm::vec3(rot[0], rot[1], rot[2])); 
     }
     if (ImGui::DragFloat3("Scale", scale, 0.1f))
         obj->setScale(glm::vec3(scale[0], scale[1], scale[2]));

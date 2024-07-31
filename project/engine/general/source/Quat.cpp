@@ -172,7 +172,7 @@ void Quat::setFromMat(glm::mat4 mat) {
 // Based on: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 glm::vec3 Quat::toEuler() {
 	// Singularities
-	if (w * y - x * z > 0.5f - EPSILON) {
+	/*if (w * y - x * z > 0.5f - EPSILON) {
 		std::cout << "SINGULARITY!!!!" << std::endl;
 		return glm::vec3(
 			2.0f * atan2f(w, x),
@@ -186,7 +186,7 @@ glm::vec3 Quat::toEuler() {
 			-M_PI / 2.0f,
 			0.0f
 		);
-	}
+	}*/
 
 	glm::vec3 res;
 
@@ -219,12 +219,19 @@ void Quat::setFromEuler(glm::vec3 eul) {
 	float cosZ = glm::cos(eul.z * 0.5f);
 	float sinZ = glm::sin(eul.z * 0.5f);
 
-	w = cosX * cosY * cosZ + sinX * sinY * sinZ;
-	x = sinX * cosY * cosZ - cosX * sinY * sinZ;
-	y = cosX * sinY * cosZ + sinX * cosY * sinZ;
-	z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+	// https://github.com/mrdoob/three.js/blob/dev/src/math/Quaternion.js
+	// Got here from: https://www.andre-gaschler.com/rotationconverter/
+	x = sinX * cosY * cosZ + cosX * sinY * sinZ;
+	y = cosX * sinY * cosZ - sinX * cosY * sinZ;
+	z = cosX * cosY * sinZ + sinX * sinY * cosZ;
+	w = cosX * cosY * cosZ - sinX * sinY * sinZ;
 
-	this->normalize();
+	//w = cosX * cosY * cosZ + sinX * sinY * sinZ;
+	//x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+	//y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+	//z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+
+	// this->normalize();
 
 	// std::cout << " --- Euler to Quaternion --- " << std::endl;
 	// std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
