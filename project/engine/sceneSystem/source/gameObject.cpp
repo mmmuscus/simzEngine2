@@ -4,14 +4,9 @@ void gameObject::calculateModelMatrix() {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, pos);
 
-	//glm::mat4 rotMat = glm::mat4(1.0f);
-	//qt.setFromEuler(rotation);
-	//rotMat = glm::rotate(rotMat, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	//rotMat = glm::rotate(rotMat, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	//rotMat = glm::rotate(rotMat, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	//modelMatrix *= rotMat;
-
-	rotation = qt.toEuler();
+	qt.setFromEuler(rotation);
+	glm::mat4 quatMat = qt.toMat();
+	modelMatrix *= quatMat;
 
 	modelMatrix = glm::scale(modelMatrix, scale);
 }
