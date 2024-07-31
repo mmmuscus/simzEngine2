@@ -87,7 +87,6 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
     float pos[3] = { obj->getPos().x, obj->getPos().y, obj->getPos().z };
     float rot[3] = { obj->getRotation().x, obj->getRotation().y, obj->getRotation().z };
     float quat[4] = { obj->getQt().x, obj->getQt().y, obj->getQt().z, obj->getQt().w };
-    // float rot[3] = { obj->getEuler().x, obj->getEuler().y, obj->getEuler().z };
     float scale[3] = { obj->getScale().x, obj->getScale().y, obj->getScale().z };
 
     if (ImGui::DragFloat3("Position", pos, 0.1f))
