@@ -169,8 +169,23 @@ void Quat::setFromMat(glm::mat4 mat) {
 	z = mat[1][0] - mat[0][1] > 0 ? fabs(z) : -fabs(z);
 }
 
-// Based on: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 glm::vec3 Quat::toEuler() {
+	// Three.js version:
+	glm::vec3 res;
+
+	//Is clamp between -1, 1 needed?
+	res.y = asinf(2.0f * (x * z + w * y));
+
+	if (2.0f * (x * z + w * y) < 1.0f - EPSILON) {
+		res.x = atan2f(-2.0f * (y * z - w * x), 1.0f - 2.0f * (x * x + y * y));
+		res.z = atan2f(-2.0f * (x * y - w * z), 1.0f - 2.0f * (y * y + z * z));
+	}
+	else {
+		res.x = atan2f(2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + z * z));
+		res.z = 0;
+	}
+
+	// Eucledian space version:
 	// Singularities
 	//float singularityTestValue = x * y + z * w;
 	//if (singularityTestValue > 0.5f - EPSILON) {
@@ -188,24 +203,32 @@ glm::vec3 Quat::toEuler() {
 	//	);
 	//}
 
-	glm::vec3 res;
+	//glm::vec3 res;
 
-	float x1 = 2.0f * (w * x + y * z);
-	float x2 = 1.0f - 2.0f * (x * x + y * y);
-	res.x = std::atan2f(x1, x2);
+	//float x1 = 2.0f * (y * w - x * z);
+	//float x2 = 1.0f - 2.0f * (y * y - z * z);
+	//res.x = std::atan2f(x1, x2);
 
-	float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
-	float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
-	res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;
-	//res.y = asinf(2.0f * (singularityTestValue));
+	//res.y = asinf(2.0f * singularityTestValue);
 
-	float z1 = 2.0f * (x * z + x * y);
-	float z2 = 1.0f - 2.0f * (y * y + z * z);
-	res.z = std::atan2f(z1, z2);
+	//float z1 = 2.0f * (x * w - y * z);
+	//float z2 = 1.0f - 2.0f * (x * x - z * z);
+	//res.z = std::atan2f(z1, z2);
 
-	// std::cout << " --- Quaternion to Euler --- " << std::endl;
-	// std::cout << "Quat: x: " << x << ", y: " << y << ", z: " << z << ", w: " << w << std::endl;
-	// std::cout << "Euler: x: " << res.x << ", y: " << res.y << ", z: " << res.z << std::endl;
+	// Wikipedia version:
+	//glm::vec3 res;
+
+	//float x1 = 2.0f * (w * x + y * z);
+	//float x2 = 1.0f - 2.0f * (x * x + y * y);
+	//res.x = std::atan2f(x1, x2);
+
+	//float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
+	//float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
+	//res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;
+
+	//float z1 = 2.0f * (x * z + x * y);
+	//float z2 = 1.0f - 2.0f * (y * y + z * z);
+	//res.z = std::atan2f(z1, z2);
 
 	return res;
 }
@@ -227,57 +250,6 @@ void Quat::setFromEuler(glm::vec3 eul) {
 
 	this->normalize();
 }
-
-
-// Based on: eucledian space
-/*glm::vec3 Quat::toEuler() {
-	float singularityTest = x * y + z * w;
-	if (singularityTest > 0.5f - EPSILON) {
-		return glm::vec3(
-			2.0f * atan2f(x, w),
-			M_PI,
-			0.0f
-		);
-	}
-	if (singularityTest < -0.5f + EPSILON) {
-		return glm::vec3(
-			-2.0f * atan2f(x, w),
-			-M_PI,
-			0.0f
-		);
-	}
-
-	glm::vec3 res;
-
-	res.x = atan2f(
-		2.0f * (y * w - x * z),
-		1.0f - 2.0f * (y * y - z * z)
-	);
-	res.y = asinf(2.0f * singularityTest);
-	res.z = atan2f(
-		2.0f * (x * w - y * z),
-		1.0f - 2.0f * (x * x - z * z)
-	);
-
-	return res;
-}
-
-void Quat::setFromEuler(glm::vec3 eul) {
-	float cosX = glm::cos(eul.x * 0.5f);
-	float cosY = glm::cos(eul.y * 0.5f);
-	float cosZ = glm::cos(eul.z * 0.5f);
-	float sinX = glm::sin(eul.x * 0.5f);
-	float sinY = glm::sin(eul.y * 0.5f);
-	float sinZ = glm::sin(eul.z * 0.5f);
-
-	w = cosX * cosY * cosZ - sinX * sinY * sinZ;
-	x = sinX * sinY * cosZ + cosX * cosY * sinZ;
-	y = sinX * cosY * cosZ + cosX * sinY * sinZ;
-	z = cosX * sinY * cosZ - sinX * cosY * sinZ;
-
-	this->normalize();
-}*/
-
 
 std::ostream& operator<<(std::ostream& os, const Quat& q) {
 	os << "x: " << q.x << ", y: " << q.y << ", z: " << q.z << ", w: " << q.w;
