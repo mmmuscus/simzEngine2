@@ -17,7 +17,7 @@ private:
 	// Transform vectors:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	// TODO: IMPLEMENT QUATERNIONS
-	Quat qt = Quat(0.0f, 0.0f, 0.0f, 0.0f);
+	Quat qt = Quat(0.0f, 0.0f, 0.0f, 1.0f);
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	// Model matrix:

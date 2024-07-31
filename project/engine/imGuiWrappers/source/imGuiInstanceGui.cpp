@@ -92,14 +92,13 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
 
     if (ImGui::DragFloat3("Position", pos, 0.1f))
         obj->setPos(glm::vec3(pos[0], pos[1], pos[2]));
-    Quat objQt = obj->getQt();
-    if (ImGui::DragFloat4("Quaternions", quat, 0.0001f)) {
+
+    if (ImGui::DragFloat4("Quaternions", quat, 0.01f)) {
         Quat q = Quat(quat[0], quat[1], quat[2], quat[3]);
+        q.normalize();
         obj->setQt(q);
     }
-        
-        
-    ImGui::Text("Quaternion: x: %f y: %f z: %f w: %f", objQt.x, objQt.y, objQt.z, objQt.w);
+    
     if (ImGui::DragFloat3("Rotation", rot, 0.01f)) {
         /*Quat q;
         q.setFromEuler(glm::vec3(rot[0], rot[1], rot[2]));
