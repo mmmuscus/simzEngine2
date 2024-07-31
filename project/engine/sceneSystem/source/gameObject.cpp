@@ -5,8 +5,8 @@ void gameObject::calculateModelMatrix() {
 	modelMatrix = glm::translate(modelMatrix, pos);
 
 	qt.setFromEuler(rotation);
-	glm::mat4 quatMat = qt.toMat();
-	modelMatrix *= quatMat;
+	glm::mat4 rotMat = qt.toMat();
+	modelMatrix *= rotMat;
 
 	modelMatrix = glm::scale(modelMatrix, scale);
 }

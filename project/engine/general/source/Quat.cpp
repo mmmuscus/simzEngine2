@@ -216,51 +216,6 @@ glm::vec3 Quat::toEuler() {
 		res.z = 0;
 	}
 
-	// Eucledian space version:
-	// Singularities
-	//float singularityTestValue = x * y + z * w;
-	//if (singularityTestValue > 0.5f - EPSILON) {
-	//	return glm::vec3(
-	//		2.0f * atan2f(x, w),
-	//		M_PI / 2.0f,
-	//		0.0f
-	//	);
-	//}
-	//if (singularityTestValue < -0.5f + EPSILON) {
-	//	return glm::vec3(
-	//		-2.0f * atan2f(x, w),
-	//		-M_PI / 2.0f,
-	//		0.0f
-	//	);
-	//}
-
-	//glm::vec3 res;
-
-	//float x1 = 2.0f * (y * w - x * z);
-	//float x2 = 1.0f - 2.0f * (y * y - z * z);
-	//res.x = std::atan2f(x1, x2);
-
-	//res.y = asinf(2.0f * singularityTestValue);
-
-	//float z1 = 2.0f * (x * w - y * z);
-	//float z2 = 1.0f - 2.0f * (x * x - z * z);
-	//res.z = std::atan2f(z1, z2);
-
-	// Wikipedia version:
-	//glm::vec3 res;
-
-	//float x1 = 2.0f * (w * x + y * z);
-	//float x2 = 1.0f - 2.0f * (x * x + y * y);
-	//res.x = std::atan2f(x1, x2);
-
-	//float y1 = glm::sqrt(1.0f + 2.0f * (w * y - x * z));
-	//float y2 = glm::sqrt(1.0f - 2.0f * (w * y - x * z));
-	//res.y = 2.0f * std::atan2f(y1, y2) - M_PI / 2.0f;
-
-	//float z1 = 2.0f * (x * z + x * y);
-	//float z2 = 1.0f - 2.0f * (y * y + z * z);
-	//res.z = std::atan2f(z1, z2);
-
 	return res;
 }
 
