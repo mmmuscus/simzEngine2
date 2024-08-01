@@ -31,7 +31,7 @@ private:
 
 public:
 	// Constructors
-	Quat() : x(0), y(0), z(0), w(1) {}
+	Quat() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 	Quat(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
 	Quat(glm::vec3 v, float _w) : x(v.x), y(v.y), z(v.z), w(_w) {}
 	Quat(Quat& q) : x(q.x), y(q.y), z(q.z), w(q.w) {}
@@ -75,4 +75,4 @@ public:
 
 std::ostream& operator<<(std::ostream& os, const Quat& q);
 
-#endif QUAT_H_
+#endif //QUAT_H_
