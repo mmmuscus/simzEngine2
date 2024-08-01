@@ -136,17 +136,28 @@ glm::mat4 Quat::toMat(Quat q) {
 	// m10 m11 m12
 	// m20 m21 m22
 
-	float m00 = 1.0f - 2.0f * q.y * q.y - 2.0f * q.z * q.z;
-	float m01 = 2.0f * q.x * q.y + 2.0f * q.z * q.w;
-	float m02 = 2.0f * q.x * q.z - 2.0f * q.y * q.w;
+	float xx2 = 2.0f * q.x * q.x;
+	float yy2 = 2.0f * q.y * q.y;
+	float zz2 = 2.0f * q.z * q.z;
 
-	float m10 = 2.0f * q.x * q.y - 2.0f * q.z * q.w;
-	float m11 = 1.0f - 2.0f * q.x * q.x - 2.0f * q.z * q.z;
-	float m12 = 2.0f * q.y * q.z + 2.0f * q.x * q.w;
+	float xy2 = 2.0f * q.x * q.y;
+	float xz2 = 2.0f * q.x * q.z;
+	float xw2 = 2.0f * q.x * q.w;
+	float yz2 = 2.0f * q.y * q.z;
+	float yw2 = 2.0f * q.y * q.w;
+	float zw2 = 2.0f * q.z * q.w;
 
-	float m20 = 2.0f * q.x * q.z + 2.0f * q.y * q.w;
-	float m21 = 2.0f * q.y * q.z - 2.0f * q.x * q.w;
-	float m22 = 1.0f - 2.0f * q.x * q.x - 2.0f * q.y * q.y;
+	float m00 = 1.0f - yy2 - zz2;
+	float m01 = xy2 + zw2;
+	float m02 = xz2 - yw2;
+
+	float m10 = xy2 - zw2;
+	float m11 = 1.0f - xx2 - zz2;
+	float m12 = yz2 + xw2;
+
+	float m20 = xz2 + yw2;
+	float m21 = yz2 - xw2;
+	float m22 = 1.0f - xx2 - yy2;
 
 	return glm::mat4(
 		m00, m01, m02, 0.0f,
@@ -207,13 +218,17 @@ glm::vec3 Quat::toEuler(Quat q) {
 	// Three.js version:
 	glm::vec3 ret;
 
-	// Is clamp between -1, 1 needed?
-https://github.com/mrdoob/three.js/blob/dev/src/math/Euler.js#L105
-	ret.y = asinf(2.0f * (q.x * q.z + q.w * q.y));
+	float testValue = q.x * q.z + q.w * q.y;
 
-	if (2.0f * (q.x * q.z + q.w * q.y) < 1.0f - EPSILON) {
-		ret.x = atan2f(-2.0f * (q.y * q.z - q.w * q.x), 1.0f - 2.0f * (q.x * q.x + q.y * q.y));
-		ret.z = atan2f(-2.0f * (q.x * q.y - q.w * q.z), 1.0f - 2.0f * (q.y * q.y + q.z * q.z));
+	// Is clamp between -1, 1 needed? 
+	// https://github.com/mrdoob/three.js/blob/dev/src/math/Euler.js#L105
+	ret.y = asinf(2.0f * testValue);
+
+	if (2.0f * testValue < 1.0f - EPSILON) {
+		float yy = q.y * q.y;
+
+		ret.x = atan2f(-2.0f * (q.y * q.z - q.w * q.x), 1.0f - 2.0f * (q.x * q.x + yy));
+		ret.z = atan2f(-2.0f * (q.x * q.y - q.w * q.z), 1.0f - 2.0f * (yy + q.z * q.z));
 	}
 	else {
 		ret.x = atan2f(2.0f * (q.y * q.z + q.w * q.x), 1.0f - 2.0f * (q.x * q.x + q.z * q.z));
