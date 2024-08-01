@@ -99,7 +99,7 @@ public:
 
 	glm::vec3 getPos() { return pos; }
 	Quat getQt() { return qt; }
-	glm::vec3 getEuler() { return qt.toEuler(); }
+	glm::vec3 getEuler() { return Quat::toEuler(qt); }
 	glm::vec3 getRotation() { return rotation; }
 	glm::vec3 getScale() { return scale; }
 	uint32_t getObjectNumber() { return objectNumber; }

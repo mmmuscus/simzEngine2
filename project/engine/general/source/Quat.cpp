@@ -131,22 +131,22 @@ glm::vec3 Quat::rotate(const glm::vec3& vec) const {
 
 // Conversions
 // According to https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
-glm::mat4 Quat::toMat() {
+glm::mat4 Quat::toMat(Quat q) {
 	// m00 m01 m02
 	// m10 m11 m12
 	// m20 m21 m22
 
-	float m00 = 1 - 2.0f * y * y - 2.0f * z * z;
-	float m01 = 2.0f * x * y + 2.0f * z * w;
-	float m02 = 2.0f * x * z - 2.0f * y * w;
+	float m00 = 1.0f - 2.0f * q.y * q.y - 2.0f * q.z * q.z;
+	float m01 = 2.0f * q.x * q.y + 2.0f * q.z * q.w;
+	float m02 = 2.0f * q.x * q.z - 2.0f * q.y * q.w;
 
-	float m10 = 2.0f * x * y - 2.0f * z * w;
-	float m11 = 1 - 2.0f * x * x - 2.0f * z * z;
-	float m12 = 2.0f * y * z + 2.0f * x * w;
+	float m10 = 2.0f * q.x * q.y - 2.0f * q.z * q.w;
+	float m11 = 1.0f - 2.0f * q.x * q.x - 2.0f * q.z * q.z;
+	float m12 = 2.0f * q.y * q.z + 2.0f * q.x * q.w;
 
-	float m20 = 2.0f * x * z + 2.0f * y * w;
-	float m21 = 2.0f * y * z - 2.0f * x * w;
-	float m22 = 1 - 2.0 * x * x - 2.0f * y * y;
+	float m20 = 2.0f * q.x * q.z + 2.0f * q.y * q.w;
+	float m21 = 2.0f * q.y * q.z - 2.0f * q.x * q.w;
+	float m22 = 1.0f - 2.0f * q.x * q.x - 2.0f * q.y * q.y;
 
 	return glm::mat4(
 		m00, m01, m02, 0.0f,
@@ -158,70 +158,76 @@ glm::mat4 Quat::toMat() {
 
 // Based on: https://github.com/mrdoob/three.js/blob/dev/src/math/Quaternion.js#L294
 // Also on: https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
-void Quat::setFromMat(glm::mat4 mat) {
+Quat Quat::fromMat(glm::mat4 mat) {
+	Quat ret;
+
 	float trace = mat[0][0] + mat[1][1] + mat[2][2];
 
 	if (trace > 0.0f) {
 		float scale = 0.5f / sqrt(1.0f + trace);
 
-		w = 0.25f / scale;
-		x = (mat[2][1] - mat[1][2]) * scale;
-		y = (mat[0][2] - mat[2][0]) * scale;
-		z = (mat[1][0] - mat[0][1]) * scale;
+		ret.w = 0.25f / scale;
+		ret.x = (mat[2][1] - mat[1][2]) * scale;
+		ret.y = (mat[0][2] - mat[2][0]) * scale;
+		ret.z = (mat[1][0] - mat[0][1]) * scale;
 	} // elses are checking for the max value along the diagonal
 	else if (mat[0][0] > mat[1][1] && mat[0][0] > mat[2][2]) {
 		float scale = 2.0f * sqrt(1.0f + mat[0][0] - mat[1][1] - mat[2][2]);
 
-		w = (mat[2][1] - mat[1][2]) / scale;
-		x = 0.25f * scale;
-		y = (mat[0][1] + mat[1][0]) / scale;
-		z = (mat[0][2] + mat[2][0]) / scale;
+		ret.w = (mat[2][1] - mat[1][2]) / scale;
+		ret.x = 0.25f * scale;
+		ret.y = (mat[0][1] + mat[1][0]) / scale;
+		ret.z = (mat[0][2] + mat[2][0]) / scale;
 	}
 	else if (mat[1][1] > mat[2][2]) {
 		float scale = 2.0f * sqrt(1.0f - mat[0][0] + mat[1][1] - mat[2][2]);
 
-		w = (mat[0][2] - mat[2][0]) / scale;
-		x = (mat[0][1] + mat[1][0]) / scale;
-		y = 0.25f * scale;
-		z = (mat[1][2] + mat[2][1]) / scale;
+		ret.w = (mat[0][2] - mat[2][0]) / scale;
+		ret.x = (mat[0][1] + mat[1][0]) / scale;
+		ret.y = 0.25f * scale;
+		ret.z = (mat[1][2] + mat[2][1]) / scale;
 	}
 	else {
 		float scale = 2.0f * sqrt(1.0f - mat[0][0] - mat[1][1] + mat[2][2]);
 
-		w = (mat[1][0] - mat[0][1]) / scale;
-		x = (mat[0][2] + mat[2][0]) / scale;
-		y = (mat[1][2] + mat[2][1]) / scale;
-		z = 0.25f * scale;
+		ret.w = (mat[1][0] - mat[0][1]) / scale;
+		ret.x = (mat[0][2] + mat[2][0]) / scale;
+		ret.y = (mat[1][2] + mat[2][1]) / scale;
+		ret.z = 0.25f * scale;
 	}
 
-	this->normalize();
+	ret.normalize();
+
+	return ret;
 }
 
 // https://github.com/mrdoob/three.js/blob/dev/src/math/Quaternion.js
 // Got here from: https://www.andre-gaschler.com/rotationconverter/
-glm::vec3 Quat::toEuler() {
+glm::vec3 Quat::toEuler(Quat q) {
 	// Three.js version:
-	glm::vec3 res;
+	glm::vec3 ret;
 
 	// Is clamp between -1, 1 needed?
-	https://github.com/mrdoob/three.js/blob/dev/src/math/Euler.js#L105
-	res.y = asinf(2.0f * (x * z + w * y));
+https://github.com/mrdoob/three.js/blob/dev/src/math/Euler.js#L105
+	ret.y = asinf(2.0f * (q.x * q.z + q.w * q.y));
 
-	if (2.0f * (x * z + w * y) < 1.0f - EPSILON) {
-		res.x = atan2f(-2.0f * (y * z - w * x), 1.0f - 2.0f * (x * x + y * y));
-		res.z = atan2f(-2.0f * (x * y - w * z), 1.0f - 2.0f * (y * y + z * z));
+	if (2.0f * (q.x * q.z + q.w * q.y) < 1.0f - EPSILON) {
+		ret.x = atan2f(-2.0f * (q.y * q.z - q.w * q.x), 1.0f - 2.0f * (q.x * q.x + q.y * q.y));
+		ret.z = atan2f(-2.0f * (q.x * q.y - q.w * q.z), 1.0f - 2.0f * (q.y * q.y + q.z * q.z));
 	}
 	else {
-		res.x = atan2f(2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + z * z));
-		res.z = 0;
+		ret.x = atan2f(2.0f * (q.y * q.z + q.w * q.x), 1.0f - 2.0f * (q.x * q.x + q.z * q.z));
+		ret.z = 0;
 	}
 
-	return res;
+	return ret;
 }
 
 // https://github.com/mrdoob/three.js/blob/dev/src/math/Quaternion.js
 // Got here from: https://www.andre-gaschler.com/rotationconverter/
-void Quat::setFromEuler(glm::vec3 eul) {
+Quat Quat::fromEuler(glm::vec3 eul) {
+	Quat ret;
+
 	float cosX = glm::cos(eul.x * 0.5f);
 	float sinX = glm::sin(eul.x * 0.5f);
 	float cosY = glm::cos(eul.y * 0.5f);
@@ -229,12 +235,14 @@ void Quat::setFromEuler(glm::vec3 eul) {
 	float cosZ = glm::cos(eul.z * 0.5f);
 	float sinZ = glm::sin(eul.z * 0.5f);
 
-	x = sinX * cosY * cosZ + cosX * sinY * sinZ;
-	y = cosX * sinY * cosZ - sinX * cosY * sinZ;
-	z = cosX * cosY * sinZ + sinX * sinY * cosZ;
-	w = cosX * cosY * cosZ - sinX * sinY * sinZ;
+	ret.x = sinX * cosY * cosZ + cosX * sinY * sinZ;
+	ret.y = cosX * sinY * cosZ - sinX * cosY * sinZ;
+	ret.z = cosX * cosY * sinZ + sinX * sinY * cosZ;
+	ret.w = cosX * cosY * cosZ - sinX * sinY * sinZ;
 
-	this->normalize();
+	ret.normalize();
+
+	return ret;
 }
 
 std::ostream& operator<<(std::ostream& os, const Quat& q) {

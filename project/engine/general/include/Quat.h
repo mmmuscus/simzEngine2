@@ -66,10 +66,10 @@ public:
 	glm::vec3 rotate(const glm::vec3& vec) const;
 
 	// Conversions
-	glm::mat4 toMat();
-	void setFromMat(glm::mat4 mat);
-	glm::vec3 toEuler();
-	void setFromEuler(glm::vec3 eul);
+	static glm::mat4 toMat(Quat q);
+	static Quat fromMat(glm::mat4 mat);
+	static glm::vec3 toEuler(Quat q);
+	static Quat fromEuler(glm::vec3 eul);
 };
 
 std::ostream& operator<<(std::ostream& os, const Quat& q);
