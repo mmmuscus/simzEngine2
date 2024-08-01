@@ -85,7 +85,7 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
     ImGui::Text("Object %d:", obj->getObjectNumber());
 
     float pos[3] = { obj->getPos().x, obj->getPos().y, obj->getPos().z };
-    float quat[4] = { obj->getQt().x, obj->getQt().y, obj->getQt().z, obj->getQt().w };
+    float quat[4] = { obj->getQuaternion().x, obj->getQuaternion().y, obj->getQuaternion().z, obj->getQuaternion().w };
     float rot[3] = { obj->getRotation().x, obj->getRotation().y, obj->getRotation().z };
     float scale[3] = { obj->getScale().x, obj->getScale().y, obj->getScale().z };
 
@@ -95,7 +95,7 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
     if (ImGui::DragFloat4("Quaternions", quat, 0.01f)) {
         Quat q = Quat(quat[0], quat[1], quat[2], quat[3]);
         q.normalize();
-        obj->setQt(q);
+        obj->setQuaternion(q);
     }
     
     if (ImGui::DragFloat3("Rotation", rot, 0.01f)) {

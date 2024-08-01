@@ -56,6 +56,7 @@ public:
 	// Length
 	float getLength() const;
 	void normalize();
+	Quat normalized();
 
 	// Conjugation
 	// With unit quaternions the inverse of the quaternion is equal to its conjugate

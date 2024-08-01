@@ -95,6 +95,10 @@ float Quat::getLength() const {
 
 void Quat::normalize() {
 	float len = this->getLength();
+
+	if (glm::epsilonEqual(len, 1.0f, EPSILON))
+		return;
+
 	if (glm::epsilonEqual(len, 0.0f, EPSILON)) {
 		x = y = z = w = 0.0f;
 	}
@@ -104,6 +108,12 @@ void Quat::normalize() {
 		z /= len;
 		w /= len;
 	}
+}
+
+Quat Quat::normalized() {
+	Quat ret = *this;
+	ret.normalize();
+	return ret;
 }
 
 // Conjugation
