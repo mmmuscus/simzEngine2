@@ -1,6 +1,8 @@
 #ifndef GAME_OBJECT_H_
 #define GAME_OBJECT_H_
 
+#define _USE_MATH_DEFINES
+
 #include "../../general/include/timer.h"
 #include "../../general/include/Quat.h"
 
@@ -18,6 +20,8 @@ private:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	// TODO: IMPLEMENT QUATERNIONS
 	Quat quaternion = Quat(0.0f, 0.0f, 0.0f, 1.0f);
+	// Needed for converting Quaternion to Euler
+	bool outsideRange = false;
 	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	// Model matrix:
@@ -99,13 +103,16 @@ public:
 
 	glm::vec3 getPos() { return pos; }
 	Quat getQuaternion() { return quaternion; }
-	glm::vec3 getEuler() { return Quat::toEuler(quaternion); }
+	bool getOutsideRange() { return outsideRange; }
 	glm::vec3 getRotation() { return rotation; }
 	glm::vec3 getScale() { return scale; }
 	uint32_t getObjectNumber() { return objectNumber; }
 	vulkanObject* getVulkanObject() { return vkObject; }
 	vulkanModelData* getModelData() { return modelData; }
 
+	void setOutsideRange(float y);
+	glm::vec3 getEuler();
+	glm::vec3 getEulerWithFlag();
 	void calculateModelMatrix();
 	void updateModelTranslation(uint32_t currentFrame);
 

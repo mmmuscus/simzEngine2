@@ -1,6 +1,6 @@
 #include "../include/Quat.h"
 
-const float EPSILON = 0.0001f;
+const float EPSILON = 0.000001f;
 
 // Comparisons
 bool Quat::operator==(const Quat& q) const {
@@ -224,17 +224,16 @@ Quat Quat::fromMat(glm::mat4 mat) {
 
 // https://github.com/mrdoob/three.js/blob/dev/src/math/Quaternion.js
 // Got here from: https://www.andre-gaschler.com/rotationconverter/
+// Limitation: ret.y is in range of [-PI/2, PI/2]
 glm::vec3 Quat::toEuler(Quat q) {
 	// Three.js version:
 	glm::vec3 ret;
 
-	float testValue = q.x * q.z + q.w * q.y;
+	float testValue = 2.0f * (q.x * q.z + q.w * q.y);
 
-	// Is clamp between -1, 1 needed? 
-	// https://github.com/mrdoob/three.js/blob/dev/src/math/Euler.js#L105
-	ret.y = asinf(2.0f * testValue);
+	ret.y = asinf(std::clamp(testValue, -1.0f, 1.0f));
 
-	if (2.0f * testValue < 1.0f - EPSILON) {
+	if (abs(testValue) < 1.0f) {
 		float yy = q.y * q.y;
 
 		ret.x = atan2f(-2.0f * (q.y * q.z - q.w * q.x), 1.0f - 2.0f * (q.x * q.x + yy));
@@ -247,6 +246,40 @@ glm::vec3 Quat::toEuler(Quat q) {
 
 	return ret;
 }
+
+// Flag tells us y is outside [-PI/2, PI/2]
+glm::vec3 Quat::toEulerWithFlag(Quat q, bool outsideRange) {
+	glm::vec3 ret;
+
+	float testValue = 2.0f * (q.x * q.z + q.w * q.y);
+
+	ret.y = asinf(std::clamp(testValue, -1.0f, 1.0f));
+
+	if (abs(testValue) < 1.0f) {
+		float yy = q.y * q.y;
+
+		ret.x = atan2f(-2.0f * (q.y * q.z - q.w * q.x), 1.0f - 2.0f * (q.x * q.x + yy));
+		ret.z = atan2f(-2.0f * (q.x * q.y - q.w * q.z), 1.0f - 2.0f * (yy + q.z * q.z));
+		if (outsideRange) {
+			ret.x += M_PI;
+			ret.z += M_PI;
+			// Shifts range of asin from [-PI/2, PI/2] to [PI/2, 3PI/2]
+			ret.y = M_PI - ret.y;
+
+			// 3PI/2 doesnt play nice with the conversion algo, so we shift it back down
+			if (ret.y > M_PI)
+				ret.y -= 2.0f * M_PI;
+		}
+	}
+	else {
+		ret.x = atan2f(2.0f * (q.y * q.z + q.w * q.x), 1.0f - 2.0f * (q.x * q.x + q.z * q.z));
+		ret.z = 0;
+	}
+
+	return ret;
+}
+
+
 
 // https://github.com/mrdoob/three.js/blob/dev/src/math/Quaternion.js
 // Got here from: https://www.andre-gaschler.com/rotationconverter/

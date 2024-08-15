@@ -12,6 +12,7 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <algorithm>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/epsilon.hpp>
@@ -70,6 +71,8 @@ public:
 	static glm::mat4 toMat(Quat q);
 	static Quat fromMat(glm::mat4 mat);
 	static glm::vec3 toEuler(Quat q);
+	// Flag tells us if y is are outside [-PI/2, PI/2]
+	static glm::vec3 toEulerWithFlag(Quat q, bool outsideRange);
 	static Quat fromEuler(glm::vec3 eul);
 };
 
