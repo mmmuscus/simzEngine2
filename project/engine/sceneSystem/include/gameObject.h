@@ -22,7 +22,6 @@ private:
 	Quat quaternion = Quat(0.0f, 0.0f, 0.0f, 1.0f);
 	// Needed for converting Quaternion to Euler
 	bool outsideRange = false;
-	glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	// Model matrix:
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -48,8 +47,12 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(_modelData),
-		pos(_pos), rotation(_rotation), scale(_scale)
-	{};
+		pos(_pos), scale(_scale)
+	{
+		std::cout << "vkObject" << std::endl;
+		setOutsideRange(_rotation.y);
+		quaternion = Quat::fromEuler(_rotation);
+	};
 
 	gameObject(
 		vk::Device* device, vulkanObject* _vkObject,
@@ -61,8 +64,12 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), scale(_scale)
 	{
+		std::cout << "Device" << std::endl;
+		setOutsideRange(_rotation.y);
+		quaternion = Quat::fromEuler(_rotation);
+
 		modelData->init(
 			device,
 			meshManager->getMeshDatas()[meshIndex],
@@ -81,8 +88,12 @@ public:
 	) :
 		sceneTimer(nullptr),
 		vkObject(_vkObject), modelData(new vulkanModelData()),
-		pos(_pos), rotation(_rotation), scale(_scale)
+		pos(_pos), scale(_scale)
 	{
+		std::cout << "Instance" << std::endl;
+		setOutsideRange(_rotation.y);
+		quaternion = Quat::fromEuler(_rotation);
+
 		modelData->init(
 			instance,
 			meshManager, meshPath, uniformBuffer,
@@ -94,7 +105,6 @@ public:
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }
 	void setQuaternion(Quat _quaternion) { quaternion = _quaternion.normalized(); }
-	void setRotation(glm::vec3 _rotation) { rotation = _rotation; }
 	void setScale(glm::vec3 _scale) { scale = _scale; }
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
@@ -104,7 +114,6 @@ public:
 	glm::vec3 getPos() { return pos; }
 	Quat getQuaternion() { return quaternion; }
 	bool getOutsideRange() { return outsideRange; }
-	glm::vec3 getRotation() { return rotation; }
 	glm::vec3 getScale() { return scale; }
 	uint32_t getObjectNumber() { return objectNumber; }
 	vulkanObject* getVulkanObject() { return vkObject; }
