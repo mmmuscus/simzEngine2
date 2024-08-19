@@ -13,7 +13,7 @@
 
 #include "../../resourceManager/include/meshDataManager.h"
 #include "../../resourceManager/include/textureDataManager.h"
-#include "../../resourceManager/include/vulkanObjectManager.h"
+#include "../../resourceManager/include/vulkanPipelineManager.h"
 
 // The base implementation of the class havily relies on this tutorial:
 // https://frguthmann.github.io/posts/vulkan_imgui
@@ -40,10 +40,10 @@ private:
 	// Manager selectors:
 	int currentMeshItem = 0;
 	int currentTextureItem = 0;
-	int currentVulkanObjectItem = 0;
+	int currentVulkanPipelineItem = 0;
 
 	// Managers:
-	vulkanObjectManager* objectManager;
+	vulkanPipelineManager* pipelineManager;
 	meshDataManager* meshManager;
 	textureDataManager* textureManager;
 
@@ -53,13 +53,13 @@ public:
 	void destroyFramebuffers();
 
 	void init(GLFWwindow* _window, vulkanInstance* _instance, vulkanSurface* _surface,
-		vulkanObjectManager* _objectManager, meshDataManager* _meshManager, textureDataManager* _textureManager
+		vulkanPipelineManager* _pipelineManager, meshDataManager* _meshManager, textureDataManager* _textureManager
 	);
 	
 	void recreateFramebuffers(vulkanSurface* _surface);
 
 	void drawGui(
-		scene* currScene, vulkanInstance* instance, vulkanObject* obj,
+		scene* currScene, vulkanInstance* instance, vulkanPipeline* pipeline,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
 	void drawFrame(vulkanSurface* _surface, uint32_t imageIndex, size_t currentFrame);
@@ -71,13 +71,13 @@ private:
 	void initCommandPool(QueueFamilyIndices queueFamilyIndices);
 	void initCommandBuffers();
 
-	void initEditor(vulkanObjectManager* _objectManager,
+	void initEditor(vulkanPipelineManager* _pipelineManager,
 		meshDataManager* _meshManager, textureDataManager* _textureManager
 	);
 
 	void showGui(
 		scene* currScene,
-		vulkanInstance* instance, vulkanObject* obj,
+		vulkanInstance* instance, vulkanPipeline* pipeline,
 		vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 	);
 	void showObjectEditGui(gameObject* obj);

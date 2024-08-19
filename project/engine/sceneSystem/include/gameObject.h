@@ -6,7 +6,7 @@
 #include "../../general/include/timer.h"
 #include "../../general/include/Quat.h"
 
-#include "../../vulkanWrappers/include/vulkanObject.h"
+#include "../../vulkanWrappers/include/vulkanPipeline.h"
 #include "../../vulkanWrappers/include/vulkanMeshData.h"
 #include "../../vulkanWrappers/include/vulkanTextureData.h"
 #include "../../vulkanWrappers/include/vulkanModelData.h"
@@ -33,20 +33,20 @@ private:
 	timer* sceneTimer;
 
 	// vulkan buffers, pipeline
-	vulkanObject* vkObject;
+	vulkanPipeline* vkPipeline;
 	vulkanModelData* modelData;
 
 public:
-	gameObject() : sceneTimer(nullptr), vkObject(nullptr), modelData(nullptr) {}
+	gameObject() : sceneTimer(nullptr), vkPipeline(nullptr), modelData(nullptr) {}
 	gameObject(
-		vulkanObject* _vkObject,
+		vulkanPipeline* _vkPipeline,
 		vulkanModelData* _modelData,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
 		sceneTimer(nullptr),
-		vkObject(_vkObject), modelData(_modelData),
+		vkPipeline(_vkPipeline), modelData(_modelData),
 		pos(_pos), scale(_scale)
 	{
 		setOutsideRange(_rotation.y);
@@ -54,7 +54,7 @@ public:
 	};
 
 	gameObject(
-		vk::Device* device, vulkanObject* _vkObject,
+		vk::Device* device, vulkanPipeline* _vkPipeline,
 		meshDataManager* meshManager, size_t meshIndex,
 		textureDataManager* textureManager, size_t textureIndex,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -62,7 +62,7 @@ public:
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
 		sceneTimer(nullptr),
-		vkObject(_vkObject), modelData(new vulkanModelData()),
+		vkPipeline(_vkPipeline), modelData(new vulkanModelData()),
 		pos(_pos), scale(_scale)
 	{
 		setOutsideRange(_rotation.y);
@@ -72,12 +72,12 @@ public:
 			device,
 			meshManager->getMeshDatas()[meshIndex],
 			textureManager->getTextureDatas()[textureIndex],
-			vkObject->getModelDescriptorSetLayout(), vkObject->getModelDescriptorPool()
+			vkPipeline->getModelDescriptorSetLayout(), vkPipeline->getModelDescriptorPool()
 		);
 		calculateModelMatrix();
 	}
 	gameObject(
-		vulkanInstance* instance, vulkanObject* _vkObject,
+		vulkanInstance* instance, vulkanPipeline* _vkPipeline,
 		meshDataManager* meshManager, std::string meshPath, vulkanDynamicUniformBuffer* uniformBuffer,
 		textureDataManager* textureManager, std::string texturePath, vulkanTextureSampler* textureSampler,
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -85,7 +85,7 @@ public:
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
 		sceneTimer(nullptr),
-		vkObject(_vkObject), modelData(new vulkanModelData()),
+		vkPipeline(_vkPipeline), modelData(new vulkanModelData()),
 		pos(_pos), scale(_scale)
 	{
 		setOutsideRange(_rotation.y);
@@ -95,7 +95,7 @@ public:
 			instance,
 			meshManager, meshPath, uniformBuffer,
 			textureManager, texturePath, textureSampler,
-			vkObject->getModelDescriptorSetLayout(), vkObject->getModelDescriptorPool()
+			vkPipeline->getModelDescriptorSetLayout(), vkPipeline->getModelDescriptorPool()
 		);
 		calculateModelMatrix();
 	}
@@ -105,7 +105,7 @@ public:
 	void setScale(glm::vec3 _scale) { scale = _scale; }
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
-	void setVulkanObject(vulkanObject* _vkObject) { vkObject = _vkObject; }
+	void setVulkanPipeline(vulkanPipeline* _vkPipeline) { vkPipeline = _vkPipeline; }
 	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 
 	glm::vec3 getPos() { return pos; }
@@ -113,7 +113,7 @@ public:
 	bool getOutsideRange() { return outsideRange; }
 	glm::vec3 getScale() { return scale; }
 	uint32_t getObjectNumber() { return objectNumber; }
-	vulkanObject* getVulkanObject() { return vkObject; }
+	vulkanPipeline* getVulkanPipeline() { return vkPipeline; }
 	vulkanModelData* getModelData() { return modelData; }
 
 	void setOutsideRange(float y);

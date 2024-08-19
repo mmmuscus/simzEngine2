@@ -1,10 +1,10 @@
-#include "../include/vulkanObject.h"
+#include "../include/vulkanPipeline.h"
 
-vulkanObject::~vulkanObject() {
+vulkanPipeline::~vulkanPipeline() {
     destroy();
 }
 
-void vulkanObject::destroy() {
+void vulkanPipeline::destroy() {
     // Descriptor Pools:
     device->destroyDescriptorPool(modelDescriptorPool);
     modelDescriptorPool = VK_NULL_HANDLE;
@@ -24,7 +24,7 @@ void vulkanObject::destroy() {
     pipelineLayout = VK_NULL_HANDLE;
 }
 
-void vulkanObject::init(
+void vulkanPipeline::init(
     std::string _name, vk::Device* _device,
     vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
     std::string vertexShaderPath, std::string fragmentShaderPath
@@ -38,7 +38,7 @@ void vulkanObject::init(
     );
 }
 
-void vulkanObject::initPipeline(
+void vulkanPipeline::initPipeline(
     vk::Extent2D extent, vk::RenderPass renderPass, vk::SampleCountFlagBits msaaSamples,
     std::string vertexShaderPath, std::string fragmentShaderPath
 ) {
@@ -178,14 +178,14 @@ void vulkanObject::initPipeline(
     }
 }
 
-void vulkanObject::initDescriptors() {
+void vulkanPipeline::initDescriptors() {
     initSceneDescriptorSetLayout();
     initSceneDescriptorPool();
     initModelDescriptorSetLayout();
     initModelDescriptorPool();
 }
 
-void vulkanObject::initSceneDescriptorSetLayout() {
+void vulkanPipeline::initSceneDescriptorSetLayout() {
     auto sceneLayoutBinding = vk::DescriptorSetLayoutBinding(
         0,                                              // binding
         vk::DescriptorType::eUniformBuffer, 1,          // descriptor type, count
@@ -208,7 +208,7 @@ void vulkanObject::initSceneDescriptorSetLayout() {
     }
 }
 
-void vulkanObject::initSceneDescriptorPool() {
+void vulkanPipeline::initSceneDescriptorPool() {
     std::array<vk::DescriptorPoolSize, 1> poolSizes = {
         vk::DescriptorPoolSize(
             vk::DescriptorType::eUniformBuffer,
@@ -229,7 +229,7 @@ void vulkanObject::initSceneDescriptorPool() {
     }
 }
 
-void vulkanObject::initModelDescriptorSetLayout() {
+void vulkanPipeline::initModelDescriptorSetLayout() {
     auto modelLayoutBinding = vk::DescriptorSetLayoutBinding(
         0,                                              // binding
         vk::DescriptorType::eUniformBufferDynamic, 1,   // descriptor type, count
@@ -262,7 +262,7 @@ void vulkanObject::initModelDescriptorSetLayout() {
     }
 }
 
-void vulkanObject::initModelDescriptorPool() {
+void vulkanPipeline::initModelDescriptorPool() {
     std::array<vk::DescriptorPoolSize, 2> poolSizes = {
         vk::DescriptorPoolSize(
             vk::DescriptorType::eUniformBufferDynamic,
@@ -287,7 +287,7 @@ void vulkanObject::initModelDescriptorPool() {
     }
 }
 
-vk::UniqueShaderModule vulkanObject::createShaderModule(const std::vector<char>& code) {
+vk::UniqueShaderModule vulkanPipeline::createShaderModule(const std::vector<char>& code) {
     try {
         return device->createShaderModuleUnique({
             vk::ShaderModuleCreateFlags(),

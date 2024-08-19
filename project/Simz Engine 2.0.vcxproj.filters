@@ -36,7 +36,7 @@
     <ClCompile Include="engine\vulkanWrappers\source\vulkanSurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\vulkanWrappers\source\vulkanObject.cpp">
+    <ClCompile Include="engine\vulkanWrappers\source\vulkanPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\vulkanWrappers\source\vulkanRenderer.cpp">
@@ -140,7 +140,7 @@
     <ClInclude Include="engine\vulkanWrappers\include\vulkanSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\vulkanWrappers\include\vulkanObject.h">
+    <ClInclude Include="engine\vulkanWrappers\include\vulkanPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\vulkanWrappers\include\vulkanRenderer.h">
@@ -209,7 +209,7 @@
     <ClInclude Include="engine\resourceManager\include\textureDataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\resourceManager\include\vulkanObjectManager.h">
+    <ClInclude Include="engine\resourceManager\include\vulkanPipelineManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\physicsSystem\include\Collider.h">

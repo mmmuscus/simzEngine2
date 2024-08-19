@@ -2,7 +2,7 @@
 
 void imGuiInstance::showGui(
     scene* currScene,
-    vulkanInstance* instance, vulkanObject* obj,
+    vulkanInstance* instance, vulkanPipeline* pipeline,
     vulkanDynamicUniformBuffer* buffer, vulkanTextureSampler* sampler
 ) {
     // Adding new objects by path:
@@ -15,7 +15,7 @@ void imGuiInstance::showGui(
         std::string currentTexturePath(texturePath);
         printf("Adding object: %s, %s\n", currentMeshPath.c_str(), currentTexturePath.c_str());
         currScene->addObject(new gameObject(
-            instance, obj,
+            instance, pipeline,
             meshManager, currentMeshPath, buffer,
             textureManager, currentTexturePath, sampler
         ));
@@ -45,11 +45,11 @@ void imGuiInstance::showGui(
         }
         ImGui::EndCombo();
     }
-    if (ImGui::BeginCombo("Pipelines", objectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str())) {
-        for (size_t i = 0; i < objectManager->getVulkanObjects().size(); i++) {
-            bool isSelected = i == currentVulkanObjectItem;
-            if (ImGui::Selectable(objectManager->getVulkanObjects()[i]->getName().c_str()))
-                currentVulkanObjectItem = i;
+    if (ImGui::BeginCombo("Pipelines", pipelineManager->getVulkanPipelines()[currentVulkanPipelineItem]->getName().c_str())) {
+        for (size_t i = 0; i < pipelineManager->getVulkanPipelines().size(); i++) {
+            bool isSelected = i == currentVulkanPipelineItem;
+            if (ImGui::Selectable(pipelineManager->getVulkanPipelines()[i]->getName().c_str()))
+                currentVulkanPipelineItem = i;
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
         }
@@ -60,10 +60,10 @@ void imGuiInstance::showGui(
             "Adding object: %s, %s, %s\n",
             meshManager->getMeshDatas()[currentMeshItem]->getName().c_str(),
             textureManager->getTextureDatas()[currentTextureItem]->getName().c_str(),
-            objectManager->getVulkanObjects()[currentVulkanObjectItem]->getName().c_str()
+            pipelineManager->getVulkanPipelines()[currentVulkanPipelineItem]->getName().c_str()
         );
         currScene->addObject(new gameObject(
-            instance->getDevicePtr(), objectManager->getVulkanObjects()[currentVulkanObjectItem],
+            instance->getDevicePtr(), pipelineManager->getVulkanPipelines()[currentVulkanPipelineItem],
             meshManager, currentMeshItem,
             textureManager, currentTextureItem
         ));
@@ -94,7 +94,6 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
         obj->setQuaternion(q);
     }
 
-    // Using quaternion from gameObject:
     glm::vec3 glmRot = obj->getEulerWithFlag();
     float qRot[3] = { glmRot.x, glmRot.y, glmRot.z };
     if (ImGui::DragFloat3("Rotation", qRot, 0.01f)) {
@@ -121,8 +120,8 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
             if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str())) {
                 obj->getModelData()->setTextureData(textureManager->getTextureDatas()[i]);
                 obj->getModelData()->initDescriptorSets(
-                    obj->getVulkanObject()->getModelDescriptorSetLayout(),
-                    obj->getVulkanObject()->getModelDescriptorPool()
+                    obj->getVulkanPipeline()->getModelDescriptorSetLayout(),
+                    obj->getVulkanPipeline()->getModelDescriptorPool()
                 );
             }
         }
@@ -130,10 +129,10 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
         ImGui::EndCombo();
     }
     // Pipeline
-    if (ImGui::BeginCombo("Pipeline", obj->getVulkanObject()->getName().c_str())) {
-        for (size_t i = 0; i < objectManager->getVulkanObjects().size(); i++) 
-            if (ImGui::Selectable(objectManager->getVulkanObjects()[i]->getName().c_str()))
-                obj->setVulkanObject(objectManager->getVulkanObjects()[i]);
+    if (ImGui::BeginCombo("Pipeline", obj->getVulkanPipeline()->getName().c_str())) {
+        for (size_t i = 0; i < pipelineManager->getVulkanPipelines().size(); i++)
+            if (ImGui::Selectable(pipelineManager->getVulkanPipelines()[i]->getName().c_str()))
+                obj->setVulkanPipeline(pipelineManager->getVulkanPipelines()[i]);
 
         ImGui::EndCombo();
     }

@@ -1,5 +1,5 @@
-#ifndef VULKAN_RENDERER_H_
-#define VULKAN_RENDERER_H_
+#ifndef VULKAN_DRAWER_H_
+#define VULKAN_DRAWER_H_
 
 #include "generalIncludes.h"
 
@@ -69,4 +69,4 @@ private:
 
 };
 
-#endif // VULKAN_RENDERER_H_
+#endif // VULKAN_DRAWER_H_

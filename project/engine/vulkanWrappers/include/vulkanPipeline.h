@@ -1,5 +1,5 @@
-#ifndef VULKAN_OBJECT_H_
-#define VULKAN_OBJECT_H_
+#ifndef VULKAN_PIPELINE_H_
+#define VULKAN_PIPELINE_H_
 
 #include "generalIncludes.h"
 #include "modelDataIncludes.h"
@@ -31,7 +31,7 @@ static std::vector<char> readFile(const std::string& filename) {
     return buffer;
 }
 
-class vulkanObject {
+class vulkanPipeline {
 private:
     // Name:
     std::string name;
@@ -48,7 +48,7 @@ private:
     vk::Device* device;
 
 public:
-    ~vulkanObject();
+    ~vulkanPipeline();
     void destroy();
     
     void setDevice(vk::Device* _device) { device = _device; }
@@ -84,4 +84,4 @@ private:
     vk::UniqueShaderModule createShaderModule(const std::vector<char>& code);
 };
 
-#endif // VULKAN_OBJECT_H_
+#endif // VULKAN_PIPELINE_H_

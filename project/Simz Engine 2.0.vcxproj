@@ -186,7 +186,7 @@
     <ClCompile Include="engine\vulkanWrappers\source\vulkanInstanceMisc.cpp" />
     <ClCompile Include="engine\vulkanWrappers\source\vulkanMeshData.cpp" />
     <ClCompile Include="engine\vulkanWrappers\source\vulkanModelData.cpp" />
-    <ClCompile Include="engine\vulkanWrappers\source\vulkanObject.cpp" />
+    <ClCompile Include="engine\vulkanWrappers\source\vulkanPipeline.cpp" />
     <ClCompile Include="engine\vulkanWrappers\source\vulkanDrawer.cpp" />
     <ClCompile Include="engine\vulkanWrappers\source\vulkanRenderer.cpp" />
     <ClCompile Include="engine\vulkanWrappers\source\vulkanSceneData.cpp" />
@@ -217,14 +217,14 @@
     <ClInclude Include="engine\resourceManager\include\resourceManagerGeneralIncludes.h" />
     <ClInclude Include="engine\resourceManager\include\inputManager.h" />
     <ClInclude Include="engine\resourceManager\include\textureDataManager.h" />
-    <ClInclude Include="engine\resourceManager\include\vulkanObjectManager.h" />
+    <ClInclude Include="engine\resourceManager\include\vulkanPipelineManager.h" />
     <ClInclude Include="engine\resourceManager\include\windowManager.h" />
     <ClInclude Include="engine\vulkanWrappers\include\generalIncludes.h" />
     <ClInclude Include="engine\vulkanWrappers\include\modelDataIncludes.h" />
     <ClInclude Include="engine\vulkanWrappers\include\vulkanDynamicUniformBuffer.h" />
     <ClInclude Include="engine\vulkanWrappers\include\vulkanMeshData.h" />
     <ClInclude Include="engine\vulkanWrappers\include\vulkanModelData.h" />
-    <ClInclude Include="engine\vulkanWrappers\include\vulkanObject.h" />
+    <ClInclude Include="engine\vulkanWrappers\include\vulkanPipeline.h" />
     <ClInclude Include="engine\vulkanWrappers\include\vulkanDrawer.h" />
     <ClInclude Include="engine\vulkanWrappers\include\vulkanRenderer.h" />
     <ClInclude Include="engine\vulkanWrappers\include\vulkanSceneData.h" />

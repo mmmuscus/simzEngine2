@@ -14,11 +14,11 @@
 #include "engine/resourceManager/include/inputManager.h"
 #include "engine/resourceManager/include/meshDataManager.h"
 #include "engine/resourceManager/include/textureDataManager.h"
-#include "engine/resourceManager/include/vulkanObjectManager.h"
+#include "engine/resourceManager/include/vulkanPipelineManager.h"
 
 #include "engine/vulkanWrappers/include/vulkanInstance.h"
 #include "engine/vulkanWrappers/include/vulkanSurface.h"
-#include "engine/vulkanWrappers/include/vulkanObject.h"
+#include "engine/vulkanWrappers/include/vulkanPipeline.h"
 #include "engine/vulkanWrappers/include/vulkanRenderer.h"
 #include "engine/vulkanWrappers/include/vulkanDrawer.h"
 #include "engine/vulkanWrappers/include/vulkanMeshData.h"
@@ -41,7 +41,7 @@ public:
         initVulkan();
         if (enableImGuiDebugger)
             imGuiInst.init(windowMngr.getWindow(), &instance, &surface,
-                &vulkanObjectMngr, &meshMngr, &textureMngr);
+                &vulkanPipelineMngr, &meshMngr, &textureMngr);
         initScene();
 
         mainLoop();
@@ -60,13 +60,13 @@ private:
 
     meshDataManager meshMngr;
     textureDataManager textureMngr;
-    vulkanObjectManager vulkanObjectMngr;
+    vulkanPipelineManager vulkanPipelineMngr;
 
     // Vulkan variables:
     vulkanInstance instance;
     vulkanSurface surface;
-    vulkanObject* diffuseObject;
-    vulkanObject* negativeObject;
+    vulkanPipeline* diffusePipeline;
+    vulkanPipeline* negativePipeline;
     vulkanRenderer renderer;
     vulkanDrawer drawer;
     vulkanDynamicUniformBuffer modelsBuffer;
@@ -110,14 +110,14 @@ private:
         renderer.initRenderPass(surface.getFormat());
 
         // DIFFUSE OBJECT:
-        diffuseObject = vulkanObjectMngr.addVulkanObject(
+        diffusePipeline = vulkanPipelineMngr.addVulkanPipeline(
             "DIFFUSE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
-        negativeObject = vulkanObjectMngr.addVulkanObject(
+        negativePipeline = vulkanPipelineMngr.addVulkanPipeline(
             "NEGATIVE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
             "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/negativeFrag.spv"
@@ -172,7 +172,7 @@ private:
         renderer.destroyColorResources();
         
         // NEGATIVE OBJECT + DIFFUSE OBJECT:
-        vulkanObjectMngr.destroyList();
+        vulkanPipelineMngr.destroyList();
         
         // Render Pass + Depth Resources:
         // Msaa Samples is not a vulkan object
@@ -197,13 +197,13 @@ private:
         // Scene setup:
         mainScene.init(
             &instance, 
-            diffuseObject->getSceneDescriptorSetLayout(),
-            diffuseObject->getSceneDescriptorPool()
+            diffusePipeline->getSceneDescriptorSetLayout(),
+            diffusePipeline->getSceneDescriptorPool()
         );
 
         // Add objects
         mainScene.addObject(new gameObject(
-            &instance, diffuseObject,
+            &instance, diffusePipeline,
             &meshMngr, "assets/models/viking_room.objj", &modelsBuffer,
             &textureMngr, "assets/textures/viking_room.png", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.0f),
@@ -211,7 +211,7 @@ private:
             glm::vec3(1.0f, 1.0f, 1.0f)
         ));
         /*mainScene.addObject(new gameObject(
-            &instance, negativeObject,
+            &instance, negativePipeline,
             &meshMngr, "assets/models/tank.objj", &modelsBuffer,
             &textureMngr, "assets/textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
@@ -266,7 +266,7 @@ private:
 
             if (enableImGuiDebugger) {
                 if (!surface.getShouldRecreateSwapChain())
-                    imGuiInst.drawGui(&mainScene, &instance, diffuseObject,
+                    imGuiInst.drawGui(&mainScene, &instance, diffusePipeline,
                         &modelsBuffer, &textureSampler);
 
                 imGuiInst.drawFrame(&surface, drawer.getImageIndex(), drawer.getCurrentFrame());

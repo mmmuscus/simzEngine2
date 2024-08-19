@@ -1,5 +1,5 @@
-#ifndef VULKAN_RENDER_PASS_H_
-#define VULKAN_RENDER_PASS_H_
+#ifndef VULKAN_RENDERER_H_
+#define VULKAN_RENDERER_H_
 
 #include "generalIncludes.h"
 
@@ -50,4 +50,4 @@ private:
 	vk::SampleCountFlagBits getMaxUsableSampleCount(vk::PhysicalDevice physicalDevice);
 };
 
-#endif // VULKAN_RENDER_PASS_H_
+#endif // VULKAN_RENDERER_H_
