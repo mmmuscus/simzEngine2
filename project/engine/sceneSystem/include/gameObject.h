@@ -49,7 +49,6 @@ public:
 		vkObject(_vkObject), modelData(_modelData),
 		pos(_pos), scale(_scale)
 	{
-		std::cout << "vkObject" << std::endl;
 		setOutsideRange(_rotation.y);
 		quaternion = Quat::fromEuler(_rotation);
 	};
@@ -66,7 +65,6 @@ public:
 		vkObject(_vkObject), modelData(new vulkanModelData()),
 		pos(_pos), scale(_scale)
 	{
-		std::cout << "Device" << std::endl;
 		setOutsideRange(_rotation.y);
 		quaternion = Quat::fromEuler(_rotation);
 
@@ -90,7 +88,6 @@ public:
 		vkObject(_vkObject), modelData(new vulkanModelData()),
 		pos(_pos), scale(_scale)
 	{
-		std::cout << "Instance" << std::endl;
 		setOutsideRange(_rotation.y);
 		quaternion = Quat::fromEuler(_rotation);
 
