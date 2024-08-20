@@ -76,19 +76,24 @@ Quat Quat::operator*=(float scalar) {
 
 // From: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
 Quat Quat::operator*(Quat q) const {
+	std::cout << "*" << std::endl;
+	std::cout << q << std::endl;
+	float ww = w * q.w - x * q.x - y * q.y - z * q.z;
+	float xx = w * q.x + x * q.w - y * q.z + z * q.y;
+	float yy = w * q.y + x * q.z + y * q.w - z * q.x;
+	float zz = w * q.z - x * q.y + y * q.x + z * q.w;
 	return Quat(
-		w * q.x + x * q.w + y * q.z - z * q.y,
-		w * q.y + y * q.w + z * q.x - x * q.z,
-		w * q.z + z * q.w + x * q.y - y * q.x,
-		w * q.w - x * q.x - y * q.y - z * q.z
+		xx, yy, zz, ww
 	);
 }
 
 Quat Quat::operator*=(Quat q) {
-	float newX = w * q.x + x * q.w + y * q.z - z * q.y;
-	float newY = w * q.y + y * q.w + z * q.x - x * q.z;
-	float newZ = w * q.z + z * q.w + x * q.y - y * q.x;
-	float newW = w * q.w - x * q.x - y * q.y - z * q.z;
+	std::cout << "*=" << std::endl;
+	std::cout << q << std::endl;
+	float newX = q.w * x + q.x * w - q.y * z + q.z * y;
+	float newY = q.w * y + q.x * z + q.y * w - q.z * x;
+	float newZ = q.w * z - q.x * y + q.y * x + q.z * w;
+	float newW = q.w * w - q.x * x - q.y * y - q.z * z;
 	x = newX;
 	y = newY;
 	z = newZ;
@@ -135,16 +140,29 @@ void Quat::conjugate() {
 
 // Rotation
 glm::vec3 Quat::rotate(const glm::vec3& vec) const {
-	float c1 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
-	// This might be bad, I should check up on it
-	float c2 = w * w - x * x - y * y - z * z;
-	float c3 = 2 * w;
+	//float c1 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
+	//// This might be bad, I should check up on it
+	//float c2 = w * w - x * x - y * y - z * z;
+	//float c3 = 2 * w;
 
-	return glm::vec3(
-		c1 * x + c2 * vec.x + c3 * (y * vec.z - z * vec.y),
-		c1 * y + c2 * vec.y + c3 * (z * vec.x - x * vec.z),
-		c1 * z + c2 * vec.z + c3 * (x * vec.y - y * vec.x)
-	);
+	//return glm::vec3(
+	//	c1 * x + c2 * vec.x + c3 * (y * vec.z - z * vec.y),
+	//	c1 * y + c2 * vec.y + c3 * (z * vec.x - x * vec.z),
+	//	c1 * z + c2 * vec.z + c3 * (x * vec.y - y * vec.x)
+	//);
+
+	Quat vQ = Quat(vec, 0.0f);
+	Quat conj = Quat(-x, -y, -z, w);
+	Quat q = Quat(x, y, z, w);
+
+	std::cout << conj << std::endl;
+	vQ = q * vQ;
+	vQ.w = 0;
+	std::cout << vQ << std::endl;
+	vQ *= conj;
+	std::cout << vQ << std::endl;
+
+	return glm::vec3(vQ.x, vQ.y, vQ.z);
 }
 
 
@@ -270,14 +288,14 @@ glm::vec3 Quat::toEulerWithFlag(Quat q, bool outsideRange) {
 		ret.x = atan2f(-2.0f * (q.y * q.z - q.w * q.x), 1.0f - 2.0f * (q.x * q.x + yy));
 		ret.z = atan2f(-2.0f * (q.x * q.y - q.w * q.z), 1.0f - 2.0f * (yy + q.z * q.z));
 		if (outsideRange) {
-			ret.x += M_PI;
-			ret.z += M_PI;
+			ret.x += static_cast<float>(M_PI);
+			ret.z += static_cast<float>(M_PI);
 			// Shifts range of asin from [-PI/2, PI/2] to [PI/2, 3PI/2]
-			ret.y = M_PI - ret.y;
+			ret.y = static_cast<float>(M_PI); - ret.y;
 
 			// 3PI/2 doesnt play nice with the conversion algo, so we shift it back down
 			if (ret.y > M_PI)
-				ret.y -= 2.0f * M_PI;
+				ret.y -= 2.0f * static_cast<float>(M_PI);;
 		}
 	}
 	else {
