@@ -44,12 +44,7 @@ public:
                 &vulkanPipelineMngr, &meshMngr, &textureMngr);
         initScene();
 
-        //mainLoop();
-
-        glm::vec3 v = glm::vec3(1.0f, 4.0f, 2.0f);
-        Quat q = Quat(0.9106f, -0.0489f, 0.3406f, 0.2285f);
-        glm::vec3 vRot = q.rotate(v);
-        //std::cout << "X: " << vRot.x << " Y: " << vRot.y << " Z: " << vRot.z << std::endl;  
+        mainLoop();
 
         mainScene.destroy();
         if (enableImGuiDebugger)

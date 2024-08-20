@@ -51,7 +51,8 @@ public:
 	Quat operator-=(const Quat& q);
 	Quat operator-() const;
 
-	// Multiplication (scalar then quaternion)
+	// Multiplication (scalar then quaternion, for quaternion it is Hamilton product)
+	// Could look into Grassmann product
 	Quat operator*(float scalar) const;
 	Quat operator*=(float scalar);
 	Quat operator*(Quat q) const;

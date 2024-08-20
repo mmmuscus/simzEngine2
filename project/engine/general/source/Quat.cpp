@@ -76,20 +76,15 @@ Quat Quat::operator*=(float scalar) {
 
 // From: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
 Quat Quat::operator*(Quat q) const {
-	std::cout << "*" << std::endl;
-	std::cout << q << std::endl;
-	float ww = w * q.w - x * q.x - y * q.y - z * q.z;
-	float xx = w * q.x + x * q.w - y * q.z + z * q.y;
-	float yy = w * q.y + x * q.z + y * q.w - z * q.x;
-	float zz = w * q.z - x * q.y + y * q.x + z * q.w;
 	return Quat(
-		xx, yy, zz, ww
+		w * q.x + x * q.w - y * q.z + z * q.y, 
+		w * q.y + x * q.z + y * q.w - z * q.x,
+		w * q.z - x * q.y + y * q.x + z * q.w,
+		w * q.w - x * q.x - y * q.y - z * q.z
 	);
 }
 
 Quat Quat::operator*=(Quat q) {
-	std::cout << "*=" << std::endl;
-	std::cout << q << std::endl;
 	float newX = q.w * x + q.x * w - q.y * z + q.z * y;
 	float newY = q.w * y + q.x * z + q.y * w - q.z * x;
 	float newZ = q.w * z - q.x * y + q.y * x + q.z * w;
@@ -130,6 +125,7 @@ Quat Quat::normalized() {
 	return ret;
 }
 
+
 // Conjugation
 void Quat::conjugate() {
 	x = -x;
@@ -139,30 +135,26 @@ void Quat::conjugate() {
 
 
 // Rotation
+// https://gamedev.stackexchange.com/questions/28395/rotating-vector3-by-a-quaternion
+// Slightly different code: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
+// This is not working well, but its hard to check wo visualization
 glm::vec3 Quat::rotate(const glm::vec3& vec) const {
-	//float c1 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
-	//// This might be bad, I should check up on it
-	//float c2 = w * w - x * x - y * y - z * z;
-	//float c3 = 2 * w;
+	// Result is:
+	// v = 2.0f * glm::dot(u, v) * u
+	//		+ (s * s - glm::dot(u, u) * v)
+	//		+ 2.0f * s * cross(u, v)
+	// 	Where q = (u, s)
+	// 	(u * u) = 1 cos |q| = 1
 
-	//return glm::vec3(
-	//	c1 * x + c2 * vec.x + c3 * (y * vec.z - z * vec.y),
-	//	c1 * y + c2 * vec.y + c3 * (z * vec.x - x * vec.z),
-	//	c1 * z + c2 * vec.z + c3 * (x * vec.y - y * vec.x)
-	//);
+	float dotuv2 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
+	float ssMinusDotuu = w * w - 1.0f;
+	float s2 = 2.0f * w;
 
-	Quat vQ = Quat(vec, 0.0f);
-	Quat conj = Quat(-x, -y, -z, w);
-	Quat q = Quat(x, y, z, w);
-
-	std::cout << conj << std::endl;
-	vQ = q * vQ;
-	vQ.w = 0;
-	std::cout << vQ << std::endl;
-	vQ *= conj;
-	std::cout << vQ << std::endl;
-
-	return glm::vec3(vQ.x, vQ.y, vQ.z);
+	return glm::vec3(
+		dotuv2 * x + ssMinusDotuu * vec.x + s2 * (y * vec.z - z * vec.y),
+		dotuv2 * y + ssMinusDotuu * vec.y + s2 * (z * vec.x - x * vec.z),
+		dotuv2 * z + ssMinusDotuu * vec.z + s2 * (x * vec.y - y * vec.x)
+	);
 }
 
 
