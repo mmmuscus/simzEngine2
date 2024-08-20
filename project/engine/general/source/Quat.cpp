@@ -2,6 +2,15 @@
 
 const float EPSILON = 0.000001f;
 
+Quat& Quat::operator=(const Quat& q) {
+	x = q.x;
+	y = q.y;
+	z = q.z;
+	w = q.w;
+
+	return *this;
+}
+
 // Comparisons
 bool Quat::operator==(const Quat& q) const {
 	return (

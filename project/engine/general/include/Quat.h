@@ -36,6 +36,9 @@ public:
 	Quat(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
 	Quat(glm::vec3 v, float _w) : x(v.x), y(v.y), z(v.z), w(_w) {}
 	Quat(Quat& q) : x(q.x), y(q.y), z(q.z), w(q.w) {}
+	Quat(Quat&& q) : x(q.x), y(q.y), z(q.z), w(q.w) {}
+
+	Quat& operator=(const Quat& q);
 
 	// Comparisons
 	bool operator==(const Quat& q) const;
