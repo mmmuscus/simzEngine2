@@ -18,7 +18,6 @@ class gameObject {
 private:
 	// Transform vectors:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	// TODO: IMPLEMENT QUATERNIONS
 	Quat quaternion = Quat(0.0f, 0.0f, 0.0f, 1.0f);
 	// Needed for converting Quaternion to Euler
 	bool outsideRange = false;
