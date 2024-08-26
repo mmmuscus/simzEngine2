@@ -44,12 +44,18 @@ public:
                 &vulkanPipelineMngr, &meshMngr, &textureMngr);
         initScene();
 
-        mainLoop();
+        //mainLoop();
 
         mainScene.destroy();
         if (enableImGuiDebugger)
             imGuiInst.destroy();
         destroyVulkan();
+
+        Quat q = Quat(0.0f, 0.707f, 0.0f, 0.707f);
+        glm::vec3 vec = glm::vec3(1.0f, 0.0f, 0.0f);
+
+        vec = q.rotate(vec);
+        std::cout << "x: " << vec.x << " y: " << vec.y << " z: " << vec.z << std::endl;
     }
 
 private:

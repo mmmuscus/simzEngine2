@@ -74,20 +74,34 @@ Quat Quat::operator*=(float scalar) {
 	return *this;
 }
 
-// From: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
+// From: https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
 Quat Quat::operator*(Quat q) const {
+	// Hamilton product
+	// w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
+	// x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
+	// y = w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2
+	// z = w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2
+	// Here q1 is *this and q2 is q
+
 	return Quat(
-		w * q.x + x * q.w - y * q.z + z * q.y, 
-		w * q.y + x * q.z + y * q.w - z * q.x,
-		w * q.z - x * q.y + y * q.x + z * q.w,
-		w * q.w - x * q.x - y * q.y - z * q.z
+		w * q.x + x * q.w + y * q.z - z * q.y, 
+		w * q.y - x * q.z + y * q.w + z * q.x,
+		w * q.z + x * q.y - y * q.x + z * q.w,
+		w* q.w - x * q.x - y * q.y - z * q.z
 	);
 }
 
 Quat Quat::operator*=(Quat q) {
-	float newX = q.w * x + q.x * w - q.y * z + q.z * y;
-	float newY = q.w * y + q.x * z + q.y * w - q.z * x;
-	float newZ = q.w * z - q.x * y + q.y * x + q.z * w;
+	// Hamilton product
+	// w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
+	// x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
+	// y = w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2
+	// z = w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2
+	// Here q1 is q and q2 is *this
+	
+	float newX = q.w * x + q.x * w + q.y * z - q.z * y;
+	float newY = q.w * y - q.x * z + q.y * w + q.z * x;
+	float newZ = q.w * z + q.x * y - q.y * x + q.z * w;
 	float newW = q.w * w - q.x * x - q.y * y - q.z * z;
 	x = newX;
 	y = newY;
@@ -139,6 +153,11 @@ void Quat::conjugate() {
 // Slightly different code: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
 // This is not working well, but its hard to check wo visualization
 glm::vec3 Quat::rotate(const glm::vec3& vec) const {
+	// This works but is slow
+	// v' = q * v * q(-1)
+	Quat res = (*this * Quat(vec.x, vec.y, vec.z, 0.0f)) * Quat(-x, -y, -z, w);
+	return glm::vec3(res.x, res.y, res.z);
+
 	// Result is:
 	// v = 2.0f * glm::dot(u, v) * u
 	//		+ (s * s - glm::dot(u, u) * v)
@@ -146,7 +165,7 @@ glm::vec3 Quat::rotate(const glm::vec3& vec) const {
 	// 	Where q = (u, s)
 	// 	(u * u) = 1 cos |q| = 1
 
-	float dotuv2 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
+	/*float dotuv2 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
 	float ssMinusDotuu = w * w - 1.0f;
 	float s2 = 2.0f * w;
 
@@ -154,7 +173,7 @@ glm::vec3 Quat::rotate(const glm::vec3& vec) const {
 		dotuv2 * x + ssMinusDotuu * vec.x + s2 * (y * vec.z - z * vec.y),
 		dotuv2 * y + ssMinusDotuu * vec.y + s2 * (z * vec.x - x * vec.z),
 		dotuv2 * z + ssMinusDotuu * vec.z + s2 * (x * vec.y - y * vec.x)
-	);
+	);*/
 }
 
 
