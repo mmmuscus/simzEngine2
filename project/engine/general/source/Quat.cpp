@@ -152,28 +152,21 @@ void Quat::conjugate() {
 // https://gamedev.stackexchange.com/questions/28395/rotating-vector3-by-a-quaternion
 // Slightly different code: https://github.com/kromenak/gengine/blob/master/Source/Math/Quaternion.cpp
 // This is not working well, but its hard to check wo visualization
-glm::vec3 Quat::rotate(const glm::vec3& vec) const {
-	// This works but is slow
-	// v' = q * v * q(-1)
-	Quat res = (*this * Quat(vec.x, vec.y, vec.z, 0.0f)) * Quat(-x, -y, -z, w);
-	return glm::vec3(res.x, res.y, res.z);
-
-	// Result is:
+glm::vec3 Quat::rotate(const glm::vec3& vec) const {// Result is:
 	// v = 2.0f * glm::dot(u, v) * u
 	//		+ (s * s - glm::dot(u, u) * v)
 	//		+ 2.0f * s * cross(u, v)
-	// 	Where q = (u, s)
-	// 	(u * u) = 1 cos |q| = 1
+	// 	Where q = (u, s) = ((x, y, z), w)
 
-	/*float dotuv2 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
-	float ssMinusDotuu = w * w - 1.0f;
+	float dotuv2 = 2.0f * (x * vec.x + y * vec.y + z * vec.z);
+	float ssMinusDotuu = w * w - (x * x + y * y + z * z);
 	float s2 = 2.0f * w;
 
 	return glm::vec3(
 		dotuv2 * x + ssMinusDotuu * vec.x + s2 * (y * vec.z - z * vec.y),
 		dotuv2 * y + ssMinusDotuu * vec.y + s2 * (z * vec.x - x * vec.z),
 		dotuv2 * z + ssMinusDotuu * vec.z + s2 * (x * vec.y - y * vec.x)
-	);*/
+	);
 }
 
 
