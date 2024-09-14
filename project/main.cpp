@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <stdexcept>
 #include <cstdlib>
 #include <vector>
@@ -113,14 +113,14 @@ private:
         diffusePipeline = vulkanPipelineMngr.addVulkanPipeline(
             "DIFFUSE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
-            "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/diffuseFrag.spv"
+            "../../../assets/shaders/vertexShaders/diffuseVert.spv", "../../../assets/shaders/fragmentShaders/diffuseFrag.spv"
         );
 
         // NEGATIVE OBJECT:
         negativePipeline = vulkanPipelineMngr.addVulkanPipeline(
             "NEGATIVE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
-            "assets/shaders/vertexShaders/diffuseVert.spv", "assets/shaders/fragmentShaders/negativeFrag.spv"
+            "../../../assets/shaders/vertexShaders/diffuseVert.spv", "../../../assets/shaders/fragmentShaders/negativeFrag.spv"
         );
 
         // Color Resources:
@@ -159,35 +159,35 @@ private:
 
         // Texture Sampler:
         textureSampler.destroy();
-        
+
         // Sync Objects:
         drawer.destroySyncObjects();
-        
+
         // Command Buffers are only detroyed when the Command Pool is destroyed
         // Command Pool:
         instance.destroyCommandPool();
-        
+
         // Framebuffers + Color Resources:
         renderer.destroyFramebuffers();
         renderer.destroyColorResources();
-        
+
         // NEGATIVE OBJECT + DIFFUSE OBJECT:
         vulkanPipelineMngr.destroyList();
-        
+
         // Render Pass + Depth Resources:
         // Msaa Samples is not a vulkan object
         renderer.destroyRenderPass();
         renderer.destroyDepthResources();
-        
+
         // SwapChain + ImageViews:
         surface.destroyImageViews();
         surface.destroySwapChain();
-        
+
         // Device + PhysicalDevice dosent need to be destroyed explicitly
-        
+
         // Surface:
         surface.destroySurface();
-        
+
         // Callback:
         // Instance dosent need to be destroyed explicily
         instance.destroyCallback();
@@ -196,7 +196,7 @@ private:
     void initScene() {
         // Scene setup:
         mainScene.init(
-            &instance, 
+            &instance,
             diffusePipeline->getSceneDescriptorSetLayout(),
             diffusePipeline->getSceneDescriptorPool()
         );
@@ -204,8 +204,8 @@ private:
         // Add objects
         mainScene.addObject(new gameObject(
             &instance, diffusePipeline,
-            &meshMngr, "assets/models/viking_room.objj", &modelsBuffer,
-            &textureMngr, "assets/textures/viking_room.png", &textureSampler,
+            &meshMngr, "../../../assets/models/viking_room.objj", &modelsBuffer,
+            &textureMngr, "../../../assets/textures/viking_room.png", &textureSampler,
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(1.0f, 1.0f, 1.0f)

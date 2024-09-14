@@ -1,3 +1,6 @@
+# Gitignore for Microsoft Visual Studio CMAKE
+out/
+
 # Prerequisites
 *.d
 

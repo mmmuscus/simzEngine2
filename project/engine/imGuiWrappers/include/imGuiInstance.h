@@ -35,8 +35,8 @@ private:
 
 	// Variables for editor:
 	// Paths:
-	char meshPath[50] = "assets/models/tank.objj";
-	char texturePath[50] = "assets/textures/damn_texture.jpeg";
+	char meshPath[50] = "../../../assets/models/tank.objj";
+	char texturePath[50] = "../../../assets/textures/damn_texture.jpeg";
 	// Manager selectors:
 	int currentMeshItem = 0;
 	int currentTextureItem = 0;
