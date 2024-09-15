@@ -143,25 +143,28 @@ void vulkanDrawer::recordCommandBuffer(
     for (size_t i = 0; i < currScene->getObjects().size(); i++) {
         gameObject* currGameObject = currScene->getObjects()[i];
         rendererComponent* currRenderer = currGameObject->getRenderer();
-        vulkanMeshData* currMesh = currRenderer->getModelData()->getMeshData();
+        if (currRenderer != nullptr) {
+            // Only render something if there is something to render
+            vulkanMeshData* currMesh = currRenderer->getModelData()->getMeshData();
 
-        commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, currRenderer->getVulkanPipeline()->getPipeline());
+            commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, currRenderer->getVulkanPipeline()->getPipeline());
 
-        vk::Buffer vertexBuffers[] = { currMesh->getVertexBuffer() };
-        vk::DeviceSize offsets[] = { 0 };
-        commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-        commandBuffer.bindIndexBuffer(currMesh->getIndexBuffer(), 0, vk::IndexType::eUint32);
-        commandBuffer.bindDescriptorSets(
-            vk::PipelineBindPoint::eGraphics,
-            currRenderer->getVulkanPipeline()->getPipelineLayout(),
-            1,
-            currRenderer->getModelData()->getDescriptorSets()[currentFrame],
-            currGameObject->getObjectNumber() * static_cast<uint32_t>(currMesh->getUniformBuffer()->getDynamicAlignment())
-        );
-        commandBuffer.drawIndexed(
-            static_cast<uint32_t>(currMesh->getIndices().size()),
-            1, 0, 0, 0
-        );
+            vk::Buffer vertexBuffers[] = { currMesh->getVertexBuffer() };
+            vk::DeviceSize offsets[] = { 0 };
+            commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
+            commandBuffer.bindIndexBuffer(currMesh->getIndexBuffer(), 0, vk::IndexType::eUint32);
+            commandBuffer.bindDescriptorSets(
+                vk::PipelineBindPoint::eGraphics,
+                currRenderer->getVulkanPipeline()->getPipelineLayout(),
+                1,
+                currRenderer->getModelData()->getDescriptorSets()[currentFrame],
+                currGameObject->getObjectNumber() * static_cast<uint32_t>(currMesh->getUniformBuffer()->getDynamicAlignment())
+            );
+            commandBuffer.drawIndexed(
+                static_cast<uint32_t>(currMesh->getIndices().size()),
+                1, 0, 0, 0
+            );
+        }
     }
     
     commandBuffer.endRenderPass();

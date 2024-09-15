@@ -87,55 +87,65 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
 
     ImGui::Text("Object %d:", obj->getObjectNumber());
 
-    float pos[3] = { transform->getPos().x, transform->getPos().y, transform->getPos().z };
-    if (ImGui::DragFloat3("Position", pos, 0.1f))
-        transform->setPos(glm::vec3(pos[0], pos[1], pos[2]));
+    if (transform != nullptr) {
+        float pos[3] = { transform->getPos().x, transform->getPos().y, transform->getPos().z };
+        if (ImGui::DragFloat3("Position", pos, 0.1f))
+            transform->setPos(glm::vec3(pos[0], pos[1], pos[2]));
 
-    float quat[4] = { transform->getQuaternion().x, transform->getQuaternion().y, transform->getQuaternion().z, transform->getQuaternion().w};
-    if (ImGui::DragFloat4("Quaternions", quat, 0.01f)) {
-        transform->setQuaternion(Quat(quat[0], quat[1], quat[2], quat[3]));
-    }
-
-    glm::vec3 glmRot = transform->getEulerWithFlag();
-    float qRot[3] = { glmRot.x, glmRot.y, glmRot.z };
-    if (ImGui::DragFloat3("Rotation", qRot, 0.01f)) {
-        transform->setQuaternion(Quat::fromEuler(glm::vec3(qRot[0], qRot[1], qRot[2])));
-        transform->setOutsideRange(qRot[1]);
-    }
-
-    float scale[3] = { transform->getScale().x, transform->getScale().y, transform->getScale().z };
-    if (ImGui::DragFloat3("Scale", scale, 0.1f))
-        transform->setScale(glm::vec3(scale[0], scale[1], scale[2]));
-
-    // Mesh
-    if (ImGui::BeginCombo("Mesh", renderer->getModelData()->getMeshData()->getName().c_str())) {
-        for (size_t i = 0; i < meshManager->getMeshDatas().size(); i++)
-            if (ImGui::Selectable(meshManager->getMeshDatas()[i]->getName().c_str()))
-                renderer->getModelData()->setMeshData(meshManager->getMeshDatas()[i]);
-
-        ImGui::EndCombo();
-    }
-    // Texture
-    if (ImGui::BeginCombo("Texture", renderer->getModelData()->getTextureData()->getName().c_str())) {
-        for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++) {
-            if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str())) {
-                renderer->getModelData()->setTextureData(textureManager->getTextureDatas()[i]);
-                renderer->getModelData()->initDescriptorSets(
-                    renderer->getVulkanPipeline()->getModelDescriptorSetLayout(),
-                    renderer->getVulkanPipeline()->getModelDescriptorPool()
-                );
-            }
+        float quat[4] = { transform->getQuaternion().x, transform->getQuaternion().y, transform->getQuaternion().z, transform->getQuaternion().w };
+        if (ImGui::DragFloat4("Quaternions", quat, 0.01f)) {
+            transform->setQuaternion(Quat(quat[0], quat[1], quat[2], quat[3]));
         }
 
-        ImGui::EndCombo();
-    }
-    // Pipeline
-    if (ImGui::BeginCombo("Pipeline", renderer->getVulkanPipeline()->getName().c_str())) {
-        for (size_t i = 0; i < pipelineManager->getVulkanPipelines().size(); i++)
-            if (ImGui::Selectable(pipelineManager->getVulkanPipelines()[i]->getName().c_str()))
-                renderer->setVulkanPipeline(pipelineManager->getVulkanPipelines()[i]);
+        glm::vec3 glmRot = transform->getEulerWithFlag();
+        float qRot[3] = { glmRot.x, glmRot.y, glmRot.z };
+        if (ImGui::DragFloat3("Rotation", qRot, 0.01f)) {
+            transform->setQuaternion(Quat::fromEuler(glm::vec3(qRot[0], qRot[1], qRot[2])));
+            transform->setOutsideRange(qRot[1]);
+        }
 
-        ImGui::EndCombo();
+        float scale[3] = { transform->getScale().x, transform->getScale().y, transform->getScale().z };
+        if (ImGui::DragFloat3("Scale", scale, 0.1f))
+            transform->setScale(glm::vec3(scale[0], scale[1], scale[2]));
+    }
+    else {
+        ImGui::Text("Game object has no transform component!");
+    }
+
+    if (renderer != nullptr) {
+        // Mesh
+        if (ImGui::BeginCombo("Mesh", renderer->getModelData()->getMeshData()->getName().c_str())) {
+            for (size_t i = 0; i < meshManager->getMeshDatas().size(); i++)
+                if (ImGui::Selectable(meshManager->getMeshDatas()[i]->getName().c_str()))
+                    renderer->getModelData()->setMeshData(meshManager->getMeshDatas()[i]);
+
+            ImGui::EndCombo();
+        }
+        // Texture
+        if (ImGui::BeginCombo("Texture", renderer->getModelData()->getTextureData()->getName().c_str())) {
+            for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++) {
+                if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str())) {
+                    renderer->getModelData()->setTextureData(textureManager->getTextureDatas()[i]);
+                    renderer->getModelData()->initDescriptorSets(
+                        renderer->getVulkanPipeline()->getModelDescriptorSetLayout(),
+                        renderer->getVulkanPipeline()->getModelDescriptorPool()
+                    );
+                }
+            }
+
+            ImGui::EndCombo();
+        }
+        // Pipeline
+        if (ImGui::BeginCombo("Pipeline", renderer->getVulkanPipeline()->getName().c_str())) {
+            for (size_t i = 0; i < pipelineManager->getVulkanPipelines().size(); i++)
+                if (ImGui::Selectable(pipelineManager->getVulkanPipelines()[i]->getName().c_str()))
+                    renderer->setVulkanPipeline(pipelineManager->getVulkanPipelines()[i]);
+
+            ImGui::EndCombo();
+        }
+    }
+    else {
+        ImGui::Text("Game object has no renderer component!");
     }
 
     ImGui::PopID();

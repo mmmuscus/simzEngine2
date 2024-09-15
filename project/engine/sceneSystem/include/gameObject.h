@@ -90,6 +90,8 @@ public:
 	transformComponent* getTransform() { return transform; }
 	rendererComponent* getRenderer() { return renderer; }
 
+	void update(size_t currentFrame);
+
 private:
 
 };
