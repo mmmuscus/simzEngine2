@@ -3,9 +3,8 @@
 
 # TODO: Move the below to different files
 # START OF WINDOWS ENVIRONMENT SPECIFIC VARIABLES
-set(VULKAN_SDK_PATH C:/VulkanSDK/1.3.239.0)
-set(GLFW_PATH C:/devTools/glfw-3.3.8.bin.WIN64)
-set(GLM_PATH C:/devTools/glm)
+include(windows.env.cmake OPTIONAL RESULT_VARIABLE LOCAL_ENV)
+message(STATUS "Local .env.cmake: ${LOCAL_ENV}")
 # END OF WINDOWS SPECIFIC ENVIRONMENT VARIABLES
 
 cmake_minimum_required (VERSION 3.15)
@@ -24,8 +23,8 @@ if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 endif()
 
 # 1. Set VULKAN_SDK_PATH in .env.cmake to target specific vulkan version
-# TODO: Fix
 find_package(Vulkan REQUIRED) # throws error if could not find Vulkan
+# Below is fancy version but it doesnt work, might be needed for LINUX tho(?)
 #if (DEFINED VULKAN_SDK_PATH)
 #  set(Vulkan_INCLUDE_DIRS "${VULKAN_SDK_PATH}/Include") # 1.1 Make sure this include path is correct
 #  set(Vulkan_LIBRARIES "${VULKAN_SDK_PATH}/Lib") # 1.2 Make sure lib path is correct
