@@ -113,14 +113,14 @@ private:
         diffusePipeline = vulkanPipelineMngr.addVulkanPipeline(
             "DIFFUSE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
-            "../../../assets/shaders/vertexShaders/diffuseVert.spv", "../../../assets/shaders/fragmentShaders/diffuseFrag.spv"
+            "../../../assets/shaders/diffuseShader.vert.spv", "../../../assets/shaders/diffuseShader.frag.spv"
         );
 
         // NEGATIVE OBJECT:
         negativePipeline = vulkanPipelineMngr.addVulkanPipeline(
             "NEGATIVE", instance.getDevicePtr(),
             surface.getExtent(), renderer.getRenderPass(), renderer.getMsaaSamples(),
-            "../../../assets/shaders/vertexShaders/diffuseVert.spv", "../../../assets/shaders/fragmentShaders/negativeFrag.spv"
+            "../../../assets/shaders/diffuseShader.vert.spv", "../../../assets/shaders/negativeShader.frag.spv"
         );
 
         // Color Resources:
