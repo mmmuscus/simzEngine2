@@ -25,7 +25,9 @@ public:
 		quaternion(Quat(0.0f, 0.0f, 0.0f, 1.0f)),
 		outsideRange(false),
 		scale(glm::vec3(1.0f, 1.0f, 1.0f))
-	{};
+	{
+		calculateModelMatrix();
+	};
 	transformComponent(
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		Quat _quaternion = Quat(0.0f, 0.0f, 0.0f, 1.0f),
@@ -33,7 +35,9 @@ public:
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
 		pos(_pos), quaternion(_quaternion), outsideRange(_outsideRange), scale(_scale)
-	{};
+	{
+		calculateModelMatrix();
+	};
 	transformComponent(
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 euler = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -43,6 +47,8 @@ public:
 	{
 		setOutsideRange(euler.y);
 		quaternion = Quat::fromEuler(euler);
+
+		calculateModelMatrix();
 	}
 
 	void setPos(glm::vec3 _pos) { pos = _pos; }

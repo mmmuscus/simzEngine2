@@ -28,7 +28,8 @@ void scene::resetSceneTimer() {
 
 void scene::defragmentObjectNumbers() {
 	for (size_t i = 0; i < gameObjects.size(); i++)
-		gameObjects[i]->setObjectNumber(i);
+		// 0 is reserved for init value
+		gameObjects[i]->setObjectNumber(i + 1);
 }
 
 void scene::updateScene(size_t currentFrame, vk::Extent2D extent) {
