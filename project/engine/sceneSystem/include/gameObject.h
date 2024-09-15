@@ -15,6 +15,7 @@
 #include "../../resourceManager/include/textureDataManager.h"
 
 #include "../include/transformComponent.h"
+#include "../include/rendererComponent.h"
 
 class gameObject {
 private:
@@ -26,6 +27,8 @@ private:
 
 	// Transform component:
 	transformComponent* transform = nullptr;
+	// Renderer component:
+	rendererComponent* renderer = nullptr;
 
 	//// Transform vectors:
 	//glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -36,12 +39,12 @@ private:
 	//// Model matrix:
 	//glm::mat4 modelMatrix = glm::mat4(1.0f);
 
-	// vulkan buffers, pipeline
-	vulkanPipeline* vkPipeline;
-	vulkanModelData* modelData;
+	//// vulkan buffers, pipeline
+	//vulkanPipeline* vkPipeline;
+	//vulkanModelData* modelData;
 
 public:
-	gameObject() : sceneTimer(nullptr), vkPipeline(nullptr), modelData(nullptr) {}
+	gameObject() : sceneTimer(nullptr), transform(nullptr), renderer(nullptr) {}
 	gameObject(
 		vulkanPipeline* _vkPipeline,
 		vulkanModelData* _modelData,
@@ -49,8 +52,8 @@ public:
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
-		sceneTimer(nullptr), vkPipeline(_vkPipeline), modelData(_modelData),
-		transform(new transformComponent(_pos, _rotation, _scale))
+		sceneTimer(nullptr), transform(new transformComponent(_pos, _rotation, _scale)),
+		renderer(new rendererComponent(_vkPipeline, _modelData))
 	{
 		transform->calculateModelMatrix();
 	};
@@ -63,17 +66,12 @@ public:
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
-		sceneTimer(nullptr), vkPipeline(_vkPipeline), modelData(new vulkanModelData()),
-		transform(new transformComponent(_pos, _rotation, _scale))
+		sceneTimer(nullptr), transform(new transformComponent(_pos, _rotation, _scale)),
+		renderer(new rendererComponent(
+			_vkPipeline, device,  meshManager, meshIndex, textureManager, textureIndex
+		))
 	{
 		transform->calculateModelMatrix();
-
-		modelData->init(
-			device,
-			meshManager->getMeshDatas()[meshIndex],
-			textureManager->getTextureDatas()[textureIndex],
-			vkPipeline->getModelDescriptorSetLayout(), vkPipeline->getModelDescriptorPool()
-		);
 	}
 	gameObject(
 		vulkanInstance* instance, vulkanPipeline* _vkPipeline,
@@ -83,39 +81,38 @@ public:
 		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
 	) :
-		sceneTimer(nullptr), vkPipeline(_vkPipeline), modelData(new vulkanModelData()),
-		transform(new transformComponent(_pos, _rotation, _scale))
+		sceneTimer(nullptr), transform(new transformComponent(_pos, _rotation, _scale)),
+		renderer(new rendererComponent(
+			_vkPipeline, instance,
+			meshManager, meshPath, uniformBuffer,
+			textureManager, texturePath, textureSampler
+
+		))
 	{
 		transform->calculateModelMatrix();
-
-		modelData->init(
-			instance,
-			meshManager, meshPath, uniformBuffer,
-			textureManager, texturePath, textureSampler,
-			vkPipeline->getModelDescriptorSetLayout(), vkPipeline->getModelDescriptorPool()
-		);
 	}
 	void setObjectNumber(uint32_t _objectNumber) { objectNumber = _objectNumber; }
 	void setSceneTimer(timer* _sceneTimer) { sceneTimer = _sceneTimer; }
 	//void setPos(glm::vec3 _pos) { pos = _pos; }
 	//void setQuaternion(Quat _quaternion) { quaternion = _quaternion.normalized(); }
 	//void setScale(glm::vec3 _scale) { scale = _scale; }
-	void setVulkanPipeline(vulkanPipeline* _vkPipeline) { vkPipeline = _vkPipeline; }
-	void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
+	//void setVulkanPipeline(vulkanPipeline* _vkPipeline) { vkPipeline = _vkPipeline; }
+	//void setModelData(vulkanModelData* _modelData) { modelData = _modelData; }
 
 	uint32_t getObjectNumber() { return objectNumber; }
 	transformComponent* getTransform() { return transform; }
+	rendererComponent* getRenderer() { return renderer; }
 	//glm::vec3 getPos() { return pos; }
 	//Quat getQuaternion() { return quaternion; }
 	//bool getOutsideRange() { return outsideRange; }
 	//glm::vec3 getScale() { return scale; }
-	vulkanPipeline* getVulkanPipeline() { return vkPipeline; }
-	vulkanModelData* getModelData() { return modelData; }
+	//vulkanPipeline* getVulkanPipeline() { return vkPipeline; }
+	//vulkanModelData* getModelData() { return modelData; }
 
 	//void setOutsideRange(float y);
 	//glm::vec3 getEulerWithFlag();
 	//void calculateModelMatrix();
-	void updateModelTranslation(uint32_t currentFrame);
+	/*void updateModelTranslation(uint32_t currentFrame);*/
 
 private:
 

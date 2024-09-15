@@ -81,6 +81,7 @@ void imGuiInstance::showGui(
 
 void imGuiInstance::showObjectEditGui(gameObject* obj) {
     transformComponent* transform = obj->getTransform();
+    rendererComponent* renderer = obj->getRenderer();
 
     ImGui::PushID(obj);
 
@@ -107,21 +108,21 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
         transform->setScale(glm::vec3(scale[0], scale[1], scale[2]));
 
     // Mesh
-    if (ImGui::BeginCombo("Mesh", obj->getModelData()->getMeshData()->getName().c_str())) {
+    if (ImGui::BeginCombo("Mesh", renderer->getModelData()->getMeshData()->getName().c_str())) {
         for (size_t i = 0; i < meshManager->getMeshDatas().size(); i++)
             if (ImGui::Selectable(meshManager->getMeshDatas()[i]->getName().c_str()))
-                obj->getModelData()->setMeshData(meshManager->getMeshDatas()[i]);
+                renderer->getModelData()->setMeshData(meshManager->getMeshDatas()[i]);
 
         ImGui::EndCombo();
     }
     // Texture
-    if (ImGui::BeginCombo("Texture", obj->getModelData()->getTextureData()->getName().c_str())) {
+    if (ImGui::BeginCombo("Texture", renderer->getModelData()->getTextureData()->getName().c_str())) {
         for (size_t i = 0; i < textureManager->getTextureDatas().size(); i++) {
             if (ImGui::Selectable(textureManager->getTextureDatas()[i]->getName().c_str())) {
-                obj->getModelData()->setTextureData(textureManager->getTextureDatas()[i]);
-                obj->getModelData()->initDescriptorSets(
-                    obj->getVulkanPipeline()->getModelDescriptorSetLayout(),
-                    obj->getVulkanPipeline()->getModelDescriptorPool()
+                renderer->getModelData()->setTextureData(textureManager->getTextureDatas()[i]);
+                renderer->getModelData()->initDescriptorSets(
+                    renderer->getVulkanPipeline()->getModelDescriptorSetLayout(),
+                    renderer->getVulkanPipeline()->getModelDescriptorPool()
                 );
             }
         }
@@ -129,10 +130,10 @@ void imGuiInstance::showObjectEditGui(gameObject* obj) {
         ImGui::EndCombo();
     }
     // Pipeline
-    if (ImGui::BeginCombo("Pipeline", obj->getVulkanPipeline()->getName().c_str())) {
+    if (ImGui::BeginCombo("Pipeline", renderer->getVulkanPipeline()->getName().c_str())) {
         for (size_t i = 0; i < pipelineManager->getVulkanPipelines().size(); i++)
             if (ImGui::Selectable(pipelineManager->getVulkanPipelines()[i]->getName().c_str()))
-                obj->setVulkanPipeline(pipelineManager->getVulkanPipelines()[i]);
+                renderer->setVulkanPipeline(pipelineManager->getVulkanPipelines()[i]);
 
         ImGui::EndCombo();
     }

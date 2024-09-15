@@ -20,6 +20,6 @@
 //	modelMatrix = glm::scale(modelMatrix, scale);
 //}
 
-void gameObject::updateModelTranslation(uint32_t currentFrame) {
-	modelData->getMeshData()->getUniformBuffer()->updateModelUniformBuffer(transform->getModelMatrix(), currentFrame, objectNumber);
-}
+//void gameObject::updateModelTranslation(uint32_t currentFrame) {
+//	modelData->getMeshData()->getUniformBuffer()->updateModelUniformBuffer(transform->getModelMatrix(), currentFrame, objectNumber);
+//}

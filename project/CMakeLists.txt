@@ -90,6 +90,7 @@ add_executable(${PROJECT_NAME}
 # scene system sources
     engine/sceneSystem/source/camera.cpp
     engine/sceneSystem/source/gameObject.cpp
+    engine/sceneSystem/source/rendererComponent.cpp
     engine/sceneSystem/source/scene.cpp
     engine/sceneSystem/source/transformComponent.cpp
 # vulkan wrappers sources
