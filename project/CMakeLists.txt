@@ -1,11 +1,8 @@
 ﻿# Referencing: https://www.youtube.com/watch?v=ZuHK_5cJ6B8
 # Referencing: https://www.youtube.com/watch?v=xYN3J13rjhM&list=PLalVdRk2RC6o5GHu618ARWh0VO0bFlif4&index=12
 
-# TODO: Move the below to different files
-# START OF WINDOWS ENVIRONMENT SPECIFIC VARIABLES
 include(windows.env.cmake OPTIONAL RESULT_VARIABLE LOCAL_ENV)
 message(STATUS "Local .env.cmake: ${LOCAL_ENV}")
-# END OF WINDOWS SPECIFIC ENVIRONMENT VARIABLES
 
 cmake_minimum_required (VERSION 3.15)
 
@@ -70,10 +67,51 @@ set(STB_PATH external/stb)
 set(TINYOBJLOADER_PATH external/tinyobjloader)
 
 include_directories(engine)
-# TODO: This is apparently not a very nice solution
-file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/engine/*.cpp)
+# Here GLOB_RECURSE is fine since no new file will be added
 file(GLOB_RECURSE IMGUI_SOURCES ${PROJECT_SOURCE_DIR}/external/imGui/*.cpp)
-add_executable(${PROJECT_NAME} "main.cpp" ${SOURCES} ${IMGUI_SOURCES})
+
+add_executable(${PROJECT_NAME} 
+    main.cpp
+# general sources
+    engine/general/source/Quat.cpp
+# imGui wrappers sources
+    engine/imGuiWrappers/source/ImGuiInstanceDrawer.cpp
+    engine/imGuiWrappers/source/ImGuiInstanceGui.cpp
+    engine/imGuiWrappers/source/ImGuiInstanceInit.cpp
+# physics system sources
+    engine/physicsSystem/source/CapsuleCollider.cpp
+    engine/physicsSystem/source/ColliderDoesCollideWithDefinition.cpp
+    engine/physicsSystem/source/CollisionUtilities
+    engine/physicsSystem/source/RigidBody.cpp
+    engine/physicsSystem/source/SphereCollider.cpp
+# resource manager sources
+    engine/resourceManager/source/inputManager.cpp
+    engine/resourceManager/source/windowManager.cpp
+# scene system sources
+    engine/sceneSystem/source/camera.cpp
+    engine/sceneSystem/source/gameObject.cpp
+    engine/sceneSystem/source/scene.cpp
+# vulkan wrappers sources
+    engine/vulkanWrappers/source/vulkanDrawer.cpp
+    engine/vulkanWrappers/source/vulkanDynamicUniformBuffer.cpp
+    engine/vulkanWrappers/source/vulkanInstanceCallback.cpp
+    engine/vulkanWrappers/source/vulkanInstanceCommandPool.cpp
+    engine/vulkanWrappers/source/vulkanInstanceDevice.cpp
+    engine/vulkanWrappers/source/vulkanInstanceInstance.cpp
+    engine/vulkanWrappers/source/vulkanInstanceMisc.cpp
+    engine/vulkanWrappers/source/vulkanMeshData.cpp
+    engine/vulkanWrappers/source/vulkanModelData.cpp
+    engine/vulkanWrappers/source/vulkanPipeline.cpp
+    engine/vulkanWrappers/source/vulkanRenderer.cpp
+    engine/vulkanWrappers/source/vulkanSceneData.cpp
+    engine/vulkanWrappers/source/vulkanSurface.cpp
+    engine/vulkanWrappers/source/vulkanTextureData.cpp
+    engine/vulkanWrappers/source/vulkanTextureSampler.cpp
+
+
+# ImGui sources
+    ${IMGUI_SOURCES}
+)
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
