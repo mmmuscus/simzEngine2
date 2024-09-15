@@ -91,6 +91,7 @@ add_executable(${PROJECT_NAME}
     engine/sceneSystem/source/camera.cpp
     engine/sceneSystem/source/gameObject.cpp
     engine/sceneSystem/source/scene.cpp
+    engine/sceneSystem/source/transform.cpp
 # vulkan wrappers sources
     engine/vulkanWrappers/source/vulkanDrawer.cpp
     engine/vulkanWrappers/source/vulkanDynamicUniformBuffer.cpp

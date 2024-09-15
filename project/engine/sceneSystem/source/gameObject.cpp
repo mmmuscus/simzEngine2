@@ -7,10 +7,6 @@ void gameObject::setOutsideRange(float y) {
 		outsideRange = false;
 }
 
-glm::vec3 gameObject::getEuler() {
-	return Quat::toEuler(quaternion);
-}
-
 glm::vec3 gameObject::getEulerWithFlag() {
 	return Quat::toEulerWithFlag(quaternion, outsideRange);
 }

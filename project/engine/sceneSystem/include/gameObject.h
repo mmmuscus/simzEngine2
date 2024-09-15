@@ -116,7 +116,6 @@ public:
 	vulkanModelData* getModelData() { return modelData; }
 
 	void setOutsideRange(float y);
-	glm::vec3 getEuler();
 	glm::vec3 getEulerWithFlag();
 	void calculateModelMatrix();
 	void updateModelTranslation(uint32_t currentFrame);
