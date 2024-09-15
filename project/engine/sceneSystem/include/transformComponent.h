@@ -1,5 +1,5 @@
-#ifndef TRANSFORM_H_
-#define TRANSFORM_H_
+#ifndef TRANSFORM_COMPONENT_H_
+#define TRANSFORM_COMPONENT_H_
 
 #define _USE_MATH_DEFINES
 
@@ -7,7 +7,7 @@
 
 #include "../../general/include/Quat.h"
 
-class transform {
+class transformComponent {
 private:
 	// position, rotation, scale
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -20,13 +20,13 @@ private:
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 public:
-	transform() :
+	transformComponent() :
 		pos(glm::vec3(0.0f, 0.0f, 0.0f)),
 		quaternion(Quat(0.0f, 0.0f, 0.0f, 1.0f)),
 		outsideRange(false),
 		scale(glm::vec3(1.0f, 1.0f, 1.0f))
 	{};
-	transform(
+	transformComponent(
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		Quat _quaternion = Quat(0.0f, 0.0f, 0.0f, 1.0f),
 		bool _outsideRange = false, 
@@ -34,7 +34,7 @@ public:
 	) :
 		pos(_pos), quaternion(_quaternion), outsideRange(_outsideRange), scale(_scale)
 	{};
-	transform(
+	transformComponent(
 		glm::vec3 _pos = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 euler = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
@@ -53,6 +53,7 @@ public:
 	Quat getQuaternion() { return quaternion; }
 	bool getOutsideRange() { return outsideRange; }
 	glm::vec3 getScale() { return scale; }
+	glm::mat4 getModelMatrix() { return modelMatrix; }
 
 	void setOutsideRange(float y);
 	glm::vec3 getEulerWithFlag();
@@ -62,4 +63,4 @@ private:
 	
 };
 
-#endif // TRANSFORM_H_
+#endif // TRANSFORM_COMPONENT_H_

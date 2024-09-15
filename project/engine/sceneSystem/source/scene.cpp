@@ -37,7 +37,7 @@ void scene::updateScene(size_t currentFrame, vk::Extent2D extent) {
 
 	for (size_t i = 0; i < gameObjects.size(); i++) {
 		// Here is where the physics used to move the game objects
-		gameObjects[i]->calculateModelMatrix();
+		gameObjects[i]->getTransform()->calculateModelMatrix();
 		gameObjects[i]->updateModelTranslation(currentFrame);
 	}
 }
