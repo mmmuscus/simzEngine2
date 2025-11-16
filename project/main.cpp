@@ -212,8 +212,8 @@ private:
         ));
         /*mainScene.addObject(new gameObject(
             &instance, negativePipeline,
-            &meshMngr, "assets/models/tank.objj", &modelsBuffer,
-            &textureMngr, "assets/textures/camouflage.jpg", &textureSampler,
+            &meshMngr, "../../../assets/models/tank.objj", &modelsBuffer,
+            &textureMngr, "../../../assets/textures/camouflage.jpg", &textureSampler,
             glm::vec3(0.0f, -2.25f, -0.75f),
             glm::vec3(0.0f, 0.0f, 3.14f),
             glm::vec3(1.0f, 1.0f, 1.0f)
