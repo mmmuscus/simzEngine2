@@ -5,12 +5,18 @@ vulkanTextureData::~vulkanTextureData() {
 }
 
 void vulkanTextureData::destroy() {
-    device->destroyImageView(imageView);
-    imageView = VK_NULL_HANDLE;
-    device->destroyImage(image);
-    image = VK_NULL_HANDLE;
-    device->freeMemory(imageMemory);
-    imageMemory = VK_NULL_HANDLE;
+    if (imageView) {
+        device->destroyImageView(imageView);
+        imageView = VK_NULL_HANDLE;
+    }
+    if (image) {
+        device->destroyImage(image);
+        image = VK_NULL_HANDLE;
+    }
+    if (imageMemory) {
+        device->freeMemory(imageMemory);
+        imageMemory = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanTextureData::init(
