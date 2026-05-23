@@ -71,7 +71,7 @@ private:
     vulkanDrawer drawer;
     vulkanDynamicUniformBuffer modelsBuffer;
     vulkanTextureSampler textureSampler;
-
+    
     // Scene variables:
     scene mainScene;
 

@@ -5,15 +5,23 @@ vulkanMeshData::~vulkanMeshData() {
 }
 
 void vulkanMeshData::destroy() {
-    device->destroyBuffer(indexBuffer);
-    indexBuffer = VK_NULL_HANDLE;
-    device->freeMemory(indexBufferMemory);
-    indexBufferMemory = VK_NULL_HANDLE;
-
-    device->destroyBuffer(vertexBuffer);
-    vertexBuffer = VK_NULL_HANDLE;
-    device->freeMemory(vertexBufferMemory);
-    vertexBufferMemory = VK_NULL_HANDLE;
+    if (indexBuffer) {
+        device->destroyBuffer(indexBuffer);
+        indexBuffer = VK_NULL_HANDLE;
+    }
+    if (indexBufferMemory) {
+        device->freeMemory(indexBufferMemory);
+        indexBufferMemory = VK_NULL_HANDLE;
+    }
+    
+    if (vertexBuffer) {
+        device->destroyBuffer(vertexBuffer);
+        vertexBuffer = VK_NULL_HANDLE;
+    }
+    if (vertexBufferMemory) {
+        device->freeMemory(vertexBufferMemory);
+        vertexBufferMemory = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanMeshData::init(

@@ -11,7 +11,7 @@ private:
 	// Instance:
 	vk::Instance instance;
 	// Callback:
-	VkDebugUtilsMessengerEXT callback = VK_NULL_HANDLE;;
+	VkDebugUtilsMessengerEXT callback = VK_NULL_HANDLE;
 	// Devices:
 	vk::PhysicalDevice physicalDevice;
 	vk::Device device = VK_NULL_HANDLE;

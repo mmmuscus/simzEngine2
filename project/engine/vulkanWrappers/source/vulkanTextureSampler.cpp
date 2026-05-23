@@ -5,8 +5,10 @@ vulkanTextureSampler::~vulkanTextureSampler() {
 }
 
 void vulkanTextureSampler::destroy() {
-    device->destroySampler(sampler);
-    sampler = VK_NULL_HANDLE;
+    if (sampler) { // only enters branch if sampler is not null
+        device->destroySampler(sampler);
+        sampler = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanTextureSampler::init(vk::Device* _device, vk::PhysicalDevice physicalDevice) {

@@ -8,19 +8,25 @@ vulkanSurface::~vulkanSurface() {
 
 void vulkanSurface::destroyImageViews() {
     for (size_t i = 0; i < imageViews.size(); i++) {
-        device->destroyImageView(imageViews[i]);
-        imageViews[i] = VK_NULL_HANDLE;
+        if (imageViews[i]) {
+            device->destroyImageView(imageViews[i]);
+            imageViews[i] = VK_NULL_HANDLE;
+        }
     }
 }
 
 void vulkanSurface::destroySwapChain() {
-    device->destroySwapchainKHR(swapChain);
-    swapChain = VK_NULL_HANDLE;
+    if (swapChain) {
+        device->destroySwapchainKHR(swapChain);
+        swapChain = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanSurface::destroySurface() {
-    instance->destroySurfaceKHR(surface);
-    surface = VK_NULL_HANDLE;
+    if (surface) {
+        instance->destroySurfaceKHR(surface);
+        surface = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanSurface::initSurface() {

@@ -7,20 +7,26 @@ vulkanInstance::~vulkanInstance() {
 }
 
 void vulkanInstance::destroyCommandPool() {
-    device.destroyCommandPool(commandPool);
-    commandPool = VK_NULL_HANDLE;
+    if (commandPool) { // only enters branch if commandPool is not null
+        device.destroyCommandPool(commandPool);
+        commandPool = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanInstance::destroyCallback() {
     if (enableValidationLayers) {
-        DestroyDebugUtilsMessengerEXT(instance, callback, nullptr);
-        callback = VK_NULL_HANDLE;
+        if (callback) { // only enters branch if callback is not null
+            DestroyDebugUtilsMessengerEXT(instance, callback, nullptr);
+            callback = VK_NULL_HANDLE;
+        }
     }
 }
 
 void vulkanInstance::destroyDevice() {
-    device.destroy();
-    device = VK_NULL_HANDLE;
+	if (device) { // only enters branch if device is not null
+        device.destroy();
+        device = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanInstance::listExtensions() {

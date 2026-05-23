@@ -5,11 +5,15 @@ vulkanSceneData::~vulkanSceneData() {
 }
 
 void vulkanSceneData::destroy() {
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        device->destroyBuffer(uniformBuffers[i]);
-        uniformBuffers[i] = VK_NULL_HANDLE;
-        device->freeMemory(uniformBuffersMemory[i]);
-        uniformBuffersMemory[i] = VK_NULL_HANDLE;
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT && i < uniformBuffers.size(); i++) {
+        if (uniformBuffers[i]) {
+            device->destroyBuffer(uniformBuffers[i]);
+            uniformBuffers[i] = VK_NULL_HANDLE;
+        }
+        if (uniformBuffersMemory[i]) {
+            device->freeMemory(uniformBuffersMemory[i]);
+            uniformBuffersMemory[i] = VK_NULL_HANDLE;
+        }
     }
 }
 

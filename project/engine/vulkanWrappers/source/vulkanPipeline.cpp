@@ -6,22 +6,34 @@ vulkanPipeline::~vulkanPipeline() {
 
 void vulkanPipeline::destroy() {
     // Descriptor Pools:
-    device->destroyDescriptorPool(modelDescriptorPool);
-    modelDescriptorPool = VK_NULL_HANDLE;
-    device->destroyDescriptorPool(sceneDescriptorPool);
-    sceneDescriptorPool = VK_NULL_HANDLE;
-
+    if (modelDescriptorPool) {
+        device->destroyDescriptorPool(modelDescriptorPool);
+        modelDescriptorPool = VK_NULL_HANDLE;
+    }
+    if (sceneDescriptorPool) {
+        device->destroyDescriptorPool(sceneDescriptorPool);
+        sceneDescriptorPool = VK_NULL_HANDLE;
+    }
+    
     // Descriptor set Layouts:
-    device->destroyDescriptorSetLayout(sceneDescriptorSetLayout);
-    sceneDescriptorSetLayout = VK_NULL_HANDLE;
-    device->destroyDescriptorSetLayout(modelDescriptorSetLayout);
-    modelDescriptorSetLayout = VK_NULL_HANDLE;
+    if (sceneDescriptorSetLayout) {
+        device->destroyDescriptorSetLayout(sceneDescriptorSetLayout);
+        sceneDescriptorSetLayout = VK_NULL_HANDLE;
+    }
+    if (modelDescriptorSetLayout) {
+        device->destroyDescriptorSetLayout(modelDescriptorSetLayout);
+        modelDescriptorSetLayout = VK_NULL_HANDLE;
+    }
 
     // Pipeline and Pipeline layout
-    device->destroyPipeline(graphicsPipeline);
-    graphicsPipeline = VK_NULL_HANDLE;
-    device->destroyPipelineLayout(pipelineLayout);
-    pipelineLayout = VK_NULL_HANDLE;
+    if (graphicsPipeline) {
+        device->destroyPipeline(graphicsPipeline);
+        graphicsPipeline = VK_NULL_HANDLE;
+    }
+    if (pipelineLayout) {
+        device->destroyPipelineLayout(pipelineLayout);
+        pipelineLayout = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanPipeline::init(

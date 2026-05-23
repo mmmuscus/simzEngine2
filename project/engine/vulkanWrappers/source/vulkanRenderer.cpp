@@ -9,32 +9,48 @@ vulkanRenderer::~vulkanRenderer() {
 
 void vulkanRenderer::destroyFramebuffers() {
     for (size_t i = 0; i < framebuffers.size(); i++) {
-        device->destroyFramebuffer(framebuffers[i]);
-        framebuffers[i] = VK_NULL_HANDLE;
+        if (framebuffers[i]) {
+            device->destroyFramebuffer(framebuffers[i]);
+            framebuffers[i] = VK_NULL_HANDLE;
+        }
     }
 }
 
 void vulkanRenderer::destroyColorResources() {
-    device->destroyImageView(colorImageView);
-    colorImageView = VK_NULL_HANDLE;
-    device->destroyImage(colorImage);
-    colorImage = VK_NULL_HANDLE;
-    device->freeMemory(colorImageMemory);
-    colorImageMemory = VK_NULL_HANDLE;
+    if (colorImageView) {
+        device->destroyImageView(colorImageView);
+        colorImageView = VK_NULL_HANDLE;
+    }
+    if (colorImage) {
+        device->destroyImage(colorImage);
+        colorImage = VK_NULL_HANDLE;
+    }
+    if (colorImageMemory) {
+        device->freeMemory(colorImageMemory);
+        colorImageMemory = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanRenderer::destroyDepthResources() {
-    device->destroyImageView(depthImageView);
-    depthImageView = VK_NULL_HANDLE;
-    device->destroyImage(depthImage);
-    depthImage = VK_NULL_HANDLE;
-    device->freeMemory(depthImageMemory);
-    depthImageMemory = VK_NULL_HANDLE;
+    if (depthImageView) {
+        device->destroyImageView(depthImageView);
+        depthImageView = VK_NULL_HANDLE;
+    }
+    if (depthImage) {
+        device->destroyImage(depthImage);
+        depthImage = VK_NULL_HANDLE;
+    }
+    if (depthImageMemory) {
+        device->freeMemory(depthImageMemory);
+        depthImageMemory = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanRenderer::destroyRenderPass() {
-    device->destroyRenderPass(renderPass);
-    renderPass = VK_NULL_HANDLE;
+    if (renderPass) {
+        device->destroyRenderPass(renderPass);
+        renderPass = VK_NULL_HANDLE;
+    }
 }
 
 void vulkanRenderer::initRenderPass(vk::Format imageFormat) {

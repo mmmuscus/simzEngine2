@@ -5,15 +5,21 @@ vulkanDrawer::~vulkanDrawer() {
 }
 
 void vulkanDrawer::destroySyncObjects() {
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        device->destroySemaphore(renderFinishedSemaphores[i]);
-        renderFinishedSemaphores[i] = VK_NULL_HANDLE;
-
-        device->destroySemaphore(imageAvailableSemaphores[i]);
-        imageAvailableSemaphores[i] = VK_NULL_HANDLE;
-
-        device->destroyFence(inFlightFences[i]);
-        inFlightFences[i] = VK_NULL_HANDLE;
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT && i < renderFinishedSemaphores.size(); i++) {
+        if (renderFinishedSemaphores[i]) {
+            device->destroySemaphore(renderFinishedSemaphores[i]);
+            renderFinishedSemaphores[i] = VK_NULL_HANDLE;
+        }
+        
+        if (imageAvailableSemaphores[i]) {
+            device->destroySemaphore(imageAvailableSemaphores[i]);
+            imageAvailableSemaphores[i] = VK_NULL_HANDLE;
+        }
+        
+        if (inFlightFences[i]) {
+            device->destroyFence(inFlightFences[i]);
+            inFlightFences[i] = VK_NULL_HANDLE;
+        }
     }
 }
 
