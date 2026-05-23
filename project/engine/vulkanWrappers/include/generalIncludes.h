@@ -15,7 +15,7 @@
 
 #include "../../general/include/generalIncludes.h"
 
-//#define VALIDATION_LAYERS_ENABLED
+#define VALIDATION_LAYERS_ENABLED
 
 #ifdef VALIDATION_LAYERS_ENABLED
 const bool enableValidationLayers = true;
