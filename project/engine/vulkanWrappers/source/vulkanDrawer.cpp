@@ -5,12 +5,7 @@ vulkanDrawer::~vulkanDrawer() {
 }
 
 void vulkanDrawer::destroySyncObjects() {
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT && i < renderFinishedSemaphores.size(); i++) {
-        if (renderFinishedSemaphores[i]) {
-            device->destroySemaphore(renderFinishedSemaphores[i]);
-            renderFinishedSemaphores[i] = VK_NULL_HANDLE;
-        }
-        
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT && i < imageAvailableSemaphores.size(); i++) {
         if (imageAvailableSemaphores[i]) {
             device->destroySemaphore(imageAvailableSemaphores[i]);
             imageAvailableSemaphores[i] = VK_NULL_HANDLE;
@@ -19,6 +14,13 @@ void vulkanDrawer::destroySyncObjects() {
         if (inFlightFences[i]) {
             device->destroyFence(inFlightFences[i]);
             inFlightFences[i] = VK_NULL_HANDLE;
+        }
+    }
+
+    for (size_t i = 0; i < renderFinishedSemaphores.size(); i++) {
+        if (renderFinishedSemaphores[i]) {
+            device->destroySemaphore(renderFinishedSemaphores[i]);
+            renderFinishedSemaphores[i] = VK_NULL_HANDLE;
         }
     }
 }
@@ -40,15 +42,18 @@ void vulkanDrawer::initCommandBuffers(vk::CommandPool commandPool) {
     }
 }
 
-void vulkanDrawer::initSyncObjects() {
+void vulkanDrawer::initSyncObjects(uint32_t swapChainImageCount) {
+    renderFinishedSemaphores.resize(swapChainImageCount);
     imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
 
     try {
+        for (size_t i = 0; i < swapChainImageCount; i++) {
+            renderFinishedSemaphores[i] = device->createSemaphore({});
+        }
+
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
             imageAvailableSemaphores[i] = device->createSemaphore({});
-            renderFinishedSemaphores[i] = device->createSemaphore({});
             inFlightFences[i] = device->createFence({ vk::FenceCreateFlagBits::eSignaled });
         }
     }
@@ -189,7 +194,7 @@ void vulkanDrawer::submitCommandBuffer(bool shouldRecreateSwapChain, vk::Queue g
 
     vk::Semaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
-    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
+    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[imageIndex] };
 
     auto submitInfo = vk::SubmitInfo(
         1, waitSemaphores, waitStages,
@@ -210,7 +215,7 @@ void vulkanDrawer::presentFrame(vulkanSurface* surface, vk::Queue presentQueue) 
     if (surface->getShouldRecreateSwapChain())
         return;
 
-    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
+    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphores[imageIndex] };
     vk::SwapchainKHR swapChains[] = { surface->getSwapChain() };
 
     auto presentInfo = vk::PresentInfoKHR(

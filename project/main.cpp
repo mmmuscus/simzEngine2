@@ -137,7 +137,7 @@ private:
         drawer.initCommandBuffers(instance.getCommandPool());
 
         // SyncObjects:
-        drawer.initSyncObjects();
+        drawer.initSyncObjects(surface.getSwapChainImageCount());
 
         // HELPERS FOR MESHES, TEXTURES:
         // Texture Sampler:

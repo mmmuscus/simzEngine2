@@ -19,8 +19,6 @@ private:
 	std::vector<vk::Fence> inFlightFences;
 	// Helper variables:
 	size_t currentFrame = 0;
-
-	// Needed for ImGui
 	uint32_t imageIndex;
 
 	// Not maintained by the class:
@@ -43,7 +41,7 @@ public:
 	vk::CommandBuffer getCurrentCommandBuffer() { return commandBuffers[currentFrame]; }
 
 	void initCommandBuffers(vk::CommandPool commandPool);
-	void initSyncObjects();
+	void initSyncObjects(uint32_t swapChainImageCount);
 
 	void getNextImage(vulkanSurface* surface);
 

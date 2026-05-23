@@ -45,6 +45,7 @@ public:
 	vk::Format getFormat() { return imageFormat; }
 	vk::Extent2D getExtent() { return extent; }
 	std::vector<vk::ImageView> getImageViews() { return imageViews; }
+	uint32_t getSwapChainImageCount() { return images.size(); }
 
 	void initSurface();
 	void initSwapChain(vulkanInstance* inst);
